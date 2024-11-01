@@ -3,6 +3,7 @@ package com.hys.hy.screens
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,7 +41,8 @@ import androidx.compose.ui.unit.dp
 fun SignUpScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onCreateAccountClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -123,16 +125,17 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            with(sharedTransitionScope){
-                Column (
+            with(sharedTransitionScope) {
+                Column(
                     modifier = Modifier.sharedBounds(
                         animatedVisibilityScope = animatedContentScope,
                         sharedContentState = rememberSharedContentState("login")
                     ).padding(bottom = 10.dp)
-                ){
+                ) {
                     Button(
-                        onClick = {},
-                        modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 20.dp),
+                        onClick = onCreateAccountClick,
+                        modifier = Modifier.fillMaxWidth().height(48.dp)
+                            .padding(horizontal = 20.dp),
                     ) {
                         Text("创建账户")
                     }
