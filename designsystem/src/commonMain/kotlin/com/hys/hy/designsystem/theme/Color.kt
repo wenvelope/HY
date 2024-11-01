@@ -1,4 +1,4 @@
-package com.hys.hy.theme
+package com.hys.hy.designsystem.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF575992)

@@ -6,7 +6,6 @@ plugins {
     id("kmp-library-plugin")
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlinMultiplatform)
 }
 
 
@@ -30,6 +29,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.navigation.compose)
             implementation(libs.animation)
+
+            api(projects.designsystem)
         }
 
         desktopMain.dependencies {

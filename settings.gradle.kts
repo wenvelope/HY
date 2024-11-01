@@ -32,3 +32,5 @@ dependencyResolutionManagement {
 include(":composeApp")
 
 include(":features:login")
+
+include(":designsystem")

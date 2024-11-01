@@ -1,4 +1,4 @@
-package com.hys.hy.core
+package com.hys.hy.login.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

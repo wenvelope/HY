@@ -1,6 +1,5 @@
-package com.hys.hy.screens
+package com.hys.hy.login.screens
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,10 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
-import com.hys.hy.theme.HYTheme
-import hy.composeapp.generated.resources.Res
+import com.hys.hy.designsystem.theme.HYTheme
 
-@Preview
 @Composable
 fun HomeScreenPreview(){
     Surface {
@@ -41,9 +38,9 @@ sealed class HomeScreen(
     val name :String,
     val icon:ImageVector
 ){
-    data object Home:HomeScreen("home","home", icon = Icons.Filled.Home)
-    data object Search:HomeScreen("search","search", icon = Icons.Filled.Search)
-    data object Account:HomeScreen("account","account", icon = Icons.Filled.AccountCircle)
+    data object Home: HomeScreen("home","home", icon = Icons.Filled.Home)
+    data object Search: HomeScreen("search","search", icon = Icons.Filled.Search)
+    data object Account: HomeScreen("account","account", icon = Icons.Filled.AccountCircle)
 }
 
 val homeScreens = listOf(

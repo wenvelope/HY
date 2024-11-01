@@ -1,29 +1,30 @@
-package com.hys.hy.viewmodel
+package com.hys.hy.login.viewmodel
 
-import com.hys.hy.core.BaseViewModelCore
-import com.hys.hy.core.MutableContainer
-import com.hys.hy.core.UiEvent
-import com.hys.hy.core.UiState
+import com.hys.hy.login.core.BaseViewModelCore
+import com.hys.hy.login.core.MutableContainer
+import com.hys.hy.login.core.UiEvent
+import com.hys.hy.login.core.UiState
 
-class SignInScreenViewModel:BaseViewModelCore<SignInScreenViewModel.SignInState, SignInScreenViewModel.SignInEvent>(){
+class SignInScreenViewModel:
+    BaseViewModelCore<SignInScreenViewModel.SignInState, SignInScreenViewModel.SignInEvent>(){
     data class SignInState(
         val isLoading:Boolean = false
-    ):UiState
+    ): UiState
 
-    sealed interface SignInEvent:UiEvent{
-        data object SignInByWechat :SignInEvent
+    sealed interface SignInEvent: UiEvent {
+        data object SignInByWechat : SignInEvent
 
         data object SignInByPhone: SignInEvent
 
-        data object SignInByEmail:SignInEvent
+        data object SignInByEmail: SignInEvent
 
-        data object ForgetPassword:SignInEvent
+        data object ForgetPassword: SignInEvent
 
-        data object GoToCreateAccount:SignInEvent
+        data object GoToCreateAccount: SignInEvent
 
     }
 
-    override fun initialState(): SignInState  {
+    override fun initialState(): SignInState {
         return SignInState()
     }
 

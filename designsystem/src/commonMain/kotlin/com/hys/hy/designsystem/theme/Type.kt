@@ -1,4 +1,4 @@
-package com.hys.hy.theme
+package com.hys.hy.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
@@ -6,10 +6,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import hy.composeapp.generated.resources.Res
-import hy.composeapp.generated.resources.nunitosans_bold
-import hy.composeapp.generated.resources.nunitosans_light
-import hy.composeapp.generated.resources.nunitosans_semibold
+import hy.designsystem.generated.resources.Res
+import hy.designsystem.generated.resources.nunitosans_bold
+import hy.designsystem.generated.resources.nunitosans_light
+import hy.designsystem.generated.resources.nunitosans_semibold
 import org.jetbrains.compose.resources.Font
 
 

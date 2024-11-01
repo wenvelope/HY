@@ -1,19 +1,20 @@
-package com.hys.hy.viewmodel
+package com.hys.hy.login.viewmodel
 
-import com.hys.hy.core.BaseViewModelCore
-import com.hys.hy.core.MutableContainer
-import com.hys.hy.core.UiEvent
-import com.hys.hy.core.UiState
+import com.hys.hy.login.core.BaseViewModelCore
+import com.hys.hy.login.core.MutableContainer
+import com.hys.hy.login.core.UiEvent
+import com.hys.hy.login.core.UiState
 
-class HomeScreenViewModel:BaseViewModelCore<HomeScreenViewModel.HomeScreenState,HomeScreenViewModel.HomeScreenEvent>(){
+class HomeScreenViewModel:
+    BaseViewModelCore<HomeScreenViewModel.HomeScreenState, HomeScreenViewModel.HomeScreenEvent>(){
     data class HomeScreenState(
             val titleName: String = "返回"
-    ) :UiState{
+    ) : UiState {
 
     }
 
-    sealed interface HomeScreenEvent:UiEvent{
-        data object HideTopNavIcon:HomeScreenEvent
+    sealed interface HomeScreenEvent: UiEvent {
+        data object HideTopNavIcon: HomeScreenEvent
     }
 
     override fun initialState(): HomeScreenState {

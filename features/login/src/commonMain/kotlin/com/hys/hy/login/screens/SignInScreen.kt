@@ -1,4 +1,4 @@
-package com.hys.hy.screens
+package com.hys.hy.login.screens
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -37,9 +37,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import hy.composeapp.generated.resources.Res
-import hy.composeapp.generated.resources.phone
-import hy.composeapp.generated.resources.wechat
+import hy.features.login.generated.resources.Res
+import hy.features.login.generated.resources.phone
+import hy.features.login.generated.resources.wechat
+
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

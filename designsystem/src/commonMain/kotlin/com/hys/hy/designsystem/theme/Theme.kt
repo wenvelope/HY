@@ -1,4 +1,4 @@
-package com.hys.hy.theme
+package com.hys.hy.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
