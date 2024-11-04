@@ -30,7 +30,14 @@ kotlin {
             implementation(libs.navigation.compose)
             implementation(libs.animation)
 
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.coroutines)
+//            implementation(libs.koin.viewmodel)
+            implementation(libs.koin.compose.viewmodel)
+
             api(projects.designsystem)
+            implementation(projects.core.viewmodel)
         }
 
         desktopMain.dependencies {

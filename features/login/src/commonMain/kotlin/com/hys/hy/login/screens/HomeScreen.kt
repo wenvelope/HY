@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
 import com.hys.hy.designsystem.theme.HYTheme
+import com.hys.hy.login.viewmodel.HomeScreenViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreenPreview(){
@@ -52,7 +54,9 @@ val homeScreens = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(
+    viewModel: HomeScreenViewModel = koinViewModel()
+){
 
     val naviController = rememberNavController()
 

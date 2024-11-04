@@ -1,9 +1,9 @@
 package com.hys.hy.login.viewmodel
 
-import com.hys.hy.login.core.BaseViewModelCore
-import com.hys.hy.login.core.MutableContainer
-import com.hys.hy.login.core.UiEvent
-import com.hys.hy.login.core.UiState
+import com.hys.hy.viewmodel.BaseViewModelCore
+import com.hys.hy.viewmodel.MutableContainer
+import com.hys.hy.viewmodel.UiEvent
+import com.hys.hy.viewmodel.UiState
 
 class SignInScreenViewModel:
     BaseViewModelCore<SignInScreenViewModel.SignInState, SignInScreenViewModel.SignInEvent>(){

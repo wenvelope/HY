@@ -18,6 +18,7 @@ kotlin = "2.0.20"
 kotlinx-coroutines = "1.9.0"
 navigationCompose = "2.8.0-alpha10"
 gradle = "8.7.1"
+koin = "4.0.0"
 
 
 [libraries]
@@ -36,6 +37,15 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+
+koin-android = { module = "io.insert-koin:koin-android" , version.ref = "koin" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" , version.ref = "koin" }
+koin_core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose" , version.ref = "koin" }
+koin_coroutines = { group = "io.insert-koin", name = "koin-core-coroutines", version.ref = "koin" }
+koin-viewmodel = { module = "io.insert-koin:koin-core-viewmodel" , version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" , version.ref = "koin" }
 
 #构建gradle 脚本
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
