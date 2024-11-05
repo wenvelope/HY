@@ -33,6 +33,9 @@ include(":composeApp")
 include(":designsystem")
 
 include(":features:login")
+include(":features:account")
+include(":features:setting")
+
 
 include(":core:viewmodel")
 

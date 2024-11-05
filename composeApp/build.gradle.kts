@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(projects.features.login)
+            implementation(projects.features.setting)
         }
 
         desktopMain.dependencies {
