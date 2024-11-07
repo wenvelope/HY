@@ -110,6 +110,11 @@ fun SignInScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     onBackClick: () -> Unit = {},
+    onPhoneClick: () -> Unit,
+    onWechatClick: () -> Unit,
+    onEmailLogInClick: () -> Unit,
+    onForgetPwdClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -175,16 +180,17 @@ fun SignInScreen(
 
                 Spacer(modifier = Modifier.padding(16.dp))
 
-                with(sharedTransitionScope){
-                    Column (
+                with(sharedTransitionScope) {
+                    Column(
                         modifier = Modifier.sharedBounds(
                             animatedVisibilityScope = animatedContentScope,
                             sharedContentState = rememberSharedContentState("login")
                         )
-                    ){
+                    ) {
                         Button(
                             onClick = {},
-                            modifier = Modifier.fillMaxWidth().height(48.dp).padding(horizontal = 20.dp),
+                            modifier = Modifier.fillMaxWidth().height(48.dp)
+                                .padding(horizontal = 20.dp),
                         ) {
                             Text("登录")
                         }
@@ -214,10 +220,9 @@ fun SignInScreen(
                     Text(
                         "还没有账户？",
                         modifier = Modifier.align(Alignment.CenterVertically),
-
-                        )
+                    )
                     TextButton(
-                        onClick = {},
+                        onClick = onSignUpClick,
                         modifier = Modifier.wrapContentSize().align(Alignment.CenterVertically)
                     ) {
                         Text(

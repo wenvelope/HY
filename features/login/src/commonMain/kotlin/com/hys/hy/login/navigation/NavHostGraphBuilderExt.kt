@@ -1,9 +1,15 @@
 package com.hys.hy.login.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -30,13 +36,18 @@ object Welcome
 @OptIn(ExperimentalSharedTransitionApi::class)
 internal fun NavGraphBuilder.addSignInScreen(
     sharedTransitionScope: SharedTransitionScope,
-    onBackClick: () -> Unit
+    onSignUpClick: () -> Unit
 ) {
     composable<SignIn> {
         SignInScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable,
-            onBackClick = onBackClick
+            onBackClick = {},
+            onWechatClick = {},
+            onPhoneClick = {},
+            onEmailLogInClick = {},
+            onForgetPwdClick = {},
+            onSignUpClick = onSignUpClick
         )
     }
 }
@@ -60,14 +71,7 @@ internal fun NavGraphBuilder.addSignUpScreen(
 internal fun NavGraphBuilder.addWelcomeScreen(
     onStartClick: () -> Unit
 ) {
-    composable<Welcome>(
-        enterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { it -> it * 2 / 3 },
-                animationSpec = tween(durationMillis = 100)
-            )
-        }
-    ) {
+    composable<Welcome> {
         WelcomeScreen(
             onStartClick = onStartClick
         )
@@ -87,7 +91,7 @@ fun NavGraphBuilder.addLoginNavGraph(
     ) {
         addSignInScreen(
             sharedTransitionScope = sharedTransitionScope,
-            onBackClick = navController::navigateSignUp
+            onSignUpClick = navController::navigateSignUp
         )
 
         addSignUpScreen(
@@ -101,6 +105,39 @@ fun NavGraphBuilder.addLoginNavGraph(
         )
 
     }
-
-
 }
+
+
+private const val TIME_DURATION = 300
+
+private val enterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
+    {
+        slideInHorizontally(
+            initialOffsetX = { it },
+            animationSpec = tween(durationMillis = TIME_DURATION, easing = LinearOutSlowInEasing)
+        )
+    }
+
+private val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
+    {
+        slideOutHorizontally(
+            targetOffsetX = { -it / 3 },
+            animationSpec = tween(durationMillis = TIME_DURATION, easing = LinearOutSlowInEasing)
+        )
+    }
+
+private val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
+    {
+        slideInHorizontally(
+            initialOffsetX = { -it / 3 },
+            animationSpec = tween(durationMillis = TIME_DURATION, easing = LinearOutSlowInEasing)
+        )
+    }
+
+private val popExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
+    {
+        slideOutHorizontally(
+            targetOffsetX = { it },
+            animationSpec = tween(durationMillis = TIME_DURATION, easing = LinearOutSlowInEasing)
+        )
+    }

@@ -6,6 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 
 @Immutable
@@ -259,14 +260,8 @@ fun HYTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> darkScheme
-        else -> lightScheme
-    }
-
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) darkScheme else lightScheme,
         typography = appTypography(),
         content = content
     )

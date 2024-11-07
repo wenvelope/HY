@@ -35,6 +35,7 @@ include(":designsystem")
 include(":features:login")
 include(":features:account")
 include(":features:setting")
+include(":features:home")
 
 
 include(":core:viewmodel")

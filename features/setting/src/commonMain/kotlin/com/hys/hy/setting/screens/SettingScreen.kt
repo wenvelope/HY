@@ -1,18 +1,28 @@
 package com.hys.hy.setting.screens
 
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,68 +32,157 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
-import com.hys.hy.designsystem.theme.HYTheme
 import hy.features.setting.generated.resources.Res
 import hy.features.setting.generated.resources.naixv
 import org.jetbrains.compose.resources.painterResource
 
 
-@Preview
-@Composable
-fun AccountScreenPreview() {
-    HYTheme {
-        SettingScreen()
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
-
+    onHomeTabClick: () -> Unit,
+    onSettingTabClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope
 ) {
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "我的",
-                        modifier = Modifier.padding(start = 4.dp),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
-                }
-            )
-        },
         bottomBar = {
-            NavigationBottomBar(
-                currentTabIndex = SettingsTabIndex,
-                onSettingTabClick = {
-
-                },
-                modifier = Modifier
-            )
+            with(sharedTransitionScope) {
+                NavigationBottomBar(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState("bottomBar"),
+                        animatedVisibilityScope = animatedContentScope
+                    ),
+                    currentTabIndex = SettingsTabIndex,
+                    onSettingTabClick = {
+                        onSettingTabClick.invoke()
+                    },
+                    onHomeTabClick = {
+                        onHomeTabClick.invoke()
+                    }
+                )
+            }
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
         ) {
 
-            UserBanner()
+            UserBanner(
+                modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth().clickable {
 
+                },
+                sharedTransitionScope = sharedTransitionScope,
+                animatedContentScope = animatedContentScope
+            )
+
+            NotificationItem(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .clickable {
+
+                    }
+            )
+
+            AboutItem(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .clickable { }
+            )
         }
-
     }
 }
 
+
 @Composable
-fun UserBanner() {
-    Row {
-        Image(
-            painter = painterResource(Res.drawable.naixv),
-            contentDescription = "avatar",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.padding(start = 24.dp).size(64.dp).clip(CircleShape)
+fun NotificationItem(
+    modifier: Modifier
+) {
+    ListItem(
+        modifier = modifier,
+        headlineContent = {
+            Text(
+                "通知",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
+        leadingContent = {
+            Icon(
+                imageVector = Icons.Filled.Notifications,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         )
+    )
+
+}
+
+@Composable
+fun AboutItem(
+    modifier: Modifier
+) {
+    ListItem(
+        modifier = modifier,
+        leadingContent = {
+            Icon(
+                imageVector = Icons.Filled.Info,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
+        headlineContent = {
+            Text(
+                "关于",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        )
+    )
+
+}
+
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun UserBanner(
+    modifier: Modifier,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope
+) {
+    Row(
+        modifier = modifier
+    ) {
+
+        with(sharedTransitionScope){
+            Image(
+                painter = painterResource(Res.drawable.naixv),
+                contentDescription = "avatar",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.padding(start = 24.dp).size(64.dp).clip(CircleShape)
+            )
+        }
+
         Column {
             Text(
                 "友利奈绪",

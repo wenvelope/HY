@@ -36,6 +36,7 @@ kotlin {
 
             implementation(projects.features.login)
             implementation(projects.features.setting)
+            implementation(projects.features.home)
         }
 
         desktopMain.dependencies {
