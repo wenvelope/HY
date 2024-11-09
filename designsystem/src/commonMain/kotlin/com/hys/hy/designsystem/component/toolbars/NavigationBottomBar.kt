@@ -1,24 +1,28 @@
 package com.hys.hy.designsystem.component.toolbars
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
+
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import hy.designsystem.generated.resources.Res
+import hy.designsystem.generated.resources.calender
+import hy.designsystem.generated.resources.home
+import hy.designsystem.generated.resources.profile
+import org.jetbrains.compose.resources.painterResource
 
-
-const val SettingsTabIndex = 1
+const val SettingsTabIndex = 2
 const val HomeTabIndex = 0
+const val TodayTabIndex = 1
 
 @Composable
 fun NavigationBottomBar(
     currentTabIndex: Int,
     onSettingTabClick: () -> Unit,
     onHomeTabClick: () -> Unit,
+    onTodayTabClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
@@ -29,12 +33,26 @@ fun NavigationBottomBar(
             onClick = onHomeTabClick,
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
+                    painter = painterResource(Res.drawable.home),
+                    contentDescription = null,
                 )
             },
             label = {
                 Text("主页")
+            }
+        )
+
+        NavigationBarItem(
+            selected = currentTabIndex == TodayTabIndex,
+            onClick = onTodayTabClick,
+            icon = {
+                Icon(
+                    painter = painterResource(Res.drawable.calender),
+                    contentDescription = null
+                )
+            },
+            label = {
+                Text("今日")
             }
         )
 
@@ -44,7 +62,7 @@ fun NavigationBottomBar(
             onClick = onSettingTabClick,
             icon = {
                 Icon(
-                    imageVector = Icons.Default.Settings,
+                    painter = painterResource(Res.drawable.profile),
                     contentDescription = null
                 )
             },

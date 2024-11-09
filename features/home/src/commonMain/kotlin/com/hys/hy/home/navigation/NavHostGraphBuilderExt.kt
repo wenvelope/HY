@@ -8,6 +8,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -22,17 +23,19 @@ object Home
 fun NavGraphBuilder.addHomeScreen(
     onHomeTabClick: () -> Unit = {},
     onSettingTabClick: () -> Unit,
+    onTodayTabClick:()->Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     composable<Home>(
         enterTransition = enterTransition,
-        exitTransition = exitTransition,
-        popEnterTransition = popEnterTransition,
-        popExitTransition = { ExitTransition.None }
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
     ) {
         HomeScreen(
             onHomeTabClick = onHomeTabClick,
             onSettingTabClick = onSettingTabClick,
+            onTodayTabClick = onTodayTabClick,
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable
         )
@@ -61,8 +64,8 @@ private val exitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.()
 
 private val popEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
     {
-        slideInHorizontally(
-            initialOffsetX = { -it },
+        slideInVertically(
+            initialOffsetY = { it / 4 }, // 页面下沉一点点
             animationSpec = tween(durationMillis = TIME_DURATION, easing = LinearOutSlowInEasing)
         )
     }

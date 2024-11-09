@@ -3,7 +3,9 @@ package com.hys.hy.setting.navigation
 import androidx.navigation.NavHostController
 
 fun NavHostController.navigateSetting() {
-    this.navigate(Setting)
+    this.navigate(Setting){
+        launchSingleTop = true
+    }
 }
 
 fun NavHostController.navigateSettingWithPopUpTo() {

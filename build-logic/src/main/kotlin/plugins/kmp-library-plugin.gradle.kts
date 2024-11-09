@@ -21,6 +21,10 @@ android {
     configureTestOptions()
 
     namespace = ConfigurationKeys.APPLICATION_ID.plus(name)
+
+    buildFeatures{
+        compose = true
+    }
 }
 
 kotlin {

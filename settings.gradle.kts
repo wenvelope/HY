@@ -36,6 +36,7 @@ include(":features:login")
 include(":features:account")
 include(":features:setting")
 include(":features:home")
+include(":features:today")
 
 
 include(":core:viewmodel")

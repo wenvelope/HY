@@ -8,7 +8,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -30,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
 import hy.features.setting.generated.resources.Res
@@ -42,10 +45,12 @@ import org.jetbrains.compose.resources.painterResource
 fun SettingScreen(
     onHomeTabClick: () -> Unit,
     onSettingTabClick: () -> Unit,
+    onTodayTabClick: () -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope
 ) {
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         bottomBar = {
             with(sharedTransitionScope) {
                 NavigationBottomBar(
@@ -59,41 +64,52 @@ fun SettingScreen(
                     },
                     onHomeTabClick = {
                         onHomeTabClick.invoke()
+                    },
+                    onTodayTabClick = {
+                        onTodayTabClick.invoke()
                     }
                 )
             }
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-        ) {
 
-            UserBanner(
-                modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth().clickable {
-
-                },
-                sharedTransitionScope = sharedTransitionScope,
-                animatedContentScope = animatedContentScope
-            )
-
-            NotificationItem(
+        SinkAnimateScope(
+            animatedContentScope
+        ) { offset ->
+            Column(
                 modifier = Modifier
-                    .padding(top = 16.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable {
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp)
+                    .offset { offset }
+            ) {
 
-                    }
-            )
+                UserBanner(
+                    modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth().clickable {
 
-            AboutItem(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable { }
-            )
+                    },
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedContentScope = animatedContentScope
+                )
+
+                NotificationItem(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable {
+
+                        }
+                )
+
+                AboutItem(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable { }
+                )
+            }
         }
+
     }
 }
 
@@ -174,7 +190,7 @@ fun UserBanner(
         modifier = modifier
     ) {
 
-        with(sharedTransitionScope){
+        with(sharedTransitionScope) {
             Image(
                 painter = painterResource(Res.drawable.naixv),
                 contentDescription = "avatar",

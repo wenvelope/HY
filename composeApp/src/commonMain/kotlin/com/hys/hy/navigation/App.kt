@@ -12,6 +12,7 @@ import com.hys.hy.home.navigation.navigateFromLoginToHome
 import com.hys.hy.home.navigation.popUpToHome
 import com.hys.hy.login.navigation.addLoginNavGraph
 import com.hys.hy.setting.navigation.addSettingScreen
+import com.hys.hy.today.navigation.addTodayScreen
 
 
 @Composable
@@ -42,13 +43,22 @@ fun HYNavHost() {
 
             addHomeScreen(
                 onSettingTabClick = navController::navigateSettingWithPopUpToHome,
-                sharedTransitionScope = this@SharedTransitionLayout
+                sharedTransitionScope = this@SharedTransitionLayout,
+                onTodayTabClick = navController::navigateTodayWithPopUpToHome,
             )
 
             addSettingScreen(
                 onHomeTabClick = navController::popUpToHome,
-                sharedTransitionScope = this@SharedTransitionLayout
+                sharedTransitionScope = this@SharedTransitionLayout,
+                onTodayTabClick = navController::navigateTodayWithPopUpToHome
             )
+
+            addTodayScreen(
+                sharedTransitionScope = this@SharedTransitionLayout,
+                onHomeTabClick = navController::popUpToHome,
+                onSettingTabClick = navController::navigateSettingWithPopUpToHome
+            )
+
 
 
         }

@@ -25,4 +25,7 @@ internal fun BaseAppModuleExtension.configureBuildTypes() {
             isMinifyEnabled = false
         }
     }
+    buildFeatures{
+        compose = true
+    }
 }

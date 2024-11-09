@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.HomeTabIndex
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.theme.CurrentTaskBrush
@@ -59,68 +61,76 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = koinViewModel(),
     onSettingTabClick: () -> Unit = {},
     onHomeTabClick: () -> Unit = {},
+    onTodayTabClick:()->Unit = {},
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope
 ) {
     val state by viewModel.container.uiStateFlow.collectAsState()
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = state.currentDayOfTheWeek,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.padding(2.dp))
+            SinkAnimateScope(
+                animatedContentScope
+            ) { offset ->
+                TopAppBar(
+                    modifier = Modifier.offset {
+                        offset
+                    },
+                    title = {
+                        Column {
+                            Text(
+                                text = state.currentDayOfTheWeek,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.padding(2.dp))
 
-                        Text(
-                            text = state.currentDayOfTheMonth + " " + state.currentMonth,
-                            style = MaterialTheme.typography.headlineLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                    }
-                },
-                actions = {
-                    OutlinedCard(
-                        onClick = { /* doSomething() */ },
-                        modifier = Modifier.size(56.dp),
-                        shape = CircleShape,
-                        elevation = CardDefaults.outlinedCardElevation(
-                            defaultElevation = 2.dp,
-                        ),
-                        border = CardDefaults.outlinedCardBorder(
-                            enabled = true,
-                        )
-                    ) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "avatar",
-                                modifier = Modifier.size(24.dp).clip(CircleShape)
-                                    .align(Alignment.Center)
+                            Text(
+                                text = state.currentDayOfTheMonth + " " + state.currentMonth,
+                                style = MaterialTheme.typography.headlineLarge,
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
+                    },
+                    actions = {
+                        OutlinedCard(
+                            onClick = { /* doSomething() */ },
+                            modifier = Modifier.size(56.dp),
+                            shape = CircleShape,
+                            elevation = CardDefaults.outlinedCardElevation(
+                                defaultElevation = 2.dp,
+                            ),
+                            border = CardDefaults.outlinedCardBorder(
+                                enabled = true,
+                            )
+                        ) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = "avatar",
+                                    modifier = Modifier.size(24.dp).clip(CircleShape)
+                                        .align(Alignment.Center)
+                                )
+                            }
+                        }
 
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        with(sharedTransitionScope) {
+                            Image(
+                                painter = painterResource(Res.drawable.naixv),
+                                contentDescription = "avatar",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.padding(end = 24.dp).size(56.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
                     }
+                )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+            }
 
-
-                    with(sharedTransitionScope) {
-                        Image(
-                            painter = painterResource(Res.drawable.naixv),
-                            contentDescription = "avatar",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.padding(end = 24.dp).size(56.dp).clip(CircleShape)
-                        )
-                    }
-
-
-                }
-            )
         },
         bottomBar = {
             with(sharedTransitionScope) {
@@ -135,41 +145,48 @@ fun HomeScreen(
                     },
                     onSettingTabClick = {
                         onSettingTabClick.invoke()
+                    },
+                    onTodayTabClick = {
+                        onTodayTabClick.invoke()
                     }
                 )
             }
 
         }
     ) { innerPadding ->
-
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-        ) {
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Greet(
+        SinkAnimateScope(
+            animatedContentScope
+        ) { offset ->
+            Column(
                 modifier = Modifier
-            )
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp)
+                    .offset { offset }
+            ) {
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "本月总览",
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                Greet(
+                    modifier = Modifier
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            MonthlyPreview(
-                modifier = Modifier
-            )
+                Text(
+                    text = "本月总览",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
+                Spacer(modifier = Modifier.height(24.dp))
+
+                MonthlyPreview(
+                    modifier = Modifier
+                )
+
+            }
         }
-
     }
 }
 
@@ -327,8 +344,8 @@ fun Greet(
                 ).padding(10.dp)
             ) {
                 Spacer(modifier.weight(1f))
-                Row (
-                ){
+                Row(
+                ) {
                     Spacer(modifier.weight(1f))
                     Text(
                         "现在",
