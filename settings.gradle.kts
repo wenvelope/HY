@@ -30,6 +30,11 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+
+include(":core:viewmodel")
+include(":core:dateutil")
+include(":core:database")
+
 include(":designsystem")
 
 include(":features:login")
@@ -37,8 +42,13 @@ include(":features:account")
 include(":features:setting")
 include(":features:home")
 include(":features:today")
+include(":features:taskcreation")
+include(":features:search")
+
+include(":components:task")
 
 
-include(":core:viewmodel")
-include(":core:dateTimeX")
+
+
+
 

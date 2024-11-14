@@ -11,7 +11,10 @@ import com.hys.hy.home.navigation.addHomeScreen
 import com.hys.hy.home.navigation.navigateFromLoginToHome
 import com.hys.hy.home.navigation.popUpToHome
 import com.hys.hy.login.navigation.addLoginNavGraph
+import com.hys.hy.search.navigation.addSearchScreen
 import com.hys.hy.setting.navigation.addSettingScreen
+import com.hys.hy.taskcreation.navigation.addTaskCreationScreen
+import com.hys.hy.taskcreation.navigation.navigateTaskCreation
 import com.hys.hy.today.navigation.addTodayScreen
 
 
@@ -45,6 +48,7 @@ fun HYNavHost() {
                 onSettingTabClick = navController::navigateSettingWithPopUpToHome,
                 sharedTransitionScope = this@SharedTransitionLayout,
                 onTodayTabClick = navController::navigateTodayWithPopUpToHome,
+                onSearchClick = navController::navigateSearch
             )
 
             addSettingScreen(
@@ -56,9 +60,20 @@ fun HYNavHost() {
             addTodayScreen(
                 sharedTransitionScope = this@SharedTransitionLayout,
                 onHomeTabClick = navController::popUpToHome,
-                onSettingTabClick = navController::navigateSettingWithPopUpToHome
+                onSettingTabClick = navController::navigateSettingWithPopUpToHome,
+                onCreateTaskButtonClick = navController::navigateTaskCreation
             )
 
+            addTaskCreationScreen(
+                sharedTransitionScope = this@SharedTransitionLayout,
+                onBackButtonClick = {
+                    navController.popBackStack()
+                }
+            )
+
+            addSearchScreen(
+                sharedTransitionScope = this@SharedTransitionLayout,
+            )
 
 
         }

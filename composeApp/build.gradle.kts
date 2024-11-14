@@ -37,6 +37,8 @@ kotlin {
             implementation(projects.features.setting)
             implementation(projects.features.home)
             implementation(projects.features.today)
+            implementation(projects.features.taskcreation)
+            implementation(projects.features.search)
         }
 
         desktopMain.dependencies {

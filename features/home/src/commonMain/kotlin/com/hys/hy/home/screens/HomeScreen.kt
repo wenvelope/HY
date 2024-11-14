@@ -61,7 +61,8 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = koinViewModel(),
     onSettingTabClick: () -> Unit = {},
     onHomeTabClick: () -> Unit = {},
-    onTodayTabClick:()->Unit = {},
+    onTodayTabClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope
 ) {
@@ -95,7 +96,7 @@ fun HomeScreen(
                     },
                     actions = {
                         OutlinedCard(
-                            onClick = { /* doSomething() */ },
+                            onClick = { onSearchClick.invoke() },
                             modifier = Modifier.size(56.dp),
                             shape = CircleShape,
                             elevation = CardDefaults.outlinedCardElevation(

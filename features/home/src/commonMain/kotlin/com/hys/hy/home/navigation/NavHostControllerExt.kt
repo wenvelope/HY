@@ -3,7 +3,7 @@ package com.hys.hy.home.navigation
 import androidx.navigation.NavHostController
 
 fun NavHostController.navigateHome() {
-    navigate(Home){
+    navigate(Home) {
         launchSingleTop = true
     }
 }
@@ -20,6 +20,6 @@ fun NavHostController.navigateFromLoginToHome() {
 }
 
 fun NavHostController.popUpToHome() {
-    popBackStack(route = Home, inclusive = false)
+    popBackStack(route = Home, inclusive = false, saveState = true)
 
 }

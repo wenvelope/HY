@@ -24,7 +24,7 @@ fun SinkAnimateScope(
     content: @Composable (IntOffset) -> Unit
 ) {
     AnimatedVisibility(
-        visible = animatedContentScope.transition.currentState == EnterExitState.Visible,
+        visible = animatedContentScope.transition.currentState != EnterExitState.PreEnter,
         enter = EnterTransition.None,
         exit = ExitTransition.None,
     ) {

@@ -24,6 +24,7 @@ fun NavGraphBuilder.addHomeScreen(
     onHomeTabClick: () -> Unit = {},
     onSettingTabClick: () -> Unit,
     onTodayTabClick:()->Unit,
+    onSearchClick:()->Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     composable<Home>(
@@ -36,6 +37,7 @@ fun NavGraphBuilder.addHomeScreen(
             onHomeTabClick = onHomeTabClick,
             onSettingTabClick = onSettingTabClick,
             onTodayTabClick = onTodayTabClick,
+            onSearchClick = onSearchClick,
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable
         )
