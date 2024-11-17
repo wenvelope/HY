@@ -53,10 +53,6 @@ kotlin {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
 compose.desktop {
     application {
         mainClass = "com.hys.hy.MainKt"

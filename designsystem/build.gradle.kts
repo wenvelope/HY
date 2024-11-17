@@ -34,7 +34,3 @@ kotlin {
     }
 }
 
-
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
