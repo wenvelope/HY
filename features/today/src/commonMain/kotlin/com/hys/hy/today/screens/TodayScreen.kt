@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -51,6 +52,10 @@ fun TodayScreen(
 ) {
 
     val state by viewModel.container.uiStateFlow.collectAsState()
+
+    LaunchedEffect(Unit){
+        viewModel.sendEvent(TodayScreenViewModel.TodayEvent.GetCurrentDayTasks("test"))
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -192,7 +197,15 @@ fun TimeLineColumn(
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-
+        items(state.currentTaskItemList.size) { index ->
+            val task = state.currentTaskItemList[index]
+            Text(
+                text = task.taskTitle,
+                style = MaterialTheme.typography.headlineLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
 
     }
 }

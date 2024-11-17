@@ -31,7 +31,6 @@ kotlin {
 
 
 dependencies {
-    //keep in mind that i am not compiling for iOS x86, if you do need it, just add it below
     add("kspAndroid", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)

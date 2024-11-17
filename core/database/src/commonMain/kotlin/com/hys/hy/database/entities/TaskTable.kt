@@ -8,12 +8,12 @@ import kotlin.uuid.Uuid
 
 @Entity(tableName = "task")
 @OptIn(ExperimentalUuidApi::class)
-data class Task(
-    @PrimaryKey(autoGenerate = true)
+data class TaskTable(
+    @PrimaryKey
     val id: String = Uuid.random().toString(),
     val taskTitle:String,
     val taskDescription:String,
-    val taskSelectDate:LocalDate,
+    val taskSelectDate:LocalDate?=null,
     val taskImportance:String,
     val userId:String = "test"
 )

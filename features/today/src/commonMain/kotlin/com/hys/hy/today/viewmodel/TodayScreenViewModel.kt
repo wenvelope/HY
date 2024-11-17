@@ -1,11 +1,18 @@
 package com.hys.hy.today.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.task.entities.Task
+import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
 import com.hys.hy.today.model.DayItem
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -16,7 +23,9 @@ import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
-class TodayScreenViewModel :
+class TodayScreenViewModel(
+    private val getCurrentDayTasksUseCase:GetCurrentDayTasksUseCase
+) :
     BaseViewModelCore<TodayScreenViewModel.TodayState, TodayScreenViewModel.TodayEvent>() {
 
     data class TodayState(
@@ -24,7 +33,7 @@ class TodayScreenViewModel :
         val currentSelectDayIndex: Int,
         val currentDayItemList: List<DayItem>,
         val currentSelectMonth: Month,
-        val currentTaskItemList:List<String> = emptyList()
+        val currentTaskItemList:List<Task> = emptyList()
     ) : UiState {
         val todayIndex: Int
             get() = today.dayOfMonth - 1
@@ -50,6 +59,8 @@ class TodayScreenViewModel :
         data class ChangeCurrentSelectDay(val selectIndex: Int) : TodayEvent
 
         data class ChangeCurrentSelectMonth(val month: Month) : TodayEvent
+
+        data class GetCurrentDayTasks(val userId:String):TodayEvent
     }
 
     override fun initialState(): TodayState {
@@ -90,6 +101,20 @@ class TodayScreenViewModel :
                                 currentSelectMonth = event.month
                             )
                         }
+                    }
+
+                    is TodayEvent.GetCurrentDayTasks -> {
+                        viewModelScope.launch {
+                            val items = withContext(Dispatchers.IO){
+                                getCurrentDayTasksUseCase.execute(GetCurrentDayTasksUseCase.Param(event.userId))
+                            }
+                            updateState {
+                                copy(
+                                    currentTaskItemList = items
+                                )
+                            }
+                        }
+
                     }
                 }
             }

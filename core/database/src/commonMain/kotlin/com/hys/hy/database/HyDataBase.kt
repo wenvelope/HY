@@ -7,13 +7,13 @@ import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.hys.hy.database.dao.TaskDao
-import com.hys.hy.database.entities.Task
+import com.hys.hy.database.entities.TaskTable
 import com.hys.hy.database.typeConverter.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 @Database(
-    entities = [Task::class],
+    entities = [TaskTable::class],
     version = 1,
     exportSchema = true
 )

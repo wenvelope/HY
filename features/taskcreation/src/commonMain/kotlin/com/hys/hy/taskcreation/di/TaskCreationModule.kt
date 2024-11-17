@@ -5,7 +5,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.lazyModule
 
 val taskCreationModule = lazyModule {
-    viewModel<TaskCreationViewModel> {
-        TaskCreationViewModel()
+    viewModel{
+        TaskCreationViewModel(
+            addTaskUseCase = get()
+        )
     }
 }

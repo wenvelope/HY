@@ -18,10 +18,12 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.coroutines)
             implementation(libs.kotlinx.serialization)
+
             implementation(libs.room.runtime)
             implementation(libs.kotlinx.datetime)
 
             implementation(projects.core.database)
+            implementation(projects.core.dateutil)
 
         }
 

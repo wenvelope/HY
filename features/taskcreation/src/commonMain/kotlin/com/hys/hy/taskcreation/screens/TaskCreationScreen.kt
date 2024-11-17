@@ -44,8 +44,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
-import com.hys.hy.taskcreation.model.TaskImportance
-import com.hys.hy.taskcreation.model.TaskImportanceName
+import com.hys.hy.task.entities.TaskImportance
+import com.hys.hy.task.entities.TaskImportanceName
 import com.hys.hy.taskcreation.viewmodel.TaskCreationViewModel
 import hy.features.taskcreation.generated.resources.Res
 import hy.features.taskcreation.generated.resources.icon_importance
@@ -92,7 +92,9 @@ fun TaskCreationScreen(
                 },
                 actions = {
                     TextButton(
-                        onClick = {}
+                        onClick = {
+                            viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.AddTask)
+                        }
                     ) {
                         Text("添加", style = MaterialTheme.typography.bodyLarge)
                     }

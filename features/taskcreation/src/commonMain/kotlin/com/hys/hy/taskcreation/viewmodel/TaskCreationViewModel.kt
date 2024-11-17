@@ -1,17 +1,23 @@
 package com.hys.hy.taskcreation.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
-import com.hys.hy.taskcreation.model.TaskImportance
+import com.hys.hy.task.entities.TaskImportance
+import com.hys.hy.task.usecase.AddTaskUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
-class TaskCreationViewModel :
-    BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
+class TaskCreationViewModel (
+    private val addTaskUseCase: AddTaskUseCase
+): BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
     data class TaskCreationState(
         val taskTitle: String = "",
         val taskDescription: String = "",
@@ -32,7 +38,7 @@ class TaskCreationViewModel :
         data class ChangeTaskSelectedDate(val taskSelectedDate: LocalDate?) : TaskCreationEvent
         data class ChangeOpenDatePickerDialog(val isOpenDatePickerDialog: Boolean) :
             TaskCreationEvent
-
+        data object AddTask : TaskCreationEvent
         data class ChangeTaskImportance(val taskImportance: TaskImportance) : TaskCreationEvent
     }
 
@@ -85,6 +91,21 @@ class TaskCreationViewModel :
                             )
                         }
                     }
+
+                    TaskCreationEvent.AddTask -> {
+                        val state = uiStateFlow.value
+                        viewModelScope.launch (Dispatchers.IO){
+                            addTaskUseCase.execute(
+                                AddTaskUseCase.Param(
+                                    taskTitle = state.taskTitle,
+                                    taskDescription = state.taskDescription,
+                                    taskSelectDate = state.taskSelectedDate,
+                                    taskImportance = state.taskImportance
+                                )
+                            )
+                        }
+                    }
+
                 }
             }
         }

@@ -6,5 +6,5 @@ import org.koin.dsl.lazyModule
 
 
 val todayModule = lazyModule {
-    viewModel<TodayScreenViewModel> { TodayScreenViewModel() }
+    viewModel<TodayScreenViewModel> { TodayScreenViewModel(get()) }
 }
