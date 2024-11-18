@@ -10,5 +10,6 @@ actual fun createHyDatabase(): HyDatabase {
     return Room.databaseBuilder<HyDatabase>(
         KoinPlatform.getKoin().get(),
         name = dbFile.absolutePath,
-    ).setDefaults().build()
+    ).setDefaults()
+        .build()
 }

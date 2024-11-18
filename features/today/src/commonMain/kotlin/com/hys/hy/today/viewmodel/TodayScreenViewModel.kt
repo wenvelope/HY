@@ -3,7 +3,9 @@ package com.hys.hy.today.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.Task
+import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
+import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCase
 import com.hys.hy.today.model.DayItem
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
@@ -24,7 +26,9 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 class TodayScreenViewModel(
-    private val getCurrentDayTasksUseCase:GetCurrentDayTasksUseCase
+    private val getCurrentDayTasksUseCase: GetCurrentDayTasksUseCase,
+    private val getTasksByUserAndDateUseCase: GetTasksByUserAndDateUseCase,
+    private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase
 ) :
     BaseViewModelCore<TodayScreenViewModel.TodayState, TodayScreenViewModel.TodayEvent>() {
 
@@ -33,7 +37,9 @@ class TodayScreenViewModel(
         val currentSelectDayIndex: Int,
         val currentDayItemList: List<DayItem>,
         val currentSelectMonth: Month,
-        val currentTaskItemList:List<Task> = emptyList()
+        val currentTaskItemList: List<Task> = emptyList(),
+        val isOpenBottomSheet: Boolean = false,
+        val currentSelectTaskIndex: Int = -1
     ) : UiState {
         val todayIndex: Int
             get() = today.dayOfMonth - 1
@@ -53,6 +59,18 @@ class TodayScreenViewModel(
                     Month(currentSelectMonth.number + 1)
                 }
             }
+        val currentSelectLocalDate: LocalDate
+            get() {
+                return LocalDate(today.year, currentSelectMonth, currentSelectDayIndex + 1)
+            }
+        val currentDayItemListSorted: List<Task>
+            get() {
+                return currentTaskItemList.sortedWith(
+                    compareBy<Task> { it.taskSelectTime == null }.thenBy {
+                        it.taskSelectTime
+                    }
+                )
+            }
     }
 
     sealed interface TodayEvent : UiEvent {
@@ -60,7 +78,15 @@ class TodayScreenViewModel(
 
         data class ChangeCurrentSelectMonth(val month: Month) : TodayEvent
 
-        data class GetCurrentDayTasks(val userId:String):TodayEvent
+        data class GetCurrentDayTasks(val userId: String) : TodayEvent
+
+        data class GetTaskByUserAndDate(val userId: String, val localDate: LocalDate) : TodayEvent
+
+        data class OpenBottomSheet(val taskIndex: Int) : TodayEvent
+
+        data object CloseBottomSheet : TodayEvent
+
+        data class ChangeTaskIsDone(val taskId: String, val isDone: Boolean) : TodayEvent
     }
 
     override fun initialState(): TodayState {
@@ -85,6 +111,13 @@ class TodayScreenViewModel(
                                 currentSelectDayIndex = event.selectIndex
                             )
                         }
+                        sendEvent(
+                            TodayEvent.GetTaskByUserAndDate(
+                                "test",
+                                uiStateFlow.value.currentSelectLocalDate
+                            )
+                        )
+
                     }
 
                     is TodayEvent.ChangeCurrentSelectMonth -> {
@@ -101,12 +134,22 @@ class TodayScreenViewModel(
                                 currentSelectMonth = event.month
                             )
                         }
+                        sendEvent(
+                            TodayEvent.GetTaskByUserAndDate(
+                                "test",
+                                uiStateFlow.value.currentSelectLocalDate
+                            )
+                        )
                     }
 
                     is TodayEvent.GetCurrentDayTasks -> {
                         viewModelScope.launch {
-                            val items = withContext(Dispatchers.IO){
-                                getCurrentDayTasksUseCase.execute(GetCurrentDayTasksUseCase.Param(event.userId))
+                            val items = withContext(Dispatchers.IO) {
+                                getCurrentDayTasksUseCase.execute(
+                                    GetCurrentDayTasksUseCase.Param(
+                                        event.userId
+                                    )
+                                )
                             }
                             updateState {
                                 copy(
@@ -115,6 +158,61 @@ class TodayScreenViewModel(
                             }
                         }
 
+                    }
+
+                    is TodayEvent.GetTaskByUserAndDate -> {
+                        viewModelScope.launch {
+                            val items = withContext(Dispatchers.IO) {
+                                getTasksByUserAndDateUseCase.execute(
+                                    GetTasksByUserAndDateUseCase.Param(
+                                        event.userId,
+                                        event.localDate
+                                    )
+                                )
+                            }
+                            updateState {
+                                copy(
+                                    currentTaskItemList = items
+                                )
+                            }
+                        }
+                    }
+
+                    is TodayEvent.OpenBottomSheet -> {
+                        updateState {
+                            copy(
+                                isOpenBottomSheet = true,
+                                currentSelectTaskIndex = event.taskIndex
+                            )
+                        }
+                    }
+
+                    TodayEvent.CloseBottomSheet -> {
+                        updateState {
+                            copy(
+                                isOpenBottomSheet = false,
+                                currentSelectTaskIndex = -1
+                            )
+                        }
+                    }
+
+                    is TodayEvent.ChangeTaskIsDone -> {
+                        viewModelScope.launch {
+                            withContext(Dispatchers.IO) {
+                                changeTaskIsDoneUseCase.execute(
+                                    ChangeTaskIsDoneUseCase.Param(
+                                        taskId = event.taskId,
+                                        isDone = event.isDone
+                                    )
+                                )
+                            }
+                            sendEvent(
+                                TodayEvent.GetTaskByUserAndDate(
+                                    userId = "test",
+                                    localDate = uiStateFlow.value.currentSelectLocalDate
+                                )
+                            )
+                        }
                     }
                 }
             }

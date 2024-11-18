@@ -33,6 +33,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
 
             api(projects.designsystem)
             implementation(projects.core.viewmodel)

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,10 +33,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,14 +49,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.designsystem.component.dialog.TimePickerDialog
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.entities.TaskImportanceName
 import com.hys.hy.taskcreation.viewmodel.TaskCreationViewModel
 import hy.features.taskcreation.generated.resources.Res
-import hy.features.taskcreation.generated.resources.icon_importance
+import hy.features.taskcreation.generated.resources.icon_startTime
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
@@ -67,11 +75,15 @@ fun TaskCreationScreen(
     viewModel: TaskCreationViewModel = koinViewModel(),
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
 ) {
     val state by viewModel.container.uiStateFlow.collectAsState()
 
     val datePickerState = rememberDatePickerState()
+
+    val timePickerState = rememberTimePickerState(
+        is24Hour = true
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -100,6 +112,22 @@ fun TaskCreationScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier.padding(16.dp),
+                hostState = state.snackBarHostState
+            ) { snackbarData ->
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 56.dp)
+                    )
+                }
+
+            }
         }
     ) { innerPadding ->
         Column(
@@ -215,58 +243,11 @@ fun TaskCreationScreen(
 
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
 
-            Row(
-                modifier = Modifier.padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(Res.drawable.icon_importance),
-                    contentDescription = "重要性"
-                )
+            TaskImportanceSelector(state, viewModel)
 
-                Spacer(modifier = Modifier.width(10.dp))
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
 
-                Text(
-                    text = "重要性",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Spacer(modifier = Modifier.padding(8.dp))
-
-                SingleChoiceSegmentedButtonRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    space = SegmentedButtonDefaults.BorderWidth
-                ) {
-                    with(TaskImportanceName.CHINESE_TASK_IMPORTANCE_NAMES.names) {
-                        forEachIndexed { index, label ->
-                            SegmentedButton(
-                                selected = state.taskImportance.ordinal == index,
-                                onClick = {
-                                    viewModel.sendEvent(
-                                        TaskCreationViewModel.TaskCreationEvent.ChangeTaskImportance(
-                                            TaskImportance.entries[index]
-                                        )
-                                    )
-                                },
-                                shape = SegmentedButtonDefaults.itemShape(
-                                    index = index,
-                                    count = size
-                                )
-                            ) {
-                                Text(
-                                    label,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    maxLines = 1,
-                                    modifier = Modifier.padding(horizontal = 1.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-
-            }
+            TaskTimeSelector(viewModel, state)
 
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
 
@@ -318,6 +299,39 @@ fun TaskCreationScreen(
 
             }
 
+            // 时间选择弹窗
+            if (state.isOpenTimePickerDialog) {
+                TimePickerDialog(
+                    title = "选择时间",
+                    onConfirm = {
+                        val localTime =
+                            LocalTime(hour = timePickerState.hour, timePickerState.minute)
+                        viewModel.sendEvent(
+                            TaskCreationViewModel.TaskCreationEvent.ChangeTaskSelectedTime(
+                                localTime
+                            )
+                        )
+                        viewModel.sendEvent(
+                            TaskCreationViewModel.TaskCreationEvent.ChangeOpenTimePickerDialog(
+                                false
+                            )
+                        )
+                    },
+                    onCancel = {
+                        viewModel.sendEvent(
+                            TaskCreationViewModel.TaskCreationEvent.ChangeOpenTimePickerDialog(
+                                false
+                            )
+                        )
+                    }
+                ) {
+                    TimePicker(
+                        state = timePickerState
+                    )
+                }
+
+            }
+
         }
 
 
@@ -325,12 +339,133 @@ fun TaskCreationScreen(
 
 }
 
+@Composable
+private fun TaskTimeSelector(
+    viewModel: TaskCreationViewModel,
+    state: TaskCreationViewModel.TaskCreationState
+) {
+    Row(
+        modifier = Modifier.padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(Res.drawable.icon_startTime),
+            contentDescription = "开始时间"
+        )
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        Text(
+            text = "开始时间",
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        FilterChip(
+            onClick = {
+                viewModel.sendEvent(
+                    TaskCreationViewModel.TaskCreationEvent.ChangeOpenTimePickerDialog(
+                        true
+                    )
+                )
+            },
+            label = {
+                val localDateText = state.taskSelectedTime?.let {
+                    "${it.hour.toString().padStart(2, '0')}:${it.minute.toString().padEnd(2, '0')}"
+                }
+                Text(
+                    localDateText ?: "选择时间",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+            },
+            selected = state.taskSelectedTime != null,
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = "选择时间"
+                )
+            },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+            ),
+            shape = MaterialTheme.shapes.large,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        )
+
+
+    }
+}
+
+@Composable
+private fun TaskImportanceSelector(
+    state: TaskCreationViewModel.TaskCreationState,
+    viewModel: TaskCreationViewModel
+) {
+    Row(
+        modifier = Modifier.padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            imageVector = Icons.Rounded.Warning,
+            contentDescription = "重要性",
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.width(10.dp))
+
+        Text(
+            text = "重要性",
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        SingleChoiceSegmentedButtonRow(
+            modifier = Modifier.fillMaxWidth(),
+            space = SegmentedButtonDefaults.BorderWidth
+        ) {
+            with(TaskImportanceName.CHINESE_TASK_IMPORTANCE_NAMES.names) {
+                forEachIndexed { index, label ->
+                    SegmentedButton(
+                        selected = state.taskImportance.ordinal == index,
+                        onClick = {
+                            viewModel.sendEvent(
+                                TaskCreationViewModel.TaskCreationEvent.ChangeTaskImportance(
+                                    TaskImportance.entries[index]
+                                )
+                            )
+                        },
+                        shape = SegmentedButtonDefaults.itemShape(
+                            index = index,
+                            count = size
+                        )
+                    ) {
+                        Text(
+                            label,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            modifier = Modifier.padding(horizontal = 1.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+    }
+}
+
 /**
  * 日期选择组件
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun DateSelector(
+private fun DateSelector(
     onTodayClick: () -> Unit,
     onTomorrowClick: () -> Unit,
     onDatePickerClick: () -> Unit,

@@ -32,7 +32,7 @@ fun NavGraphBuilder.addTaskCreationScreen(
         TaskCreationScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable,
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
         )
     }
 }

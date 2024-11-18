@@ -1,10 +1,14 @@
 package com.hys.hy.task.entities
 
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 
 data class Task(
-    val taskTitle:String,
+    val taskId: String? = null,
+    val taskTitle: String,
     val taskImportance: TaskImportance,
-    val taskDescription:String,
+    val taskDescription: String,
     val taskSelectDate: LocalDate?,
+    val taskSelectTime: LocalTime?,
+    val isDone: Boolean = false
 )

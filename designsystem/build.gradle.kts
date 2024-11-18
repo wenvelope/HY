@@ -1,5 +1,5 @@
 plugins {
-    id("kmp-library-plugin")
+    id("designsystem")
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
 }
@@ -34,3 +34,6 @@ kotlin {
     }
 }
 
+dependencies {
+    debugImplementation(compose.uiTooling)
+}

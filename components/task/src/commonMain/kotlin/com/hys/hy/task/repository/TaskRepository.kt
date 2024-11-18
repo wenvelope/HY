@@ -4,14 +4,16 @@ import com.hys.hy.database.dao.TaskDao
 import com.hys.hy.database.entities.TaskTable
 import com.hys.hy.database.typeConverter.DateConverter
 import com.hys.hy.task.entities.Task
-import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.TaskImportance
+import kotlinx.datetime.LocalDate
 
 
 interface TaskRepository {
     suspend fun addTask(task: Task)
 
-    suspend fun getCurrentDayTasksByUser(userId: String): List<Task>
+    suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
+
+    suspend fun changeTaskIsDone(taskId: String, isDone: Boolean)
 
 }
 
@@ -24,22 +26,30 @@ class TaskRepositoryImpl(
             taskTitle = task.taskTitle,
             taskImportance = task.taskImportance.name,
             taskDescription = task.taskDescription,
-            taskSelectDate = task.taskSelectDate
+            taskSelectDate = task.taskSelectDate,
+            taskSelectTime = task.taskSelectTime,
+            isDone = task.isDone
         )
         taskDao.insert(taskTable)
     }
 
-    override suspend fun getCurrentDayTasksByUser(userId: String): List<Task> {
-        val timeNow = DateTimeUtil.getCurrentDate()
-        val tasks = taskDao.getTasksByUserAndDate(userId, DateConverter().fromDateToLong(timeNow))
+    override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {
+        val tasks = taskDao.getTasksByUserAndDate(userId, DateConverter().fromDateToLong(localDate))
         return tasks.map {
             Task(
                 taskTitle = it.taskTitle,
                 taskDescription = it.taskDescription,
                 taskSelectDate = it.taskSelectDate,
-                taskImportance = TaskImportance.valueOf(it.taskImportance)
+                taskImportance = TaskImportance.valueOf(it.taskImportance),
+                isDone = it.isDone,
+                taskSelectTime = it.taskSelectTime,
+                taskId = it.id
             )
         }
+    }
+
+    override suspend fun changeTaskIsDone(taskId: String, isDone: Boolean) {
+        taskDao.updateTaskIsDone(taskId, isDone)
     }
 
 

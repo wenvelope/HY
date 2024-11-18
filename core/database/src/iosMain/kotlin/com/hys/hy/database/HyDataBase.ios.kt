@@ -1,6 +1,7 @@
 package com.hys.hy.database
 
 import androidx.room.Room
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
@@ -11,7 +12,7 @@ actual fun createHyDatabase(): HyDatabase {
     val dbFile = "${fileDirectory()}/$dbFileName"
     return Room.databaseBuilder<HyDatabase>(
         name = dbFile
-    ).setDefaults().build()
+    ).setDefaults().setDriver(BundledSQLiteDriver()).build()
 }
 
 @OptIn(ExperimentalForeignApi::class)

@@ -1,6 +1,7 @@
 package com.hys.hy.database
 
 import androidx.room.Room
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import java.io.File
 
 private val userHome get() = System.getProperty("user.home")
@@ -15,6 +16,9 @@ actual fun createHyDatabase(): HyDatabase {
 
     val databasePath = File(parentFolder, dbFileName)
     return Room.databaseBuilder<HyDatabase>(
-        name = databasePath.absolutePath,
-    ).setDefaults().build()
+        name = databasePath.absolutePath
+    )
+        .setDefaults()
+        .setDriver(BundledSQLiteDriver())
+        .build()
 }

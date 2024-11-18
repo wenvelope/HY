@@ -1,5 +1,6 @@
 package com.hys.hy.task.usecase
 
+import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.repository.TaskRepository
 
@@ -13,6 +14,7 @@ class GetCurrentDayTasksUseCaseImpl(
     private val taskRepository: TaskRepository
 ): GetCurrentDayTasksUseCase{
     override suspend fun execute(input: GetCurrentDayTasksUseCase.Param): List<Task> {
-        return taskRepository.getCurrentDayTasksByUser(input.userId)
+        val timeNow = DateTimeUtil.getCurrentDate()
+        return taskRepository.getTasksByUserAndDate(input.userId,timeNow)
     }
 }
