@@ -295,6 +295,7 @@ fun TimeLineColumn(
                             Spacer(modifier = Modifier.weight(1f))
 
                             FilterChip(
+                                modifier = Modifier.height(32.dp),
                                 selected = task.isDone,
                                 onClick = {
                                     task.taskId?.let {
@@ -309,6 +310,11 @@ fun TimeLineColumn(
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = task.color,
                                     containerColor = Color.Transparent
+                                ),
+                                border = FilterChipDefaults.filterChipBorder(
+                                    selected = task.isDone,
+                                    enabled = true,
+                                    borderColor = MaterialTheme.colorScheme.surface
                                 ),
                                 elevation = null,
                                 shape = MaterialTheme.shapes.large,
