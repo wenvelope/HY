@@ -8,6 +8,8 @@ import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCaseImpl
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCaseImpl
+import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
+import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCaseImpl
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCaseImpl
 import org.koin.dsl.module
@@ -31,5 +33,9 @@ val taskModule = module {
 
     factory<ChangeTaskIsDoneUseCase> {
         ChangeTaskIsDoneUseCaseImpl(get())
+    }
+
+    factory<GetMonthTasksByUserAndDateUseCase> {
+        GetMonthTasksByUserAndDateUseCaseImpl(get())
     }
 }

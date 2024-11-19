@@ -3,6 +3,7 @@ package com.hys.hy.dateutil
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -105,6 +106,10 @@ class DateTimeUtil {
 
         fun getCurrentDate(): LocalDate {
             return getCurrentTime().date
+        }
+
+        fun getCurrentDayTime(): LocalTime {
+            return getCurrentTime().time
         }
 
 

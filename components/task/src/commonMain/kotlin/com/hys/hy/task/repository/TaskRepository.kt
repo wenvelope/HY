@@ -13,6 +13,8 @@ interface TaskRepository {
 
     suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
 
+    suspend fun getMonthTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
+
     suspend fun changeTaskIsDone(taskId: String, isDone: Boolean)
 
 }
@@ -35,6 +37,25 @@ class TaskRepositoryImpl(
 
     override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {
         val tasks = taskDao.getTasksByUserAndDate(userId, DateConverter().fromDateToLong(localDate))
+        return tasks.map {
+            Task(
+                taskTitle = it.taskTitle,
+                taskDescription = it.taskDescription,
+                taskSelectDate = it.taskSelectDate,
+                taskImportance = TaskImportance.valueOf(it.taskImportance),
+                isDone = it.isDone,
+                taskSelectTime = it.taskSelectTime,
+                taskId = it.id
+            )
+        }
+    }
+
+    override suspend fun getMonthTasksByUserAndDate(
+        userId: String,
+        localDate: LocalDate
+    ): List<Task> {
+        val tasks =
+            taskDao.getMonthsTasksByUserAndDate(userId, DateConverter().fromDateToLong(localDate))
         return tasks.map {
             Task(
                 taskTitle = it.taskTitle,

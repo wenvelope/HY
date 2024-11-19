@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -67,6 +68,10 @@ fun HomeScreen(
     animatedContentScope: AnimatedContentScope
 ) {
     val state by viewModel.container.uiStateFlow.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.sendEvent(HomeScreenViewModel.HomeScreenEvent.RefreshScreen)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -169,7 +174,8 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Greet(
-                    modifier = Modifier
+                    modifier = Modifier,
+                    state
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -183,7 +189,8 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 MonthlyPreview(
-                    modifier = Modifier
+                    modifier = Modifier,
+                    state
                 )
 
             }
@@ -192,7 +199,10 @@ fun HomeScreen(
 }
 
 @Composable
-fun MonthlyPreview(modifier: Modifier) {
+fun MonthlyPreview(
+    modifier: Modifier,
+    state: HomeScreenViewModel.HomeScreenState
+) {
     Column(
         modifier = modifier
     ) {
@@ -203,7 +213,7 @@ fun MonthlyPreview(modifier: Modifier) {
             ) {
                 MonthlyPreviewItem(
                     modifier = Modifier.height(150.dp).fillMaxWidth(),
-                    title = "22",
+                    title = "${state.currentMonthDoneTaskNum}",
                     subTitle = "已完成",
                     brush = Brush.MonthlyItemDoneBrush
                 )
@@ -212,7 +222,7 @@ fun MonthlyPreview(modifier: Modifier) {
 
                 MonthlyPreviewItem(
                     modifier = Modifier.height(105.dp).fillMaxWidth(),
-                    title = "12",
+                    title = "${state.currentMonthImportantTaskNum}",
                     subTitle = "重要",
                     brush = Brush.MonthlyItemImportantBrush
                 )
@@ -226,7 +236,7 @@ fun MonthlyPreview(modifier: Modifier) {
 
                 MonthlyPreviewItem(
                     modifier = Modifier.height(105.dp).fillMaxWidth(),
-                    title = "7",
+                    title = "${state.currentDayInProcessTasksNum}",
                     subTitle = "进行中",
                     brush = Brush.MonthlyItemInProgressBrush
                 )
@@ -245,21 +255,6 @@ fun MonthlyPreview(modifier: Modifier) {
 
     }
 }
-
-
-//@Composable
-//@Preview
-//fun MonthItemPreview() {
-//    MonthlyPreviewItem(
-//        modifier = Modifier.height(150.dp).fillMaxWidth(),
-//        title = "14",
-//        subTitle = "5 件任务",
-//        color = CardDefaults.cardColors(
-//            containerColor = MaterialTheme.colorScheme.primary,
-//            contentColor = MaterialTheme.colorScheme.onPrimary
-//        )
-//    )
-//}
 
 
 /**
@@ -316,7 +311,8 @@ fun MonthlyPreviewItem(
 
 @Composable
 fun Greet(
-    modifier: Modifier.Companion
+    modifier: Modifier,
+    state: HomeScreenViewModel.HomeScreenState
 ) {
     Column(
         modifier = modifier
@@ -328,10 +324,11 @@ fun Greet(
         Spacer(modifier = Modifier.height(4.dp))
         // 今日正在进行的任务
         Text(
-            text = "5 件任务在进行中",
+            text = "${state.currentDayInProcessTasksNum} 件任务在进行中",
             style = MaterialTheme.typography.bodyMedium,
         )
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
         Card(
             modifier = Modifier.height(93.dp).fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -344,15 +341,36 @@ fun Greet(
                     brush = Brush.CurrentTaskBrush
                 ).padding(10.dp)
             ) {
-                Spacer(modifier.weight(1f))
-                Row(
-                ) {
+                Text(
+                    text = state.currentDayInProcessTask?.taskTitle ?: "无任务",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    text = state.currentDayInProcessTask?.taskDescription ?: "",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                Row {
                     Spacer(modifier.weight(1f))
-                    Text(
-                        "现在",
-                        textAlign = TextAlign.End,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    if (state.currentDayInProcessTask != null) {
+                        val timeText = with(state.currentDayInProcessTask!!) {
+                            "${
+                                taskSelectTime!!.hour.toString().padStart(2, '0')
+                            }:${
+                                taskSelectTime!!.minute.toString().padStart(2, '0')
+                            }"
+                        }
+                        Text(
+                            timeText,
+                            textAlign = TextAlign.End,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                    }
                 }
             }
         }

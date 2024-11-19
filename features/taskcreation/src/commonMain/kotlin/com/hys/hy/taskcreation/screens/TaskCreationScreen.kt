@@ -164,14 +164,14 @@ fun TaskCreationScreen(
                         )
                     )
                 },
-                textStyle = MaterialTheme.typography.titleLarge.copy(
+                textStyle = MaterialTheme.typography.headlineMedium.copy(
                     color = MaterialTheme.colorScheme.onSurface
                 ),
                 decorationBox = { innerTextField ->
                     innerTextField()
                     if (state.taskTitle.isEmpty()) {
                         Text(
-                            "准备做什么？", style = MaterialTheme.typography.titleLarge,
+                            "准备做什么？", style = MaterialTheme.typography.headlineMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

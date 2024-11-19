@@ -32,6 +32,17 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE userId = :userId AND taskSelectDate = :date")
     suspend fun getTasksByUserAndDate(userId: String, date: Long): List<TaskTable>
 
+    // 查询指定用户当前所在月的所有任务
+    @Query(
+        """
+    SELECT * FROM task
+    WHERE userId = :userId 
+    AND taskSelectDate IS NOT NULL
+    AND strftime('%Y-%m', taskSelectDate / 1000, 'unixepoch') = strftime('%Y-%m', :date / 1000, 'unixepoch')
+    """
+    )
+    suspend fun getMonthsTasksByUserAndDate(userId: String, date: Long): List<TaskTable>
+
     // 查询所有task
     @Query("SELECT * FROM task")
     suspend fun getAllTasks(): List<TaskTable>

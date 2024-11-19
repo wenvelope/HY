@@ -264,9 +264,12 @@ fun TimeLineColumn(
             ) { modifier ->
 
                 Card(
-                    modifier = modifier.height(104.dp).fillMaxWidth().clickable {
+                    modifier = modifier
+                        .height(93.dp)
+                        .fillMaxWidth()
+                        .clickable {
 
-                    },
+                        },
                     colors = CardDefaults.cardColors(
                         containerColor = Color.Transparent,
                         contentColor = MaterialTheme.colorScheme.surface

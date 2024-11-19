@@ -38,6 +38,8 @@ kotlin {
 
             api(projects.designsystem)
             implementation(projects.core.viewmodel)
+            implementation(projects.components.task)
+            implementation(projects.core.dateutil)
         }
 
         desktopMain.dependencies {

@@ -6,6 +6,9 @@ import org.koin.dsl.lazyModule
 
 val homeModule = lazyModule {
     viewModel<HomeScreenViewModel> {
-        HomeScreenViewModel()
+        HomeScreenViewModel(
+            getMonthTasksByUserAndDateUseCase = get(),
+            getTasksByUserAndDateUseCase = get()
+        )
     }
 }
