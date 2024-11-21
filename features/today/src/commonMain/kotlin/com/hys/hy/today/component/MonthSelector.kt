@@ -30,7 +30,9 @@ fun MonthSelector(
     state: TodayScreenViewModel.TodayState
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp)
+        modifier = Modifier.fillMaxWidth()
+            .height(45.dp)
+            .padding(horizontal = 18.dp)
             .padding(top = 10.dp)
     ) {
         IconButton(

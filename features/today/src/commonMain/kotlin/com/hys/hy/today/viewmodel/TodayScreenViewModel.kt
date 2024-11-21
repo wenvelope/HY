@@ -39,10 +39,15 @@ class TodayScreenViewModel(
         val currentSelectMonth: Month,
         val currentTaskItemList: List<Task> = emptyList(),
         val isOpenBottomSheet: Boolean = false,
-        val currentSelectTaskIndex: Int = -1
+        val isDaySelectorShow: Boolean = true,
+        val currentSelectTaskIndex: Int = -1,
+        val currentDayItemListSorted: List<Task> = emptyList()
     ) : UiState {
         val todayIndex: Int
             get() = today.dayOfMonth - 1
+        val todayMonth: Month
+            get() = today.month
+
         val forwardMonth: Month
             get() {
                 return if (currentSelectMonth.number == 1) {
@@ -63,14 +68,7 @@ class TodayScreenViewModel(
             get() {
                 return LocalDate(today.year, currentSelectMonth, currentSelectDayIndex + 1)
             }
-        val currentDayItemListSorted: List<Task>
-            get() {
-                return currentTaskItemList.sortedWith(
-                    compareBy<Task> { it.taskSelectTime == null }.thenBy {
-                        it.taskSelectTime
-                    }
-                )
-            }
+
     }
 
     sealed interface TodayEvent : UiEvent {
@@ -85,6 +83,8 @@ class TodayScreenViewModel(
         data class OpenBottomSheet(val taskIndex: Int) : TodayEvent
 
         data object CloseBottomSheet : TodayEvent
+
+        data class ChangeDaySelectorShowState(val isShow: Boolean) : TodayEvent
 
         data class ChangeTaskIsDone(val taskId: String, val isDone: Boolean) : TodayEvent
     }
@@ -170,9 +170,15 @@ class TodayScreenViewModel(
                                     )
                                 )
                             }
+                            val currentDayItemListSorted = items.sortedWith(
+                                compareBy<Task> { it.taskSelectTime == null }.thenBy {
+                                    it.taskSelectTime
+                                }
+                            )
                             updateState {
                                 copy(
-                                    currentTaskItemList = items
+                                    currentTaskItemList = items,
+                                    currentDayItemListSorted = currentDayItemListSorted
                                 )
                             }
                         }
@@ -211,6 +217,14 @@ class TodayScreenViewModel(
                                     userId = "test",
                                     localDate = uiStateFlow.value.currentSelectLocalDate
                                 )
+                            )
+                        }
+                    }
+
+                    is TodayEvent.ChangeDaySelectorShowState -> {
+                        updateState {
+                            copy(
+                                isDaySelectorShow = event.isShow
                             )
                         }
                     }

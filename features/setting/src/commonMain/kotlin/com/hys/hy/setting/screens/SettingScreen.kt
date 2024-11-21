@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -40,7 +39,7 @@ import hy.features.setting.generated.resources.naixv
 import org.jetbrains.compose.resources.painterResource
 
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SettingScreen(
     onHomeTabClick: () -> Unit,
