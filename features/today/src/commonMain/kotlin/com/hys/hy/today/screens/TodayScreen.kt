@@ -91,10 +91,7 @@ fun TodayScreen(
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(
-            TodayScreenViewModel.TodayEvent.GetTaskByUserAndDate(
-                "test",
-                state.currentSelectLocalDate
-            )
+            TodayScreenViewModel.TodayEvent.RefreshDateAndData
         )
     }
 
@@ -304,7 +301,7 @@ fun TodayScreen(
 
 
 @Composable
-fun TimeLineColumn(
+internal fun TimeLineColumn(
     state: TodayScreenViewModel.TodayState,
     viewModel: TodayScreenViewModel,
     lazyColumnState: LazyListState

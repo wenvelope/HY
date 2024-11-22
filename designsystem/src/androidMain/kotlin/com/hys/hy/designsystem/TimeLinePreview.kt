@@ -170,7 +170,7 @@ private fun TimelinePreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun Test() {
+internal fun Test() {
     HYTheme {
         Surface(
             modifier = Modifier.fillMaxSize()

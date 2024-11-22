@@ -44,6 +44,7 @@ include(":features:home")
 include(":features:today")
 include(":features:taskcreation")
 include(":features:search")
+include(":features:widget")
 
 include(":components:task")
 

@@ -87,6 +87,8 @@ class TodayScreenViewModel(
         data class ChangeDaySelectorShowState(val isShow: Boolean) : TodayEvent
 
         data class ChangeTaskIsDone(val taskId: String, val isDone: Boolean) : TodayEvent
+
+        data object RefreshDateAndData : TodayEvent
     }
 
     override fun initialState(): TodayState {
@@ -227,6 +229,24 @@ class TodayScreenViewModel(
                                 isDaySelectorShow = event.isShow
                             )
                         }
+                    }
+
+                    is TodayEvent.RefreshDateAndData -> {
+                       val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        updateState {
+                            copy(
+                                today = today,
+                                currentSelectDayIndex = today.dayOfMonth - 1,
+                                currentSelectMonth = today.month,
+                                currentDayItemList = getDayItemList(today.month, today.year)
+                            )
+                        }
+                        sendEvent(
+                            TodayEvent.GetTaskByUserAndDate(
+                                "test",
+                                uiStateFlow.value.currentSelectLocalDate
+                            )
+                        )
                     }
                 }
             }

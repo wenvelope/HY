@@ -1,5 +1,6 @@
 package com.hys.hy.taskcreation.viewmodel
 
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
@@ -9,6 +10,7 @@ import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import com.hys.hy.widget.UpdateWidgetImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -126,6 +128,7 @@ class TaskCreationViewModel(
                                     )
                                 )
                             }
+                            UpdateWidgetImpl.updateWidget()
                             sendEvent(TaskCreationEvent.ShowSnackBar("添加成功"))
                         }
                     }
@@ -147,7 +150,13 @@ class TaskCreationViewModel(
                     }
 
                     is TaskCreationEvent.ShowSnackBar -> {
-                        uiStateFlow.value.snackBarHostState.showSnackbar(event.message)
+                        viewModelScope.launch {
+                            uiStateFlow.value.snackBarHostState.showSnackbar(
+                                event.message,
+                                duration = SnackbarDuration.Short,
+                                withDismissAction = true
+                            )
+                        }
                     }
                 }
             }

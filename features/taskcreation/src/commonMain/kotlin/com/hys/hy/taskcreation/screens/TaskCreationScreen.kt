@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -115,7 +116,9 @@ fun TaskCreationScreen(
         },
         snackbarHost = {
             SnackbarHost(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = 72.dp),
                 hostState = state.snackBarHostState
             ) { snackbarData ->
                 Box(
@@ -123,7 +126,10 @@ fun TaskCreationScreen(
                 ) {
                     Snackbar(
                         snackbarData = snackbarData,
-                        modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 56.dp)
+                        modifier = Modifier
+                            .padding(horizontal = 60.dp)
+                            .align(Alignment.TopCenter),
+                        shape = MaterialTheme.shapes.large
                     )
                 }
 

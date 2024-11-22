@@ -13,6 +13,12 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.permissions.compose)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.permissions.compose)
         }
 
         commonMain.dependencies {
@@ -39,6 +45,7 @@ kotlin {
             implementation(projects.core.viewmodel)
 
             implementation(projects.components.task)
+            implementation(projects.features.widget)
         }
 
         desktopMain.dependencies {

@@ -56,5 +56,3 @@ class TaskImportanceName(
 }
 
 
-fun main() {
-}

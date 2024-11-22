@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.hys.hy.database.entities.TaskTable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -31,6 +32,10 @@ interface TaskDao {
     // 查询指定用户当前所在天的所有任务
     @Query("SELECT * FROM task WHERE userId = :userId AND taskSelectDate = :date")
     suspend fun getTasksByUserAndDate(userId: String, date: Long): List<TaskTable>
+
+    // 查询指定用户当前所在天的所有任务 返回Flow
+    @Query("SELECT * FROM task WHERE userId = :userId AND taskSelectDate = :date")
+    fun getTasksByUserAndDateFlow(userId: String, date: Long): Flow<List<TaskTable>>
 
     // 查询指定用户当前所在月的所有任务
     @Query(
