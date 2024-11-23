@@ -14,8 +14,6 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
-import androidx.glance.appwidget.CheckBox
-import androidx.glance.appwidget.CheckboxDefaults
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
@@ -34,6 +32,9 @@ import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
@@ -42,6 +43,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.mp.KoinPlatform
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 
 class HyAppWidget : GlanceAppWidget(), KoinComponent {
@@ -72,12 +76,22 @@ class HyAppWidget : GlanceAppWidget(), KoinComponent {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val getUseCase: GetCurrentDayTasksUseCase by inject()
+        val changeUseCase: ChangeTaskIsDoneUseCase by inject()
+
         val tasksFlow = getUseCase.executeFlow(GetCurrentDayTasksUseCase.Param("test")).map {
             it.filter { task ->
                 task.taskSelectTime != null
             }
         }
-        val changeUseCase: ChangeTaskIsDoneUseCase by inject()
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "HyAppWidgetWorker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            PeriodicWorkRequest.Builder(
+                HyWidgetWorker::class.java,
+                5.seconds.toJavaDuration()
+            ).setInitialDelay(15.minutes.toJavaDuration()).build()
+        )
+
 
         provideContent {
             val state by tasksFlow.collectAsState(initial = emptyList())
@@ -99,11 +113,12 @@ private fun MyContent(tasks: List<Task> = emptyList(), onTaskClick: (Task) -> Un
     GlanceTheme {
         Column(
             modifier = GlanceModifier.fillMaxSize()
-                .background(GlanceTheme.colors.background)
                 .padding(10.dp)
                 .cornerRadius(
-                    20.dp
-                ).clickable(
+                    14.dp
+                )
+                .background(GlanceTheme.colors.background)
+                .clickable(
                     actionStartActivity(
                         componentName = ComponentName(
                             "com.hys.hy",
@@ -128,56 +143,49 @@ private fun MyContent(tasks: List<Task> = emptyList(), onTaskClick: (Task) -> Un
                 items(
                     count = tasks.size,
                     itemContent = { index ->
-                        Row(
-                            modifier = GlanceModifier
-                                .fillMaxWidth()
-                                .background(tasks[index].color)
-                                .cornerRadius(14.dp)
-                                .padding(horizontal = 5.dp)
-                                .padding(vertical = 5.dp)
-                                .clickable(
-                                    actionStartActivity(
-                                        componentName = ComponentName(
-                                            "com.hys.hy",
-                                            "com.hys.hy.MainActivity"
+                        Column {
+                            Row(
+                                modifier = GlanceModifier
+                                    .fillMaxWidth()
+                                    .cornerRadius(14.dp)
+                                    .height(32.dp)
+                                    .background(tasks[index].color)
+                                    .padding(horizontal = 5.dp)
+                                    .clickable(
+                                        actionStartActivity(
+                                            componentName = ComponentName(
+                                                "com.hys.hy",
+                                                "com.hys.hy.MainActivity"
+                                            )
                                         )
-                                    )
-                                ),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            val task = tasks[index]
-                            val timeText = if (task.taskSelectTime != null) "${
-                                task.taskSelectTime?.hour.toString().padStart(2, '0')
-                            }:${
-                                task.taskSelectTime?.minute.toString().padStart(2, '0')
-                            }" else "未定时间"
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val task = tasks[index]
+                                val timeText = if (task.taskSelectTime != null) "${
+                                    task.taskSelectTime?.hour.toString().padStart(2, '0')
+                                }:${
+                                    task.taskSelectTime?.minute.toString().padStart(2, '0')
+                                }" else "未定时间"
 
-                            Text(
-                                timeText,
-                                modifier = GlanceModifier.padding(start = 3.dp, end = 10.dp),
-                                maxLines = 1,
-                                style = TextStyle(
-                                    color = ColorProvider(Color.White),
+                                Text(
+                                    timeText,
+                                    modifier = GlanceModifier.padding(start = 3.dp, end = 10.dp),
+                                    maxLines = 1,
+                                    style = TextStyle(
+                                        color = ColorProvider(Color.White),
+                                    )
                                 )
-                            )
-                            Text(
-                                text = tasks[index].taskTitle,
-                                maxLines = 1,
-                                style = TextStyle(
-                                    color = ColorProvider(Color.White),
+                                Text(
+                                    text = tasks[index].taskTitle,
+                                    maxLines = 1,
+                                    style = TextStyle(
+                                        color = ColorProvider(Color.White),
+                                    )
                                 )
-                            )
-                            Spacer(modifier = GlanceModifier.defaultWeight())
-                            CheckBox(
-                                checked = task.isDone,
-                                onCheckedChange = {
-                                    onTaskClick.invoke(task)
-                                },
-                                colors = CheckboxDefaults.colors(
-                                    checkedColor = ColorProvider(task.copy(isDone = true).color),
-                                    uncheckedColor = ColorProvider(Color.White)
-                                )
-                            )
+                                Spacer(modifier = GlanceModifier.defaultWeight())
+                            }
+                            Spacer(modifier = GlanceModifier.height(6.dp))
                         }
 
                     }

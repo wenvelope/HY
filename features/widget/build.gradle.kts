@@ -15,16 +15,13 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation (libs.androidx.glance.appwidget)
             implementation (libs.androidx.glance.material3)
+            implementation(libs.androidx.work.runtime)
         }
 
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.navigation.compose)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

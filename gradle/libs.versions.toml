@@ -26,10 +26,12 @@ koin = "4.0.0"
 kotlin-serialization = "1.7.3"
 ksp = "2.0.20-1.0.25"
 sqlite = "2.5.0-alpha11"
+workRuntime = "2.10.0"
 
 [libraries]
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceAppwidget" }
 androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glanceAppwidget" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "animation" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
