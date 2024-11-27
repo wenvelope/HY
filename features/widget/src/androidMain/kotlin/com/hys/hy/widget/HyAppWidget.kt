@@ -81,7 +81,7 @@ class HyAppWidget : GlanceAppWidget(), KoinComponent {
         val tasksFlow = getUseCase.executeFlow(GetCurrentDayTasksUseCase.Param("test")).map {
             it.filter { task ->
                 task.taskSelectTime != null
-            }
+            }.sortedBy { task -> task.taskSelectTime!! }
         }
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             "HyAppWidgetWorker",

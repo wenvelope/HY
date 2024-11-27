@@ -10,7 +10,6 @@ import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
-import com.hys.hy.widget.UpdateWidgetImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
@@ -128,7 +127,6 @@ class TaskCreationViewModel(
                                     )
                                 )
                             }
-                            UpdateWidgetImpl.updateWidget()
                             sendEvent(TaskCreationEvent.ShowSnackBar("添加成功"))
                         }
                     }

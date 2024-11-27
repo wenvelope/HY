@@ -365,11 +365,10 @@ internal fun TimeLineColumn(
                                     text = task.taskTitle,
                                     style = MaterialTheme.typography.titleMedium,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
+                                    modifier = Modifier.fillMaxWidth(0.7f)
                                 )
-
                                 Spacer(modifier = Modifier.weight(1f))
-
                                 FilterChip(
                                     modifier = Modifier.height(32.dp),
                                     selected = task.isDone,
