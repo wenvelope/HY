@@ -7,7 +7,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 
-class DateConverter {
+object DateConverter {
     @TypeConverter
     fun fromLongToDate(timeInMillis: Long): LocalDate {
         return Instant.fromEpochMilliseconds(timeInMillis)

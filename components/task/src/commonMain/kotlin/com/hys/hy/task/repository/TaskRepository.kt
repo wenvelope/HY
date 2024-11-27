@@ -40,7 +40,7 @@ class TaskRepositoryImpl(
     }
 
     override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {
-        val tasks = taskDao.getTasksByUserAndDate(userId, DateConverter().fromDateToLong(localDate))
+        val tasks = taskDao.getTasksByUserAndDate(userId, DateConverter.fromDateToLong(localDate))
         return tasks.map {
             Task(
                 taskTitle = it.taskTitle,
@@ -60,7 +60,7 @@ class TaskRepositoryImpl(
     ): Flow<List<Task>> {
         return taskDao.getTasksByUserAndDateFlow(
             userId,
-            DateConverter().fromDateToLong(localDate)
+            DateConverter.fromDateToLong(localDate)
         ).map { tasks ->
             tasks.map {
                 Task(
@@ -82,7 +82,7 @@ class TaskRepositoryImpl(
         localDate: LocalDate
     ): List<Task> {
         val tasks =
-            taskDao.getMonthsTasksByUserAndDate(userId, DateConverter().fromDateToLong(localDate))
+            taskDao.getMonthsTasksByUserAndDate(userId, DateConverter.fromDateToLong(localDate))
         return tasks.map {
             Task(
                 taskTitle = it.taskTitle,

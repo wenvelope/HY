@@ -31,10 +31,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
+import com.hys.hy.setting.navigation.TaskCategory
 import hy.features.setting.generated.resources.Res
+import hy.features.setting.generated.resources.category
 import hy.features.setting.generated.resources.naixv
 import org.jetbrains.compose.resources.painterResource
 
@@ -45,6 +48,7 @@ fun SettingScreen(
     onHomeTabClick: () -> Unit,
     onSettingTabClick: () -> Unit,
     onTodayTabClick: () -> Unit,
+    navController: NavController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope
 ) {
@@ -100,16 +104,60 @@ fun SettingScreen(
                         }
                 )
 
+                TaskCategorySettingItem(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable {
+                            navController.navigate(TaskCategory)
+                        }
+                )
+
                 AboutItem(
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .clip(MaterialTheme.shapes.medium)
-                        .clickable { }
+                        .clickable {
+
+                        }
                 )
             }
         }
 
     }
+}
+
+@Composable
+fun TaskCategorySettingItem(
+    modifier: Modifier
+) {
+    ListItem(
+        modifier = modifier,
+        headlineContent = {
+            Text(
+                "任务种类",
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
+        leadingContent = {
+            Icon(
+                painter = painterResource(Res.drawable.category),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        )
+    )
+
 }
 
 

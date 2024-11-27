@@ -182,6 +182,7 @@ fun TaskCreationScreen(
                         )
                     }
                 },
+                maxLines = 2,
                 cursorBrush = SolidColor(value = MaterialTheme.colorScheme.primary)
             )
 

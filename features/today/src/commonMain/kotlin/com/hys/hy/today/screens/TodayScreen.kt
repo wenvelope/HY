@@ -366,9 +366,11 @@ internal fun TimeLineColumn(
                                     style = MaterialTheme.typography.titleMedium,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    modifier = Modifier.fillMaxWidth(0.7f)
+                                    modifier = Modifier.fillMaxWidth(0.6f)
                                 )
+
                                 Spacer(modifier = Modifier.weight(1f))
+
                                 FilterChip(
                                     modifier = Modifier.height(32.dp),
                                     selected = task.isDone,
@@ -419,6 +421,7 @@ internal fun TimeLineColumn(
                                         }
                                     }
                                 )
+
                             }
 
 
