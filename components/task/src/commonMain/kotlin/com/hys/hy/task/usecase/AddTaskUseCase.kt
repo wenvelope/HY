@@ -14,6 +14,7 @@ interface AddTaskUseCase : UseCase<AddTaskUseCase.Param, Unit> {
         val taskSelectDate: LocalDate?,
         val taskImportance: TaskImportance,
         val taskSelectTime: LocalTime?,
+        val taskCategory:String?,
         val isDone: Boolean
     )
 }
@@ -29,6 +30,7 @@ class AddTaskUseCaseImpl(
             taskSelectDate = input.taskSelectDate,
             taskImportance = input.taskImportance,
             taskSelectTime = input.taskSelectTime,
+            taskCategory = input.taskCategory,
             isDone = input.isDone
         )
         taskRepository.addTask(task)

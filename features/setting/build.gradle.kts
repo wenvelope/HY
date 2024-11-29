@@ -34,7 +34,8 @@ kotlin {
 
             implementation(libs.kotlinx.serialization)
 
-            api(projects.designsystem)
+            implementation(projects.designsystem)
+            implementation(projects.components.taskCategory)
             implementation(projects.core.viewmodel)
         }
 

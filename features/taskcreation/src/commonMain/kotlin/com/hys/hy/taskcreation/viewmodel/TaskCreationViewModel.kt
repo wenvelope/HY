@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.AddTaskUseCase
+import com.hys.hy.taskCategory.entities.TaskCategory
+import com.hys.hy.taskCategory.usecase.GetTaskCategoriesUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
@@ -20,7 +22,8 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.plus
 
 class TaskCreationViewModel(
-    private val addTaskUseCase: AddTaskUseCase
+    private val addTaskUseCase: AddTaskUseCase,
+    private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase
 ) : BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
     data class TaskCreationState(
         val taskTitle: String = "",
@@ -30,7 +33,9 @@ class TaskCreationViewModel(
         val isOpenTimePickerDialog: Boolean = false,
         val taskSelectedTime: LocalTime? = null,
         val taskImportance: TaskImportance = TaskImportance.ORDINARY,
-        val snackBarHostState: SnackbarHostState = SnackbarHostState()
+        val taskCategoryList: List<TaskCategory> = emptyList(),
+        val snackBarHostState: SnackbarHostState = SnackbarHostState(),
+        val taskCategoryName: String? = null
     ) : UiState {
         val isTodaySelected: Boolean
             get() = taskSelectedDate != null && taskSelectedDate == DateTimeUtil.getCurrentDate()
@@ -53,7 +58,11 @@ class TaskCreationViewModel(
         data class ChangeTaskImportance(val taskImportance: TaskImportance) : TaskCreationEvent
         data class ChangeTaskSelectedTime(val taskSelectedTime: LocalTime?) : TaskCreationEvent
 
+        data class ChangeSelectedTaskCategory(val taskCategoryName: String?) : TaskCreationEvent
+
         data class ShowSnackBar(val message: String) : TaskCreationEvent
+
+        data class GetCategories(val userId: String) : TaskCreationEvent
 
     }
 
@@ -123,7 +132,8 @@ class TaskCreationViewModel(
                                         taskSelectDate = state.taskSelectedDate,
                                         taskImportance = state.taskImportance,
                                         taskSelectTime = state.taskSelectedTime,
-                                        isDone = false
+                                        isDone = false,
+                                        taskCategory = state.taskCategoryName
                                     )
                                 )
                             }
@@ -153,6 +163,31 @@ class TaskCreationViewModel(
                                 event.message,
                                 duration = SnackbarDuration.Short,
                                 withDismissAction = true
+                            )
+                        }
+                    }
+
+                    is TaskCreationEvent.GetCategories -> {
+                        viewModelScope.launch {
+                            val categories = withContext(Dispatchers.IO) {
+                                getTaskCategoriesUseCase.execute(
+                                    GetTaskCategoriesUseCase.Param(
+                                        userId = event.userId
+                                    )
+                                )
+                            }
+                            updateState {
+                                copy(
+                                    taskCategoryList = categories
+                                )
+                            }
+                        }
+                    }
+
+                    is TaskCreationEvent.ChangeSelectedTaskCategory -> {
+                        updateState {
+                            copy(
+                                taskCategoryName = event.taskCategoryName
                             )
                         }
                     }

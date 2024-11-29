@@ -34,6 +34,7 @@ class TaskRepositoryImpl(
             taskDescription = task.taskDescription,
             taskSelectDate = task.taskSelectDate,
             taskSelectTime = task.taskSelectTime,
+            taskCategoryName = task.taskCategory,
             isDone = task.isDone
         )
         taskDao.insert(taskTable)
@@ -48,6 +49,7 @@ class TaskRepositoryImpl(
                 taskSelectDate = it.taskSelectDate,
                 taskImportance = TaskImportance.valueOf(it.taskImportance),
                 isDone = it.isDone,
+                taskCategory = it.taskCategoryName,
                 taskSelectTime = it.taskSelectTime,
                 taskId = it.id
             )

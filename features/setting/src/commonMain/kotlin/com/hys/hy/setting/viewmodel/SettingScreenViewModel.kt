@@ -5,8 +5,8 @@ import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
 
-class SettingScreenModel :
-    BaseViewModelCore<SettingScreenModel.SettingState, SettingScreenModel.SettingEvent>() {
+class SettingScreenViewModel :
+    BaseViewModelCore<SettingScreenViewModel.SettingState, SettingScreenViewModel.SettingEvent>() {
     data class SettingState(
         val userName:String
     ) : UiState

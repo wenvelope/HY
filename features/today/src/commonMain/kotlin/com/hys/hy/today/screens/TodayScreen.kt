@@ -445,7 +445,7 @@ internal fun TimeLineColumn(
 
                             Text(
                                 modifier = Modifier.align(Alignment.End),
-                                text = timeText,
+                                text = task.taskCategory?.let { "$it · $timeText" } ?: timeText,
                                 style = MaterialTheme.typography.bodySmall,
                                 textAlign = TextAlign.End
                             )

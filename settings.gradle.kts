@@ -47,6 +47,7 @@ include(":features:search")
 include(":features:widget")
 
 include(":components:task")
+include(":components:taskCategory")
 
 
 

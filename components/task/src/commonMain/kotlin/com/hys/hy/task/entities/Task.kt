@@ -10,5 +10,6 @@ data class Task(
     val taskDescription: String,
     val taskSelectDate: LocalDate?,
     val taskSelectTime: LocalTime?,
+    val taskCategory:String?=null,
     val isDone: Boolean = false
 )

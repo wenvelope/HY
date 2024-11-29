@@ -366,7 +366,8 @@ fun Greet(
                             }"
                         }
                         Text(
-                            timeText,
+                            state.currentDayInProcessTask!!.taskCategory?.let { "$it · $timeText" }
+                                ?: timeText,
                             textAlign = TextAlign.End,
                             style = MaterialTheme.typography.bodySmall,
                         )

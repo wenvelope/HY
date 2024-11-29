@@ -35,11 +35,14 @@ import androidx.navigation.NavController
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
+import com.hys.hy.setting.navigation.About
 import com.hys.hy.setting.navigation.TaskCategory
+import com.hys.hy.setting.viewmodel.SettingScreenViewModel
 import hy.features.setting.generated.resources.Res
 import hy.features.setting.generated.resources.category
 import hy.features.setting.generated.resources.naixv
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -50,7 +53,8 @@ fun SettingScreen(
     onTodayTabClick: () -> Unit,
     navController: NavController,
     sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
+    animatedContentScope: AnimatedContentScope,
+    viewModel: SettingScreenViewModel = koinViewModel()
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -118,7 +122,7 @@ fun SettingScreen(
                         .padding(top = 16.dp)
                         .clip(MaterialTheme.shapes.medium)
                         .clickable {
-
+                            navController.navigate(About)
                         }
                 )
             }

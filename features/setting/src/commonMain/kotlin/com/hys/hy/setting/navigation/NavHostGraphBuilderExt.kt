@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.hys.hy.setting.screens.AboutScreen
 import com.hys.hy.setting.screens.SettingScreen
 import com.hys.hy.setting.screens.TaskCategoryScreen
 import kotlinx.serialization.Serializable
@@ -55,6 +56,9 @@ object SettingGraph
 @Serializable
 object TaskCategory
 
+@Serializable
+object About
+
 fun NavGraphBuilder.addTaskCategoryScreen(
     onBackClick: () -> Unit
 ) {
@@ -65,6 +69,21 @@ fun NavGraphBuilder.addTaskCategoryScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         TaskCategoryScreen(
+            onBackClick = onBackClick
+        )
+    }
+}
+
+fun NavGraphBuilder.addAboutScreen(
+    onBackClick: () -> Unit
+) {
+    composable<About>(
+        enterTransition = { slideInHorizontally { it / 3 } + fadeIn() },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
+    ) {
+        AboutScreen(
             onBackClick = onBackClick
         )
     }
@@ -116,6 +135,10 @@ fun NavGraphBuilder.addSettingGraph(
         )
 
         addTaskCategoryScreen {
+            navController.popBackStack()
+        }
+
+        addAboutScreen {
             navController.popBackStack()
         }
     }

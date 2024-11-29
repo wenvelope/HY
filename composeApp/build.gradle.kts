@@ -39,6 +39,7 @@ kotlin {
             implementation(projects.features.taskcreation)
             implementation(projects.features.search)
 
+            implementation(projects.components.taskCategory)
             implementation(projects.components.task)
 
             implementation(projects.core.database)
