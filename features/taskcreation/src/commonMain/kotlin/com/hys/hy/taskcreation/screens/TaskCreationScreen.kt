@@ -1,7 +1,6 @@
 package com.hys.hy.taskcreation.screens
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Animatable
@@ -119,7 +118,7 @@ private fun Modifier.animatePlacement(): Modifier = composed {
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
-    ExperimentalLayoutApi::class, ExperimentalAnimationApi::class
+    ExperimentalLayoutApi::class
 )
 @Composable
 fun TaskCreationScreen(

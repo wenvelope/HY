@@ -5,6 +5,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.hys.hy.search.screens.SearchScreen
 import kotlinx.serialization.Serializable
@@ -18,7 +19,8 @@ fun NavGraphBuilder.addSearchScreen(
     onHomeTabClick: () -> Unit = {},
     onSettingTabClick: () -> Unit = {},
     onTodayTabClick: () -> Unit = {},
-    sharedTransitionScope: SharedTransitionScope
+    sharedTransitionScope: SharedTransitionScope,
+    navController: NavHostController
 ) {
     composable<Search>(
         enterTransition = { EnterTransition.None },
@@ -27,8 +29,7 @@ fun NavGraphBuilder.addSearchScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         SearchScreen(
-            sharedTransitionScope = sharedTransitionScope,
-            animatedContentScope = this@composable,
+            navController
         )
     }
 }

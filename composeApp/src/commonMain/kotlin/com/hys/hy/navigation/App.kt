@@ -74,6 +74,7 @@ fun HYNavHost() {
 
             addSearchScreen(
                 sharedTransitionScope = this@SharedTransitionLayout,
+                navController = navController
             )
 
 
