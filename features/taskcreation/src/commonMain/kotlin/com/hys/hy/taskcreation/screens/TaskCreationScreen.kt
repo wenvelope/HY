@@ -195,7 +195,6 @@ fun TaskCreationScreen(
             modifier = Modifier.padding(innerPadding).padding(horizontal = 16.dp)
         ) {
 
-
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -206,7 +205,7 @@ fun TaskCreationScreen(
                 }
 
                 for ((index, category) in sortedList.withIndex()) {
-                    key(index) {
+                    key(index,category) {
                         FilterChip(
                             modifier = Modifier.animatePlacement(),
                             selected = state.taskCategoryName == category.name,
