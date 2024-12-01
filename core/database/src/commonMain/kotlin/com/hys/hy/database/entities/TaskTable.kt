@@ -2,6 +2,7 @@ package com.hys.hy.database.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -17,7 +18,8 @@ import kotlin.uuid.Uuid
             onDelete = ForeignKey.SET_NULL,
             onUpdate = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["taskCategoryName"])]
 )
 @OptIn(ExperimentalUuidApi::class)
 data class TaskTable(
