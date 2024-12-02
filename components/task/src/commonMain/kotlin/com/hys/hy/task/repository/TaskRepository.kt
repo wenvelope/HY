@@ -5,6 +5,7 @@ import com.hys.hy.database.entities.TaskTable
 import com.hys.hy.database.typeConverter.DateConverter
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.entities.TaskImportance
+import com.hys.hy.task.entities.TaskWithCategory
 import kotlinx.datetime.LocalDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,6 +21,20 @@ interface TaskRepository {
     suspend fun getMonthTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
 
     suspend fun changeTaskIsDone(taskId: String, isDone: Boolean)
+
+    suspend fun getMonthTaskWithCategoryByUser(
+        userId: String,
+        localDate: LocalDate
+    ): List<TaskWithCategory>
+
+    suspend fun getTaskWithCategoryByUserAndDateAndCategoryAndIsDone(
+        userId: String,
+        taskTitle: String?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        category: String?,
+        isDone: Boolean?
+    ): List<TaskWithCategory>
 
 }
 
@@ -100,6 +115,58 @@ class TaskRepositoryImpl(
 
     override suspend fun changeTaskIsDone(taskId: String, isDone: Boolean) {
         taskDao.updateTaskIsDone(taskId, isDone)
+    }
+
+    override suspend fun getMonthTaskWithCategoryByUser(
+        userId: String,
+        localDate: LocalDate
+    ): List<TaskWithCategory> {
+        return taskDao.getMonthsTasksWithCategoryByUserAndDate(
+            userId,
+            DateConverter.fromDateToLong(localDate)
+        ).map {
+            TaskWithCategory(
+                taskId = it.task.id,
+                taskTitle = it.task.taskTitle,
+                taskDescription = it.task.taskDescription,
+                taskSelectDate = it.task.taskSelectDate,
+                taskImportance = TaskImportance.valueOf(it.task.taskImportance),
+                isDone = it.task.isDone,
+                taskCategoryName = it.taskCategory?.name,
+                taskCategoryColor = it.taskCategory?.color,
+                taskSelectTime = it.task.taskSelectTime
+            )
+        }
+    }
+
+    override suspend fun getTaskWithCategoryByUserAndDateAndCategoryAndIsDone(
+        userId: String,
+        taskTitle: String?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        category: String?,
+        isDone: Boolean?
+    ): List<TaskWithCategory> {
+        return taskDao.getTasksByUserAndDateRangeAndCategoryAndIsDone(
+            userId,
+            taskTitle,
+            startDate?.let { DateConverter.fromDateToLong(it) },
+            endDate?.let { DateConverter.fromDateToLong(it) },
+            category,
+            isDone
+        ).map {
+            TaskWithCategory(
+                taskId = it.task.id,
+                taskTitle = it.task.taskTitle,
+                taskDescription = it.task.taskDescription,
+                taskSelectDate = it.task.taskSelectDate,
+                taskImportance = TaskImportance.valueOf(it.task.taskImportance),
+                isDone = it.task.isDone,
+                taskCategoryName = it.taskCategory?.name,
+                taskCategoryColor = it.taskCategory?.color,
+                taskSelectTime = it.task.taskSelectTime
+            )
+        }
     }
 
 

@@ -10,6 +10,10 @@ import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCaseImpl
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCaseImpl
+import com.hys.hy.task.usecase.GetMonthsTaskWithCategoryByUser
+import com.hys.hy.task.usecase.GetMonthsTaskWithCategoryByUserImpl
+import com.hys.hy.task.usecase.GetTaskWithCategoryByParams
+import com.hys.hy.task.usecase.GetTaskWithCategoryByParamsImpl
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCaseImpl
 import org.koin.dsl.module
@@ -38,4 +42,12 @@ val taskModule = module {
     factory<GetMonthTasksByUserAndDateUseCase> {
         GetMonthTasksByUserAndDateUseCaseImpl(get())
     }
+
+    factory<GetMonthsTaskWithCategoryByUser> {
+        GetMonthsTaskWithCategoryByUserImpl(get())
+    }
+    factory<GetTaskWithCategoryByParams> {
+        GetTaskWithCategoryByParamsImpl(get())
+    }
+
 }

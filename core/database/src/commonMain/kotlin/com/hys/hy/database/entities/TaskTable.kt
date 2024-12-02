@@ -1,9 +1,11 @@
 package com.hys.hy.database.entities
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlin.uuid.ExperimentalUuidApi
@@ -33,4 +35,15 @@ data class TaskTable(
     val isDone: Boolean = false,
     val userId: String = "test",
     val taskCategoryName: String? = null
+)
+
+
+data class TaskWithCategory(
+    @Embedded
+    val task: TaskTable,
+    @Relation(
+        parentColumn = "taskCategoryName",
+        entityColumn = "name"
+    )
+    val taskCategory: TaskCategoryTable?
 )

@@ -6,6 +6,9 @@ import org.koin.dsl.lazyModule
 
 val searchModule = lazyModule {
     viewModel<SearchScreenViewModel> {
-        SearchScreenViewModel()
+        SearchScreenViewModel(
+            getTaskWithCategoryByParams = get(),
+            changeTaskIsDoneUseCase = get()
+        )
     }
 }

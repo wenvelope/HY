@@ -34,8 +34,10 @@ kotlin {
 
             implementation(libs.kotlinx.serialization)
 
-            api(projects.designsystem)
+            implementation(projects.core.dateutil)
+            implementation(projects.designsystem)
             implementation(projects.core.viewmodel)
+            implementation(projects.components.task)
         }
 
         desktopMain.dependencies {

@@ -10,6 +10,18 @@ data class Task(
     val taskDescription: String,
     val taskSelectDate: LocalDate?,
     val taskSelectTime: LocalTime?,
-    val taskCategory:String?=null,
+    val taskCategory: String? = null,
+    val isDone: Boolean = false
+)
+
+data class TaskWithCategory(
+    val taskId: String? = null,
+    val taskTitle: String,
+    val taskImportance: TaskImportance,
+    val taskDescription: String,
+    val taskSelectDate: LocalDate?,
+    val taskSelectTime: LocalTime?,
+    val taskCategoryName: String? = null,
+    val taskCategoryColor: Int? = null,
     val isDone: Boolean = false
 )

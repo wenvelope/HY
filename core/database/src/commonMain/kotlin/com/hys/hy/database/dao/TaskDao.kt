@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.hys.hy.database.entities.TaskTable
+import com.hys.hy.database.entities.TaskWithCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -51,5 +52,41 @@ interface TaskDao {
     // 查询所有task
     @Query("SELECT * FROM task")
     suspend fun getAllTasks(): List<TaskTable>
+
+    //查询指定用户的的当前所在月的所有任务和种类
+    @Query(
+        """
+    SELECT * FROM task
+    WHERE userId = :userId
+    AND taskSelectDate IS NOT NULL
+    AND strftime('%Y-%m', taskSelectDate / 1000, 'unixepoch') = strftime('%Y-%m', :date / 1000, 'unixepoch')
+    """
+    )
+    suspend fun getMonthsTasksWithCategoryByUserAndDate(
+        userId: String,
+        date: Long
+    ): List<TaskWithCategory>
+
+    // 根据 userID 日期范围 分类 完成状态 重要性 查询任务
+    @Query(
+        """
+        SELECT * FROM task
+        WHERE userId = :userId
+        AND (:taskTitle IS NULL OR taskTitle LIKE '%' || :taskTitle || '%')
+        AND (:startDate IS NULL OR taskSelectDate >= :startDate)
+        AND (:endDate IS NULL OR taskSelectDate <= :endDate)
+        AND (:categoryName IS NULL OR taskCategoryName = :categoryName)
+        AND (:isDone IS NULL OR isDone = :isDone)
+        """
+    )
+    suspend fun getTasksByUserAndDateRangeAndCategoryAndIsDone(
+        userId: String,
+        taskTitle:String?,
+        startDate: Long?,
+        endDate: Long?,
+        categoryName: String?,
+        isDone: Boolean?
+    ): List<TaskWithCategory>
+
 
 }
