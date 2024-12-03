@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.map
 interface TaskRepository {
     suspend fun addTask(task: Task)
 
+    suspend fun deleteTask(taskId: String)
+
     suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
 
     suspend fun getTasksByUserAndDateFlow(userId: String, localDate: LocalDate): Flow<List<Task>>
@@ -53,6 +55,16 @@ class TaskRepositoryImpl(
             isDone = task.isDone
         )
         taskDao.insert(taskTable)
+    }
+
+    override suspend fun deleteTask(taskId: String) {
+        val taskTable = TaskTable(
+            id = taskId,
+            taskTitle = "",
+            taskImportance = "",
+            taskDescription = "",
+        )
+        taskDao.delete(taskTable)
     }
 
     override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {

@@ -6,6 +6,8 @@ import com.hys.hy.task.usecase.AddTaskUseCase
 import com.hys.hy.task.usecase.AddTaskUseCaseImpl
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCaseImpl
+import com.hys.hy.task.usecase.DeleteTaskUseCase
+import com.hys.hy.task.usecase.DeleteTaskUseCaseImpl
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCaseImpl
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
@@ -48,6 +50,10 @@ val taskModule = module {
     }
     factory<GetTaskWithCategoryByParams> {
         GetTaskWithCategoryByParamsImpl(get())
+    }
+
+    factory<DeleteTaskUseCase> {
+        DeleteTaskUseCaseImpl(get())
     }
 
 }

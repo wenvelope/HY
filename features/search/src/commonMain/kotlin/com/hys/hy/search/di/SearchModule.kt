@@ -8,7 +8,9 @@ val searchModule = lazyModule {
     viewModel<SearchScreenViewModel> {
         SearchScreenViewModel(
             getTaskWithCategoryByParams = get(),
-            changeTaskIsDoneUseCase = get()
+            changeTaskIsDoneUseCase = get(),
+            getTaskCategoriesUseCase = get(),
+            deleteTaskUseCase = get()
         )
     }
 }

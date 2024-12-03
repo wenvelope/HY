@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -45,6 +47,7 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,8 +56,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.hys.hy.designsystem.component.animation.SwipeToShowActionBox
+import com.hys.hy.designsystem.component.animation.animatePlacement
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.designsystem.component.toolbars.SearchBar
 import com.hys.hy.search.viewmodel.SearchScreenViewModel
@@ -73,6 +79,12 @@ fun SearchScreen(
 ) {
 
     val state by viewModel.container.uiStateFlow.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.sendEvent(
+            SearchScreenViewModel.SearchScreenEvent.GetTaskCategories(userId = "test")
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -136,7 +148,6 @@ fun SearchScreen(
             }
         })
     { innerPadding ->
-
         Box(
             modifier = Modifier.fillMaxSize()
                 .padding(innerPadding)
@@ -147,10 +158,9 @@ fun SearchScreen(
             ) {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Box {
+                    Box(modifier = Modifier.animatePlacement()) {
                         AssistChip(
                             onClick = {
 
@@ -174,11 +184,20 @@ fun SearchScreen(
 
                         }
                     }
-                    Box {
+                    Box (modifier = Modifier.animatePlacement()){
+                        var expandedState by remember {
+                            mutableStateOf(false)
+                        }
                         AssistChip(
-                            onClick = {},
+                            onClick = {
+                                expandedState = true
+                            },
                             label = {
-                                Text("分类")
+                                if (state.queryParamCategory == null) {
+                                    Text("分类")
+                                } else {
+                                    Text(state.queryParamCategory!!.name)
+                                }
                             },
                             trailingIcon = {
                                 Icon(
@@ -188,16 +207,38 @@ fun SearchScreen(
                             }
                         )
                         DropdownMenu(
-                            expanded = false,
+                            expanded = expandedState,
                             onDismissRequest = {
-
+                                expandedState = false
                             }
                         ) {
-
+                            DropdownMenuItem(
+                                onClick = {
+                                    viewModel.sendEvent(
+                                        SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamCategory(
+                                            null
+                                        )
+                                    )
+                                    expandedState = false
+                                },
+                                text = { Text("全部") }
+                            )
+                            state.taskCategoryList.forEachIndexed { _, taskCategory ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        viewModel.sendEvent(
+                                            SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamCategory(
+                                                taskCategory
+                                            )
+                                        )
+                                        expandedState = false
+                                    },
+                                    text = { Text(taskCategory.name) }
+                                )
+                            }
                         }
                     }
-
-                    Box {
+                    Box (modifier = Modifier.animatePlacement()){
                         var expandedState by remember {
                             mutableStateOf(false)
                         }
@@ -261,7 +302,6 @@ fun SearchScreen(
 
                         }
                     }
-
                 }
 
                 LazyColumn(
@@ -273,7 +313,51 @@ fun SearchScreen(
                         key = { _, item -> item.taskId!! }
                     ) { index, item ->
 
+                        SwipeToShowActionBox(
+                            modifier = Modifier.fillMaxWidth().animateItem(),
+                            endAction = listOf(
+                                {
+                                    Box(
+                                        modifier = Modifier.fillMaxHeight().width(70.dp).background(
+                                            color = Color(0xFF3B82F6)
+                                        ).clickable {
 
+                                        }
+                                    ) {
+                                        Text(
+                                            "编辑",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+
+                                    }
+                                },
+                                {
+                                    Box(
+                                        modifier = Modifier.fillMaxHeight().width(70.dp).background(
+                                            color = Color(0XFFEF4444)
+                                        ).clickable {
+                                            viewModel.sendEvent(
+                                                SearchScreenViewModel.SearchScreenEvent.DeleteTask(
+                                                    item.taskId!!
+                                                )
+                                            )
+                                        }
+                                    ) {
+                                        Text(
+                                            "删除",
+                                            color = Color.White,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier.align(Alignment.Center)
+                                        )
+
+                                    }
+                                }
+                            )
+                        ) {
                             ListItem(
                                 modifier = Modifier.fillMaxWidth()
                                     .animateItem(),
@@ -334,8 +418,9 @@ fun SearchScreen(
                                     }
                                 }
                             )
+                        }
 
-                    }                                                                               
+                    }
                 }
             }
 

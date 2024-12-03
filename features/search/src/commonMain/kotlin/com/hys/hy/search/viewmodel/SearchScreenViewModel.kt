@@ -3,7 +3,10 @@ package com.hys.hy.search.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.task.entities.TaskWithCategory
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
+import com.hys.hy.task.usecase.DeleteTaskUseCase
 import com.hys.hy.task.usecase.GetTaskWithCategoryByParams
+import com.hys.hy.taskCategory.entities.TaskCategory
+import com.hys.hy.taskCategory.usecase.GetTaskCategoriesUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
@@ -15,7 +18,9 @@ import kotlinx.coroutines.withContext
 
 class SearchScreenViewModel(
     private val getTaskWithCategoryByParams: GetTaskWithCategoryByParams,
-    private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase
+    private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase,
+    private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase
 ) :
     BaseViewModelCore<SearchScreenViewModel.SearchScreenState, SearchScreenViewModel.SearchScreenEvent>() {
 
@@ -23,14 +28,16 @@ class SearchScreenViewModel(
         data object Done : QueryParamIsDone(true, "已完成")
         data object NotDone : QueryParamIsDone(false, "未完成")
         data object All : QueryParamIsDone(null, "全部")
-
     }
+
 
     data class SearchScreenState(
         val searchQuery: String = "",
         val requestCloseSearchSuggestList: Boolean = false,
         val tasksWithCategoryList: List<TaskWithCategory> = emptyList(),
-        val queryParamIsDone: QueryParamIsDone = QueryParamIsDone.All
+        val queryParamIsDone: QueryParamIsDone = QueryParamIsDone.All,
+        val queryParamCategory: TaskCategory? = null,
+        val taskCategoryList: List<TaskCategory> = emptyList()
     ) : UiState {
         val isShowSearchSuggestList: Boolean
             get() = searchQuery.isNotEmpty() && !requestCloseSearchSuggestList
@@ -42,14 +49,21 @@ class SearchScreenViewModel(
             SearchScreenEvent
 
         data class GetTaskWithCategoryByParams(
-            val searchQuery: String,
-            val isDoneParam: QueryParamIsDone
+            val searchQuery: String? = null,
+            val isDoneParam: QueryParamIsDone? = null,
+            val category: TaskCategory? = null
         ) : SearchScreenEvent
 
         data class ChangeQueryParamIsDone(val queryParamIsDone: QueryParamIsDone) :
             SearchScreenEvent
 
         data class ChangeTaskIsDone(val taskId: String, val isDone: Boolean) : SearchScreenEvent
+
+        data class GetTaskCategories(val userId: String) : SearchScreenEvent
+
+        data class ChangeQueryParamCategory(val category: TaskCategory?) : SearchScreenEvent
+
+        data class DeleteTask(val taskId: String) : SearchScreenEvent
     }
 
     override fun initialState(): SearchScreenState {
@@ -78,11 +92,18 @@ class SearchScreenViewModel(
                     is SearchScreenEvent.GetTaskWithCategoryByParams -> {
                         viewModelScope.launch {
                             val tasksWithCategoryList = withContext(Dispatchers.IO) {
+                                if (uiStateFlow.value.searchQuery.isBlank()) {
+                                    return@withContext emptyList()
+                                }
                                 getTaskWithCategoryByParams.execute(
                                     GetTaskWithCategoryByParams.Param(
                                         userId = "test",
-                                        taskTitle = event.searchQuery,
-                                        isDone = event.isDoneParam.isDone
+                                        taskTitle = event.searchQuery
+                                            ?: uiStateFlow.value.searchQuery,
+                                        isDone = event.isDoneParam?.isDone
+                                            ?: uiStateFlow.value.queryParamIsDone.isDone,
+                                        category = event.category?.name
+                                            ?: uiStateFlow.value.queryParamCategory?.name
                                     )
                                 )
                             }
@@ -98,7 +119,6 @@ class SearchScreenViewModel(
                         }
                         sendEvent(
                             SearchScreenEvent.GetTaskWithCategoryByParams(
-                                searchQuery = uiStateFlow.value.searchQuery,
                                 isDoneParam = event.queryParamIsDone
                             )
                         )
@@ -116,9 +136,49 @@ class SearchScreenViewModel(
                             }
                             sendEvent(
                                 SearchScreenEvent.GetTaskWithCategoryByParams(
-                                    searchQuery = uiStateFlow.value.searchQuery,
                                     isDoneParam = uiStateFlow.value.queryParamIsDone
                                 )
+                            )
+                        }
+                    }
+
+                    is SearchScreenEvent.GetTaskCategories -> {
+                        viewModelScope.launch {
+                            val taskCategories = withContext(Dispatchers.IO) {
+                                getTaskCategoriesUseCase.execute(
+                                    GetTaskCategoriesUseCase.Param(
+                                        userId = event.userId
+                                    )
+                                )
+                            }
+                            updateState {
+                                copy(taskCategoryList = taskCategories)
+                            }
+                        }
+                    }
+
+                    is SearchScreenEvent.ChangeQueryParamCategory -> {
+                        updateState {
+                            copy(queryParamCategory = event.category)
+                        }
+                        sendEvent(
+                            SearchScreenEvent.GetTaskWithCategoryByParams(
+                                category = event.category
+                            )
+                        )
+                    }
+
+                    is SearchScreenEvent.DeleteTask -> {
+                        viewModelScope.launch {
+                            withContext(Dispatchers.IO) {
+                                deleteTaskUseCase.execute(
+                                    DeleteTaskUseCase.Param(
+                                        taskId = event.taskId
+                                    )
+                                )
+                            }
+                            sendEvent(
+                                SearchScreenEvent.GetTaskWithCategoryByParams()
                             )
                         }
                     }

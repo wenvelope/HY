@@ -38,6 +38,7 @@ kotlin {
             implementation(projects.designsystem)
             implementation(projects.core.viewmodel)
             implementation(projects.components.task)
+            implementation(projects.components.taskCategory)
         }
 
         desktopMain.dependencies {
