@@ -16,6 +16,10 @@ interface TaskRepository {
 
     suspend fun deleteTask(taskId: String)
 
+    suspend fun getTaskById(taskId: String): Task?
+
+    suspend fun updateTask(task: Task)
+
     suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
 
     suspend fun getTasksByUserAndDateFlow(userId: String, localDate: LocalDate): Flow<List<Task>>
@@ -65,6 +69,36 @@ class TaskRepositoryImpl(
             taskDescription = "",
         )
         taskDao.delete(taskTable)
+    }
+
+    override suspend fun getTaskById(taskId: String): Task? {
+        val task = taskDao.getTaskById(taskId)
+        return task?.let {
+            Task(
+                taskTitle = it.taskTitle,
+                taskDescription = it.taskDescription,
+                taskSelectDate = it.taskSelectDate,
+                taskImportance = TaskImportance.valueOf(it.taskImportance),
+                isDone = it.isDone,
+                taskCategory = it.taskCategoryName,
+                taskSelectTime = it.taskSelectTime,
+                taskId = it.id
+            )
+        }
+    }
+
+    override suspend fun updateTask(task: Task) {
+        val taskTable = TaskTable(
+            id = task.taskId!!,
+            taskTitle = task.taskTitle,
+            taskImportance = task.taskImportance.name,
+            taskDescription = task.taskDescription,
+            taskSelectDate = task.taskSelectDate,
+            taskSelectTime = task.taskSelectTime,
+            taskCategoryName = task.taskCategory,
+            isDone = task.isDone
+        )
+        taskDao.update(taskTable)
     }
 
     override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {

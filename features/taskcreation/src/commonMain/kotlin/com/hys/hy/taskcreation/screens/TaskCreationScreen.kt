@@ -71,7 +71,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-
+import org.koin.core.parameter.parametersOf
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
@@ -79,11 +79,13 @@ import org.koin.compose.viewmodel.koinViewModel
 )
 @Composable
 fun TaskCreationScreen(
-    viewModel: TaskCreationViewModel = koinViewModel(),
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     onBackButtonClick: () -> Unit,
+    taskId: String?,
 ) {
+
+    val viewModel: TaskCreationViewModel = koinViewModel(parameters = { parametersOf(taskId) })
     val state by viewModel.container.uiStateFlow.collectAsState()
 
     val datePickerState = rememberDatePickerState()
@@ -115,12 +117,26 @@ fun TaskCreationScreen(
                     )
                 },
                 actions = {
-                    TextButton(
-                        onClick = {
-                            viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.AddTask)
+                    when (state.taskCreationType) {
+                        TaskCreationViewModel.TaskCreationType.TaskCreation -> {
+                            TextButton(
+                                onClick = {
+                                    viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.AddTask)
+                                }
+                            ) {
+                                Text("添加", style = MaterialTheme.typography.bodyLarge)
+                            }
                         }
-                    ) {
-                        Text("添加", style = MaterialTheme.typography.bodyLarge)
+
+                        TaskCreationViewModel.TaskCreationType.TaskEdit -> {
+                            TextButton(
+                                onClick = {
+                                    viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.UpdateTask)
+                                }
+                            ) {
+                                Text("保存", style = MaterialTheme.typography.bodyLarge)
+                            }
+                        }
                     }
                 }
             )
@@ -161,7 +177,7 @@ fun TaskCreationScreen(
                 }
 
                 for ((index, category) in sortedList.withIndex()) {
-                    key(index,category) {
+                    key(index, category) {
                         FilterChip(
                             modifier = Modifier.animatePlacement(),
                             selected = state.taskCategoryName == category.name,
@@ -416,7 +432,9 @@ private fun TaskTimeSelector(
             },
             label = {
                 val localDateText = state.taskSelectedTime?.let {
-                    "${it.hour.toString().padStart(2, '0')}:${it.minute.toString().padEnd(2, '0')}"
+                    "${it.hour.toString().padStart(2, '0')}:${
+                        it.minute.toString().padStart(2, '0')
+                    }"
                 }
                 Text(
                     localDateText ?: "选择时间",

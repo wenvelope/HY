@@ -1,6 +1,7 @@
 package com.hys.hy.search.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.TaskWithCategory
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.DeleteTaskUseCase
@@ -15,6 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
 
 class SearchScreenViewModel(
     private val getTaskWithCategoryByParams: GetTaskWithCategoryByParams,
@@ -28,6 +32,59 @@ class SearchScreenViewModel(
         data object Done : QueryParamIsDone(true, "已完成")
         data object NotDone : QueryParamIsDone(false, "未完成")
         data object All : QueryParamIsDone(null, "全部")
+
+        companion object{
+            fun getQueryParamIsDoneList(): List<QueryParamIsDone> {
+                return listOf(
+                    All,
+                    Done,
+                    NotDone,
+                )
+            }
+        }
+    }
+
+    sealed class QueryParamDate(val startDate: LocalDate?, val endDate: LocalDate?, val name: String) {
+        data object All : QueryParamDate(null, null, "全部")
+
+        data object LastWeekend : QueryParamDate(
+            startDate = DateTimeUtil.getCurrentDate().minus(DatePeriod(days = 7)),
+            endDate = DateTimeUtil.getCurrentDate(),
+            name = "最近7天"
+        )
+
+        data object LastMonth :
+            QueryParamDate(
+                startDate = DateTimeUtil.getCurrentDate().minus(DatePeriod(days = 30)),
+                endDate = DateTimeUtil.getCurrentDate(),
+                name = "最近三十天"
+            )
+
+        data object LastHalfYear :
+            QueryParamDate(
+                startDate = DateTimeUtil.getCurrentDate().minus(DatePeriod(months = 6)),
+                endDate = DateTimeUtil.getCurrentDate(),
+                name = "最近半年"
+            )
+
+        data object LastYear :
+            QueryParamDate(
+                startDate = DateTimeUtil.getCurrentDate().minus(DatePeriod(years = 1)),
+                endDate = DateTimeUtil.getCurrentDate(),
+                name = "最近一年"
+            )
+
+        companion object{
+            fun getQueryParamDateList(): List<QueryParamDate> {
+                return listOf(
+                    All,
+                    LastWeekend,
+                    LastMonth,
+                    LastHalfYear,
+                    LastYear
+                )
+            }
+        }
     }
 
 
@@ -37,7 +94,8 @@ class SearchScreenViewModel(
         val tasksWithCategoryList: List<TaskWithCategory> = emptyList(),
         val queryParamIsDone: QueryParamIsDone = QueryParamIsDone.All,
         val queryParamCategory: TaskCategory? = null,
-        val taskCategoryList: List<TaskCategory> = emptyList()
+        val queryParamDate: QueryParamDate = QueryParamDate.All,
+        val taskCategoryList: List<TaskCategory> = emptyList(),
     ) : UiState {
         val isShowSearchSuggestList: Boolean
             get() = searchQuery.isNotEmpty() && !requestCloseSearchSuggestList
@@ -51,7 +109,8 @@ class SearchScreenViewModel(
         data class GetTaskWithCategoryByParams(
             val searchQuery: String? = null,
             val isDoneParam: QueryParamIsDone? = null,
-            val category: TaskCategory? = null
+            val category: TaskCategory? = null,
+            val dateParam: QueryParamDate? = null
         ) : SearchScreenEvent
 
         data class ChangeQueryParamIsDone(val queryParamIsDone: QueryParamIsDone) :
@@ -64,6 +123,8 @@ class SearchScreenViewModel(
         data class ChangeQueryParamCategory(val category: TaskCategory?) : SearchScreenEvent
 
         data class DeleteTask(val taskId: String) : SearchScreenEvent
+
+        data class ChangeQueryParamDate(val queryParamDate: QueryParamDate) : SearchScreenEvent
     }
 
     override fun initialState(): SearchScreenState {
@@ -103,7 +164,9 @@ class SearchScreenViewModel(
                                         isDone = event.isDoneParam?.isDone
                                             ?: uiStateFlow.value.queryParamIsDone.isDone,
                                         category = event.category?.name
-                                            ?: uiStateFlow.value.queryParamCategory?.name
+                                            ?: uiStateFlow.value.queryParamCategory?.name,
+                                        startDate = event.dateParam?.startDate?: uiStateFlow.value.queryParamDate.startDate,
+                                        endDate = event.dateParam?.endDate?: uiStateFlow.value.queryParamDate.endDate
                                     )
                                 )
                             }
@@ -181,6 +244,15 @@ class SearchScreenViewModel(
                                 SearchScreenEvent.GetTaskWithCategoryByParams()
                             )
                         }
+                    }
+
+                    is SearchScreenEvent.ChangeQueryParamDate -> {
+                        updateState {
+                            copy(queryParamDate = event.queryParamDate)
+                        }
+                        sendEvent(
+                            SearchScreenEvent.GetTaskWithCategoryByParams()
+                        )
                     }
                 }
             }

@@ -22,6 +22,10 @@ interface TaskDao {
     @Update
     suspend fun update(task: TaskTable)
 
+    // 查询指定任务
+    @Query("SELECT * FROM task WHERE id = :taskId")
+    suspend fun getTaskById(taskId: String): TaskTable?
+
     // 删除任务
     @Delete
     suspend fun delete(task: TaskTable)

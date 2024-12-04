@@ -15,6 +15,7 @@ import com.hys.hy.search.navigation.addSearchScreen
 import com.hys.hy.setting.navigation.addSettingGraph
 import com.hys.hy.taskcreation.navigation.addTaskCreationScreen
 import com.hys.hy.taskcreation.navigation.navigateTaskCreation
+import com.hys.hy.taskcreation.navigation.navigateTaskEdit
 import com.hys.hy.today.navigation.addTodayScreen
 
 
@@ -74,6 +75,7 @@ fun HYNavHost() {
 
             addSearchScreen(
                 sharedTransitionScope = this@SharedTransitionLayout,
+                onTaskEditClick = navController::navigateTaskEdit,
                 navController = navController
             )
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.AddTaskUseCase
+import com.hys.hy.task.usecase.GetTaskByIdUseCase
 import com.hys.hy.taskCategory.entities.TaskCategory
 import com.hys.hy.taskCategory.usecase.GetTaskCategoriesUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
@@ -23,9 +24,37 @@ import kotlinx.datetime.plus
 
 class TaskCreationViewModel(
     private val addTaskUseCase: AddTaskUseCase,
-    private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase
+    private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
+    private val getTaskByIdUseCase: GetTaskByIdUseCase,
+    val taskId: String?
 ) : BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
+
+    enum class TaskCreationType {
+        TaskCreation,
+        TaskEdit
+    }
+
+    init {
+        println(this.hashCode().toString() + "$taskId")
+        if (taskId != null) {
+            sendEvent(
+                TaskCreationEvent.ChangeTaskCreationType(
+                    TaskCreationType.TaskEdit
+                )
+            )
+            sendEvent(TaskCreationEvent.GetTaskMessage)
+        } else {
+            sendEvent(
+                TaskCreationEvent.ChangeTaskCreationType(
+                    TaskCreationType.TaskCreation
+                )
+            )
+        }
+    }
+
+
     data class TaskCreationState(
+        val taskCreationType: TaskCreationType = TaskCreationType.TaskCreation,
         val taskTitle: String = "",
         val taskDescription: String = "",
         val taskSelectedDate: LocalDate?,
@@ -64,9 +93,17 @@ class TaskCreationViewModel(
 
         data class GetCategories(val userId: String) : TaskCreationEvent
 
+        data object UpdateTask : TaskCreationEvent
+
+        data object GetTaskMessage : TaskCreationEvent
+
+        data class ChangeTaskCreationType(val taskCreationType: TaskCreationType) :
+            TaskCreationEvent
+
     }
 
     override fun initialState(): TaskCreationState {
+        println("initialState +${this.hashCode()}$taskId")
         return TaskCreationState(
             taskSelectedDate = DateTimeUtil.getCurrentDate()
         )
@@ -188,6 +225,44 @@ class TaskCreationViewModel(
                         updateState {
                             copy(
                                 taskCategoryName = event.taskCategoryName
+                            )
+                        }
+                    }
+
+                    TaskCreationEvent.GetTaskMessage -> {
+                        println("GetTaskMessage${this@TaskCreationViewModel.hashCode()}$taskId")
+                        if (taskId != null) {
+                            viewModelScope.launch {
+                                val task = withContext(Dispatchers.IO) {
+                                    getTaskByIdUseCase.execute(
+                                        GetTaskByIdUseCase.Param(
+                                            taskId = taskId
+                                        )
+                                    )
+                                }
+                                updateState {
+                                    copy(
+                                        taskTitle = task?.taskTitle ?: "",
+                                        taskDescription = task?.taskDescription ?: "",
+                                        taskSelectedDate = task?.taskSelectDate,
+                                        taskSelectedTime = task?.taskSelectTime,
+                                        taskImportance = task?.taskImportance
+                                            ?: TaskImportance.ORDINARY,
+                                        taskCategoryName = task?.taskCategory
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    TaskCreationEvent.UpdateTask -> {
+
+                    }
+
+                    is TaskCreationEvent.ChangeTaskCreationType -> {
+                        updateState {
+                            copy(
+                                taskCreationType = event.taskCreationType
                             )
                         }
                     }

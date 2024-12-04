@@ -14,10 +14,14 @@ import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCaseImpl
 import com.hys.hy.task.usecase.GetMonthsTaskWithCategoryByUser
 import com.hys.hy.task.usecase.GetMonthsTaskWithCategoryByUserImpl
+import com.hys.hy.task.usecase.GetTaskByIdUseCase
+import com.hys.hy.task.usecase.GetTaskByIdUseCaseImpl
 import com.hys.hy.task.usecase.GetTaskWithCategoryByParams
 import com.hys.hy.task.usecase.GetTaskWithCategoryByParamsImpl
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCaseImpl
+import com.hys.hy.task.usecase.UpdateTaskUseCase
+import com.hys.hy.task.usecase.UpdateTaskUseCaseImpl
 import org.koin.dsl.module
 
 val taskModule = module {
@@ -54,6 +58,14 @@ val taskModule = module {
 
     factory<DeleteTaskUseCase> {
         DeleteTaskUseCaseImpl(get())
+    }
+
+    factory<GetTaskByIdUseCase> {
+        GetTaskByIdUseCaseImpl(get())
+    }
+
+    factory <UpdateTaskUseCase>{
+        UpdateTaskUseCaseImpl(get())
     }
 
 }

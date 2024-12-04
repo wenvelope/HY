@@ -30,10 +30,9 @@ import kotlin.math.roundToInt
 enum class SwipeToShowActionBoxValue {
     ShowMainContent,
     ShowStartAction,
-
     //    ShowStartActionOnly,
     ShowEndAction,
-//    ShowEndActionOnly
+    //    ShowEndActionOnly
 }
 
 

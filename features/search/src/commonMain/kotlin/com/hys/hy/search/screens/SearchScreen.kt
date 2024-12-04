@@ -75,7 +75,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SearchScreen(
     navController: NavHostController,
-    viewModel: SearchScreenViewModel = koinViewModel()
+    viewModel: SearchScreenViewModel = koinViewModel(),
+    onTaskEditClick: (taskId: String) -> Unit
 ) {
 
     val state by viewModel.container.uiStateFlow.collectAsState()
@@ -143,8 +144,7 @@ fun SearchScreen(
                             color = Color.Gray
                         )
                     },
-
-                    )
+                )
             }
         })
     { innerPadding ->
@@ -161,12 +161,19 @@ fun SearchScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Box(modifier = Modifier.animatePlacement()) {
+                        var expandedState by remember {
+                            mutableStateOf(false)
+                        }
                         AssistChip(
                             onClick = {
-
+                                expandedState = true
                             },
                             label = {
-                                Text("日期范围")
+                                if (state.queryParamDate == SearchScreenViewModel.QueryParamDate.All) {
+                                    Text("日期范围")
+                                } else {
+                                    Text(state.queryParamDate.name)
+                                }
                             },
                             trailingIcon = {
                                 Icon(
@@ -176,15 +183,28 @@ fun SearchScreen(
                             }
                         )
                         DropdownMenu(
-                            expanded = false,
+                            expanded = expandedState,
                             onDismissRequest = {
-
+                                expandedState = false
                             }
                         ) {
-
+                            SearchScreenViewModel.QueryParamDate.getQueryParamDateList()
+                                .forEachIndexed { index, queryParamDate ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            viewModel.sendEvent(
+                                                SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamDate(
+                                                    queryParamDate
+                                                )
+                                            )
+                                            expandedState = false
+                                        },
+                                        text = { Text(queryParamDate.name) }
+                                    )
+                                }
                         }
                     }
-                    Box (modifier = Modifier.animatePlacement()){
+                    Box(modifier = Modifier.animatePlacement()) {
                         var expandedState by remember {
                             mutableStateOf(false)
                         }
@@ -238,7 +258,7 @@ fun SearchScreen(
                             }
                         }
                     }
-                    Box (modifier = Modifier.animatePlacement()){
+                    Box(modifier = Modifier.animatePlacement()) {
                         var expandedState by remember {
                             mutableStateOf(false)
                         }
@@ -266,40 +286,20 @@ fun SearchScreen(
                                 expandedState = false
                             }
                         ) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.sendEvent(
-                                        SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamIsDone(
-                                            SearchScreenViewModel.QueryParamIsDone.All
-                                        )
+                            SearchScreenViewModel.QueryParamIsDone.getQueryParamIsDoneList()
+                                .forEachIndexed { _, queryParamIsDone ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            viewModel.sendEvent(
+                                                SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamIsDone(
+                                                    queryParamIsDone
+                                                )
+                                            )
+                                            expandedState = false
+                                        },
+                                        text = { Text(queryParamIsDone.name) }
                                     )
-                                    expandedState = false
-                                },
-                                text = { Text(SearchScreenViewModel.QueryParamIsDone.All.name) }
-                            )
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.sendEvent(
-                                        SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamIsDone(
-                                            SearchScreenViewModel.QueryParamIsDone.Done
-                                        )
-                                    )
-                                    expandedState = false
-                                },
-                                text = { Text(SearchScreenViewModel.QueryParamIsDone.Done.name) }
-                            )
-                            DropdownMenuItem(
-                                onClick = {
-                                    viewModel.sendEvent(
-                                        SearchScreenViewModel.SearchScreenEvent.ChangeQueryParamIsDone(
-                                            SearchScreenViewModel.QueryParamIsDone.NotDone
-                                        )
-                                    )
-                                    expandedState = false
-                                },
-                                text = { Text(SearchScreenViewModel.QueryParamIsDone.NotDone.name) }
-                            )
-
+                                }
                         }
                     }
                 }
@@ -321,7 +321,7 @@ fun SearchScreen(
                                         modifier = Modifier.fillMaxHeight().width(70.dp).background(
                                             color = Color(0xFF3B82F6)
                                         ).clickable {
-
+                                            onTaskEditClick(item.taskId!!)
                                         }
                                     ) {
                                         Text(

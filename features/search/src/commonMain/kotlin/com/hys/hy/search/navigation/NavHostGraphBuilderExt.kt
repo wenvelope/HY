@@ -19,6 +19,7 @@ fun NavGraphBuilder.addSearchScreen(
     onHomeTabClick: () -> Unit = {},
     onSettingTabClick: () -> Unit = {},
     onTodayTabClick: () -> Unit = {},
+    onTaskEditClick: (String) -> Unit = {},
     sharedTransitionScope: SharedTransitionScope,
     navController: NavHostController
 ) {
@@ -29,7 +30,8 @@ fun NavGraphBuilder.addSearchScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         SearchScreen(
-            navController
+            navController,
+            onTaskEditClick = onTaskEditClick,
         )
     }
 }
