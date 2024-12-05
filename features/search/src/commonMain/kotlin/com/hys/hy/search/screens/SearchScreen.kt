@@ -32,20 +32,17 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -70,7 +67,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class
 )
 @Composable
 fun SearchScreen(
@@ -304,124 +301,132 @@ fun SearchScreen(
                     }
                 }
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
                 ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        itemsIndexed(
+                            items = state.tasksWithCategoryList,
+                            key = { _, item -> item.taskId!! }
+                        ) { index, item ->
 
-                    itemsIndexed(
-                        items = state.tasksWithCategoryList,
-                        key = { _, item -> item.taskId!! }
-                    ) { index, item ->
-
-                        SwipeToShowActionBox(
-                            modifier = Modifier.fillMaxWidth().animateItem(),
-                            endAction = listOf(
-                                {
-                                    Box(
-                                        modifier = Modifier.fillMaxHeight().width(70.dp).background(
-                                            color = Color(0xFF3B82F6)
-                                        ).clickable {
-                                            onTaskEditClick(item.taskId!!)
-                                        }
-                                    ) {
-                                        Text(
-                                            "编辑",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.align(Alignment.Center)
-                                        )
-
-                                    }
-                                },
-                                {
-                                    Box(
-                                        modifier = Modifier.fillMaxHeight().width(70.dp).background(
-                                            color = Color(0XFFEF4444)
-                                        ).clickable {
-                                            viewModel.sendEvent(
-                                                SearchScreenViewModel.SearchScreenEvent.DeleteTask(
-                                                    item.taskId!!
-                                                )
-                                            )
-                                        }
-                                    ) {
-                                        Text(
-                                            "删除",
-                                            color = Color.White,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.align(Alignment.Center)
-                                        )
-
-                                    }
-                                }
-                            )
-                        ) {
-                            ListItem(
-                                modifier = Modifier.fillMaxWidth()
-                                    .animateItem(),
-                                headlineContent = {
-                                    Text(
-                                        item.taskTitle,
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                },
-                                leadingContent = {
-                                    Checkbox(
-                                        checked = item.isDone,
-                                        onCheckedChange = {
-                                            viewModel.sendEvent(
-                                                SearchScreenViewModel.SearchScreenEvent.ChangeTaskIsDone(
-                                                    item.taskId!!,
-                                                    !item.isDone
-                                                )
-                                            )
-                                        },
-                                        colors = CheckboxDefaults.colors(
-                                            uncheckedColor = with(item.taskCategoryColor) {
-                                                return@with if (this == null) {
-                                                    MaterialTheme.colorScheme.primary
-                                                } else {
-                                                    Color(this)
+                            SwipeToShowActionBox(
+                                modifier = Modifier.fillMaxWidth().animateItem(),
+                                endAction = listOf(
+                                    {
+                                        Box(
+                                            modifier = Modifier.fillMaxHeight().width(70.dp)
+                                                .background(
+                                                    color = Color(0xFF3B82F6)
+                                                ).clickable {
+                                                    onTaskEditClick(item.taskId!!)
                                                 }
+                                        ) {
+                                            Text(
+                                                "编辑",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                textAlign = TextAlign.Center,
+                                                modifier = Modifier.align(Alignment.Center)
+                                            )
+
+                                        }
+                                    },
+                                    {
+                                        Box(
+                                            modifier = Modifier.fillMaxHeight().width(70.dp)
+                                                .background(
+                                                    color = Color(0XFFEF4444)
+                                                ).clickable {
+                                                    viewModel.sendEvent(
+                                                        SearchScreenViewModel.SearchScreenEvent.DeleteTask(
+                                                            item.taskId!!
+                                                        )
+                                                    )
+                                                }
+                                        ) {
+                                            Text(
+                                                "删除",
+                                                color = Color.White,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                textAlign = TextAlign.Center,
+                                                modifier = Modifier.align(Alignment.Center)
+                                            )
+
+                                        }
+                                    }
+                                )
+                            ) {
+                                ListItem(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .animateItem(),
+                                    headlineContent = {
+                                        Text(
+                                            item.taskTitle,
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    },
+                                    leadingContent = {
+                                        Checkbox(
+                                            checked = item.isDone,
+                                            onCheckedChange = {
+                                                viewModel.sendEvent(
+                                                    SearchScreenViewModel.SearchScreenEvent.ChangeTaskIsDone(
+                                                        item.taskId!!,
+                                                        !item.isDone
+                                                    )
+                                                )
                                             },
-                                            checkedColor = with(item.taskCategoryColor) {
-                                                return@with if (this == null) {
-                                                    MaterialTheme.colorScheme.primary
-                                                } else {
-                                                    Color(this)
+                                            colors = CheckboxDefaults.colors(
+                                                uncheckedColor = with(item.taskCategoryColor) {
+                                                    return@with if (this == null) {
+                                                        MaterialTheme.colorScheme.primary
+                                                    } else {
+                                                        Color(this)
+                                                    }
+                                                },
+                                                checkedColor = with(item.taskCategoryColor) {
+                                                    return@with if (this == null) {
+                                                        MaterialTheme.colorScheme.primary
+                                                    } else {
+                                                        Color(this)
+                                                    }
                                                 }
-                                            }
+                                            )
                                         )
-                                    )
-                                },
-                                supportingContent = {
-                                    item.taskSelectDate?.let { date ->
-                                        Text(
-                                            "${date.year}年${date.monthNumber}月${date.dayOfMonth}日",
-                                            style = MaterialTheme.typography.bodyMedium
-                                        )
-                                    }
-                                },
-                                trailingContent = {
-                                    FilledTonalIconButton(
-                                        onClick = {
-
+                                    },
+                                    supportingContent = {
+                                        item.taskSelectDate?.let { date ->
+                                            Text(
+                                                "${date.year}年${date.monthNumber}月${date.dayOfMonth}日",
+                                                style = MaterialTheme.typography.bodyMedium
+                                            )
                                         }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(Res.drawable.button_alarm),
-                                            contentDescription = "more",
-                                            modifier = Modifier.size(24.dp)
-                                        )
-                                    }
-                                }
-                            )
-                        }
+                                    },
+                                    trailingContent = {
+                                        FilledTonalIconButton(
+                                            onClick = {
 
+                                            }
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(Res.drawable.button_alarm),
+                                                contentDescription = "more",
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+
+                        }
                     }
                 }
+
+
             }
 
 

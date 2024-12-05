@@ -33,7 +33,7 @@ class SearchScreenViewModel(
         data object NotDone : QueryParamIsDone(false, "未完成")
         data object All : QueryParamIsDone(null, "全部")
 
-        companion object{
+        companion object {
             fun getQueryParamIsDoneList(): List<QueryParamIsDone> {
                 return listOf(
                     All,
@@ -44,7 +44,11 @@ class SearchScreenViewModel(
         }
     }
 
-    sealed class QueryParamDate(val startDate: LocalDate?, val endDate: LocalDate?, val name: String) {
+    sealed class QueryParamDate(
+        val startDate: LocalDate?,
+        val endDate: LocalDate?,
+        val name: String
+    ) {
         data object All : QueryParamDate(null, null, "全部")
 
         data object LastWeekend : QueryParamDate(
@@ -74,7 +78,7 @@ class SearchScreenViewModel(
                 name = "最近一年"
             )
 
-        companion object{
+        companion object {
             fun getQueryParamDateList(): List<QueryParamDate> {
                 return listOf(
                     All,
@@ -95,6 +99,7 @@ class SearchScreenViewModel(
         val queryParamIsDone: QueryParamIsDone = QueryParamIsDone.All,
         val queryParamCategory: TaskCategory? = null,
         val queryParamDate: QueryParamDate = QueryParamDate.All,
+        val isRefreshing: Boolean = false,
         val taskCategoryList: List<TaskCategory> = emptyList(),
     ) : UiState {
         val isShowSearchSuggestList: Boolean
@@ -151,6 +156,13 @@ class SearchScreenViewModel(
                     }
 
                     is SearchScreenEvent.GetTaskWithCategoryByParams -> {
+
+                        updateState {
+                            copy(
+                                isRefreshing = true
+                            )
+                        }
+
                         viewModelScope.launch {
                             val tasksWithCategoryList = withContext(Dispatchers.IO) {
                                 if (uiStateFlow.value.searchQuery.isBlank()) {
@@ -165,13 +177,19 @@ class SearchScreenViewModel(
                                             ?: uiStateFlow.value.queryParamIsDone.isDone,
                                         category = event.category?.name
                                             ?: uiStateFlow.value.queryParamCategory?.name,
-                                        startDate = event.dateParam?.startDate?: uiStateFlow.value.queryParamDate.startDate,
-                                        endDate = event.dateParam?.endDate?: uiStateFlow.value.queryParamDate.endDate
+                                        startDate = event.dateParam?.startDate
+                                            ?: uiStateFlow.value.queryParamDate.startDate,
+                                        endDate = event.dateParam?.endDate
+                                            ?: uiStateFlow.value.queryParamDate.endDate
                                     )
                                 )
                             }
+
                             updateState {
-                                copy(tasksWithCategoryList = tasksWithCategoryList)
+                                copy(
+                                    tasksWithCategoryList = tasksWithCategoryList,
+                                    isRefreshing = false
+                                )
                             }
                         }
                     }
