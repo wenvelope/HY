@@ -97,6 +97,7 @@ fun TaskCreationScreen(
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.GetCategories("test"))
+        viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.GetTaskMessage)
     }
 
     Scaffold(
@@ -104,11 +105,20 @@ fun TaskCreationScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "创建代办",
-                        style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
+                    if (state.taskCreationType == TaskCreationViewModel.TaskCreationType.TaskEdit) {
+                        Text(
+                            "编辑代办",
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    } else {
+                        Text(
+                            "创建代办",
+                            style = MaterialTheme.typography.headlineMedium,
+                            modifier = Modifier.padding(start = 10.dp)
+                        )
+                    }
+
                 },
                 navigationIcon = {
                     NavigationBackButton(

@@ -66,7 +66,8 @@ class ContainerLazy<STATE : UiState, SINGLE_EVENT : UiEvent>(
     override fun isInitialized() = cache != null
 }
 
-abstract class BaseViewModelCore<T : UiState, S : UiEvent>: ViewModel() {
+abstract class BaseViewModelCore<T : UiState, S : UiEvent> : ViewModel() {
+    //！！ 不应该在initialState中获取子类的构造函数的参数值或者属性值 因为这个时候子类的构造函数还没有执行
     private val initialState: T by lazy { initialState() }
     protected abstract fun initialState(): T
     private val _mContainer by containers<T, S>(initialState = initialState)

@@ -14,7 +14,7 @@ interface UpdateTaskUseCase : UseCase<UpdateTaskUseCase.Params, Unit> {
         val taskDescription: String,
         val taskSelectDate: LocalDate?,
         val taskSelectTime: LocalTime?,
-        val taskCategory: String,
+        val taskCategory: String?,
         val isDone: Boolean
     )
 }

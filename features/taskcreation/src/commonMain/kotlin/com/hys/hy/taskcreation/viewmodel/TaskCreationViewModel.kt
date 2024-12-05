@@ -7,6 +7,7 @@ import com.hys.hy.dateutil.DateTimeUtil
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.AddTaskUseCase
 import com.hys.hy.task.usecase.GetTaskByIdUseCase
+import com.hys.hy.task.usecase.UpdateTaskUseCase
 import com.hys.hy.taskCategory.entities.TaskCategory
 import com.hys.hy.taskCategory.usecase.GetTaskCategoriesUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
@@ -26,6 +27,7 @@ class TaskCreationViewModel(
     private val addTaskUseCase: AddTaskUseCase,
     private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
     val taskId: String?
 ) : BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
 
@@ -35,21 +37,11 @@ class TaskCreationViewModel(
     }
 
     init {
-        println(this.hashCode().toString() + "$taskId")
-        if (taskId != null) {
-            sendEvent(
-                TaskCreationEvent.ChangeTaskCreationType(
-                    TaskCreationType.TaskEdit
-                )
-            )
-            sendEvent(TaskCreationEvent.GetTaskMessage)
-        } else {
-            sendEvent(
-                TaskCreationEvent.ChangeTaskCreationType(
-                    TaskCreationType.TaskCreation
-                )
-            )
+        val taskCreationType = when (taskId) {
+            null -> TaskCreationType.TaskCreation
+            else -> TaskCreationType.TaskEdit
         }
+        sendEvent(TaskCreationEvent.ChangeTaskCreationType(taskCreationType))
     }
 
 
@@ -103,7 +95,6 @@ class TaskCreationViewModel(
     }
 
     override fun initialState(): TaskCreationState {
-        println("initialState +${this.hashCode()}$taskId")
         return TaskCreationState(
             taskSelectedDate = DateTimeUtil.getCurrentDate()
         )
@@ -230,13 +221,13 @@ class TaskCreationViewModel(
                     }
 
                     TaskCreationEvent.GetTaskMessage -> {
-                        println("GetTaskMessage${this@TaskCreationViewModel.hashCode()}$taskId")
-                        if (taskId != null) {
+
+                        if (uiStateFlow.value.taskCreationType == TaskCreationType.TaskEdit) {
                             viewModelScope.launch {
                                 val task = withContext(Dispatchers.IO) {
                                     getTaskByIdUseCase.execute(
                                         GetTaskByIdUseCase.Param(
-                                            taskId = taskId
+                                            taskId = taskId!!
                                         )
                                     )
                                 }
@@ -256,6 +247,29 @@ class TaskCreationViewModel(
                     }
 
                     TaskCreationEvent.UpdateTask -> {
+                        val state = uiStateFlow.value
+                        // 判断必要属性
+                        if (state.taskTitle.isEmpty()) {
+                            sendEvent(TaskCreationEvent.ShowSnackBar("请输入任务标题"))
+                            return@collect
+                        }
+                        viewModelScope.launch {
+                            withContext(Dispatchers.IO) {
+                                updateTaskUseCase.execute(
+                                    UpdateTaskUseCase.Params(
+                                        taskId = taskId!!,
+                                        taskTitle = state.taskTitle,
+                                        taskDescription = state.taskDescription,
+                                        taskSelectDate = state.taskSelectedDate,
+                                        taskImportance = state.taskImportance,
+                                        taskSelectTime = state.taskSelectedTime,
+                                        isDone = false,
+                                        taskCategory = state.taskCategoryName
+                                    )
+                                )
+                            }
+                            sendEvent(TaskCreationEvent.ShowSnackBar("更新成功"))
+                        }
 
                     }
 

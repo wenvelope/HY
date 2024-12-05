@@ -10,7 +10,8 @@ val taskCreationModule = lazyModule {
             addTaskUseCase = get(),
             getTaskCategoriesUseCase = get(),
             taskId = taskId,
-            getTaskByIdUseCase = get()
+            getTaskByIdUseCase = get(),
+            updateTaskUseCase = get(),
         )
     }
 }
