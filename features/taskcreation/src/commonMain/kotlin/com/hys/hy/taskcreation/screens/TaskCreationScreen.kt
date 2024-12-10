@@ -96,7 +96,7 @@ fun TaskCreationScreen(
 
 
     LaunchedEffect(Unit) {
-        viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.GetCategories("test"))
+        viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.GetCategories)
         viewModel.sendEvent(TaskCreationViewModel.TaskCreationEvent.GetTaskMessage)
     }
 

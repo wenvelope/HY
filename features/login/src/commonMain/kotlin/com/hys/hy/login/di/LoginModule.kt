@@ -1,13 +1,21 @@
 package com.hys.hy.login.di
 
 
-import com.hys.hy.login.viewmodel.HomeScreenViewModel
+import com.hys.hy.login.viewmodel.SignInScreenViewModel
+import com.hys.hy.login.viewmodel.SignUpScreenViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.lazyModule
 
 
 val loginModule = lazyModule {
-    viewModel<HomeScreenViewModel> {
-        HomeScreenViewModel()
+
+    viewModel<SignInScreenViewModel> {
+        SignInScreenViewModel()
+    }
+
+    viewModel<SignUpScreenViewModel>{
+        SignUpScreenViewModel(
+            appPreference = get()
+        )
     }
 }

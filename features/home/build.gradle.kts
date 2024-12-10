@@ -40,6 +40,7 @@ kotlin {
             implementation(projects.core.viewmodel)
             implementation(projects.components.task)
             implementation(projects.core.dateutil)
+            implementation(projects.components.preference)
         }
 
         desktopMain.dependencies {

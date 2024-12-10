@@ -2,6 +2,7 @@ package com.hys.hy.home.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
@@ -18,7 +19,8 @@ import kotlin.math.abs
 
 class HomeScreenViewModel(
     private val getMonthTasksByUserAndDateUseCase: GetMonthTasksByUserAndDateUseCase,
-    private val getTasksByUserAndDateUseCase: GetTasksByUserAndDateUseCase
+    private val getTasksByUserAndDateUseCase: GetTasksByUserAndDateUseCase,
+    private val appPreference: AppPreference
 ) :
     BaseViewModelCore<HomeScreenViewModel.HomeScreenState, HomeScreenViewModel.HomeScreenEvent>() {
 
@@ -96,7 +98,7 @@ class HomeScreenViewModel(
                             val currentDayTasks = async(Dispatchers.IO) {
                                 getTasksByUserAndDateUseCase.execute(
                                     GetTasksByUserAndDateUseCase.Param(
-                                        userId = "test",
+                                        userId = appPreference.getUserId(),
                                         localDate = now
                                     )
                                 )
@@ -104,7 +106,7 @@ class HomeScreenViewModel(
                             val currentMonthTasks = async(Dispatchers.IO) {
                                 getMonthTasksByUserAndDateUseCase.execute(
                                     GetTasksByUserAndDateUseCase.Param(
-                                        userId = "test",
+                                        userId = appPreference.getUserId(),
                                         localDate = now
                                     )
                                 )

@@ -2,6 +2,7 @@ package com.hys.hy.today.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
@@ -28,9 +29,11 @@ import kotlinx.datetime.toLocalDateTime
 class TodayScreenViewModel(
     private val getCurrentDayTasksUseCase: GetCurrentDayTasksUseCase,
     private val getTasksByUserAndDateUseCase: GetTasksByUserAndDateUseCase,
-    private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase
+    private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase,
+    private val appPreference: AppPreference
 ) :
     BaseViewModelCore<TodayScreenViewModel.TodayState, TodayScreenViewModel.TodayEvent>() {
+
 
     data class TodayState(
         val today: LocalDate,
@@ -76,9 +79,9 @@ class TodayScreenViewModel(
 
         data class ChangeCurrentSelectMonth(val month: Month) : TodayEvent
 
-        data class GetCurrentDayTasks(val userId: String) : TodayEvent
+        data object GetCurrentDayTasks: TodayEvent
 
-        data class GetTaskByUserAndDate(val userId: String, val localDate: LocalDate) : TodayEvent
+        data class GetTaskByUserAndDate(val localDate: LocalDate) : TodayEvent
 
         data class OpenBottomSheet(val taskIndex: Int) : TodayEvent
 
@@ -115,7 +118,6 @@ class TodayScreenViewModel(
                         }
                         sendEvent(
                             TodayEvent.GetTaskByUserAndDate(
-                                "test",
                                 uiStateFlow.value.currentSelectLocalDate
                             )
                         )
@@ -138,7 +140,6 @@ class TodayScreenViewModel(
                         }
                         sendEvent(
                             TodayEvent.GetTaskByUserAndDate(
-                                "test",
                                 uiStateFlow.value.currentSelectLocalDate
                             )
                         )
@@ -149,7 +150,7 @@ class TodayScreenViewModel(
                             val items = withContext(Dispatchers.IO) {
                                 getCurrentDayTasksUseCase.execute(
                                     GetCurrentDayTasksUseCase.Param(
-                                        event.userId
+                                        appPreference.getUserId()
                                     )
                                 )
                             }
@@ -167,7 +168,7 @@ class TodayScreenViewModel(
                             val items = withContext(Dispatchers.IO) {
                                 getTasksByUserAndDateUseCase.execute(
                                     GetTasksByUserAndDateUseCase.Param(
-                                        event.userId,
+                                        appPreference.getUserId(),
                                         event.localDate
                                     )
                                 )
@@ -216,7 +217,6 @@ class TodayScreenViewModel(
                             }
                             sendEvent(
                                 TodayEvent.GetTaskByUserAndDate(
-                                    userId = "test",
                                     localDate = uiStateFlow.value.currentSelectLocalDate
                                 )
                             )
@@ -232,7 +232,8 @@ class TodayScreenViewModel(
                     }
 
                     is TodayEvent.RefreshDateAndData -> {
-                       val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                        val today =
+                            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
                         updateState {
                             copy(
                                 today = today,
@@ -243,7 +244,6 @@ class TodayScreenViewModel(
                         }
                         sendEvent(
                             TodayEvent.GetTaskByUserAndDate(
-                                "test",
                                 uiStateFlow.value.currentSelectLocalDate
                             )
                         )

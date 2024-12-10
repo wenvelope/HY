@@ -36,6 +36,8 @@ kotlin {
 
             api(projects.designsystem)
             implementation(projects.core.viewmodel)
+
+            implementation(projects.components.preference)
         }
 
         desktopMain.dependencies {

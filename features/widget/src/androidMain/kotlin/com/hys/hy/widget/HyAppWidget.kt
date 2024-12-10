@@ -35,6 +35,7 @@ import androidx.glance.unit.ColorProvider
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.task.entities.Task
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.GetCurrentDayTasksUseCase
@@ -77,12 +78,16 @@ class HyAppWidget : GlanceAppWidget(), KoinComponent {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val getUseCase: GetCurrentDayTasksUseCase by inject()
         val changeUseCase: ChangeTaskIsDoneUseCase by inject()
+        val appPreference: AppPreference by inject()
 
-        val tasksFlow = getUseCase.executeFlow(GetCurrentDayTasksUseCase.Param("test")).map {
+        val userId = appPreference.getUserId()
+
+        val tasksFlow = getUseCase.executeFlow(GetCurrentDayTasksUseCase.Param(userId)).map {
             it.filter { task ->
                 task.taskSelectTime != null
             }.sortedBy { task -> task.taskSelectTime!! }
         }
+
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             "HyAppWidgetWorker",
             ExistingPeriodicWorkPolicy.KEEP,

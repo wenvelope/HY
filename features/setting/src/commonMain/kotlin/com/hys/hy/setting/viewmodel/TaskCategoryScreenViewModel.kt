@@ -4,6 +4,7 @@ package com.hys.hy.setting.viewmodel
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.viewModelScope
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.taskCategory.entities.TaskCategory
 import com.hys.hy.taskCategory.usecase.AddTaskCategoryUseCase
 import com.hys.hy.taskCategory.usecase.DeleteTaskCategoryUseCase
@@ -21,7 +22,8 @@ import kotlinx.coroutines.withContext
 class TaskCategoryScreenViewModel(
     private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
     private val deleteTaskCategoryUseCase: DeleteTaskCategoryUseCase,
-    private val addTaskCategoryUseCase: AddTaskCategoryUseCase
+    private val addTaskCategoryUseCase: AddTaskCategoryUseCase,
+    private val appPreference: AppPreference
 ) :
     BaseViewModelCore<TaskCategoryScreenViewModel.TaskCategoryState, TaskCategoryScreenViewModel.TaskCategoryEvent>() {
 
@@ -34,7 +36,7 @@ class TaskCategoryScreenViewModel(
 
     sealed interface TaskCategoryEvent : UiEvent {
         data class DeleteTaskCategory(val id: Long) : TaskCategoryEvent
-        data class GetTaskCategories(val userId: String) : TaskCategoryEvent
+        data object GetTaskCategories : TaskCategoryEvent
         data class ShowBottomSheet(val isShow: Boolean) : TaskCategoryEvent
         data class AddTaskCategory(val taskCategory: TaskCategory, val job: Job) : TaskCategoryEvent
         data class ShowSnackBar(val message: String) : TaskCategoryEvent
@@ -57,7 +59,7 @@ class TaskCategoryScreenViewModel(
                                     )
                                 )
                             }
-                            sendEvent(TaskCategoryEvent.GetTaskCategories("test"))
+                            sendEvent(TaskCategoryEvent.GetTaskCategories)
                         }
                     }
 
@@ -66,7 +68,7 @@ class TaskCategoryScreenViewModel(
                             val taskCategories = withContext(Dispatchers.IO) {
                                 getTaskCategoriesUseCase.execute(
                                     GetTaskCategoriesUseCase.Param(
-                                        event.userId
+                                        appPreference.getUserId()
                                     )
                                 )
                             }
@@ -92,7 +94,7 @@ class TaskCategoryScreenViewModel(
                             val result = withContext(Dispatchers.IO) {
                                 addTaskCategoryUseCase.execute(
                                     AddTaskCategoryUseCase.Param(
-                                        userId = "test",
+                                        userId = appPreference.getUserId(),
                                         name = event.taskCategory.name,
                                         color = event.taskCategory.color
                                     )
@@ -101,7 +103,7 @@ class TaskCategoryScreenViewModel(
 
                             result.fold(
                                 onSuccess = {
-                                    sendEvent(TaskCategoryEvent.GetTaskCategories("test"))
+                                    sendEvent(TaskCategoryEvent.GetTaskCategories)
                                     event.job.apply {
                                         invokeOnCompletion {
                                             sendEvent(TaskCategoryEvent.ShowBottomSheet(false))

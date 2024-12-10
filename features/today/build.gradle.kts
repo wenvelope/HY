@@ -39,6 +39,7 @@ kotlin {
             implementation(projects.core.viewmodel)
             implementation(projects.core.dateutil)
             implementation(projects.components.task)
+            implementation(projects.components.preference)
 
         }
 

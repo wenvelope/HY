@@ -8,7 +8,8 @@ val homeModule = lazyModule {
     viewModel<HomeScreenViewModel> {
         HomeScreenViewModel(
             getMonthTasksByUserAndDateUseCase = get(),
-            getTasksByUserAndDateUseCase = get()
+            getTasksByUserAndDateUseCase = get(),
+            appPreference = get()
         )
     }
 }

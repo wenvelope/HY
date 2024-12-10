@@ -6,13 +6,13 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -27,6 +27,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +38,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.hys.hy.login.viewmodel.SignInScreenViewModel
 import hy.features.login.generated.resources.Res
 import hy.features.login.generated.resources.phone
 import hy.features.login.generated.resources.wechat
-
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SinInFromThirdAccount(
@@ -49,6 +51,7 @@ fun SinInFromThirdAccount(
     onWechatClick: () -> Unit,
     onPhoneClick: () -> Unit
 ) {
+
     Column(modifier = Modifier) {
         // 微信登陆按钮
         Button(
@@ -114,8 +117,12 @@ fun SignInScreen(
     onWechatClick: () -> Unit,
     onEmailLogInClick: () -> Unit,
     onForgetPwdClick: () -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    viewModel: SignInScreenViewModel = koinViewModel()
 ) {
+
+    val state by viewModel.container.uiStateFlow.collectAsState()
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -145,15 +152,12 @@ fun SignInScreen(
 
                 Spacer(modifier = Modifier.padding(9.dp))
 
-
                 //第三方登录方式
                 SinInFromThirdAccount(
                     modifier = Modifier,
                     onWechatClick = {},
                     onPhoneClick = {}
                 )
-
-
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
@@ -176,8 +180,6 @@ fun SignInScreen(
                 }
 
 
-
-
                 Spacer(modifier = Modifier.padding(16.dp))
 
                 with(sharedTransitionScope) {
@@ -188,7 +190,9 @@ fun SignInScreen(
                         )
                     ) {
                         Button(
-                            onClick = {},
+                            onClick = {
+
+                            },
                             modifier = Modifier.fillMaxWidth().height(48.dp)
                                 .padding(horizontal = 20.dp),
                         ) {
@@ -198,11 +202,13 @@ fun SignInScreen(
                 }
 
 
-                Spacer(modifier = Modifier.padding(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 TextButton(
-                    onClick = {},
-                    modifier = Modifier.wrapContentSize()
+                    onClick = {
+
+                    },
+                    modifier = Modifier
                         .align(alignment = Alignment.CenterHorizontally)
                 ) {
                     Text(
@@ -211,23 +217,21 @@ fun SignInScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.padding(24.dp))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        "还没有账户？",
-                        modifier = Modifier.align(Alignment.CenterVertically),
+                        "还没有账户？"
                     )
                     TextButton(
                         onClick = onSignUpClick,
-                        modifier = Modifier.wrapContentSize().align(Alignment.CenterVertically)
+                        contentPadding = PaddingValues(0.dp),
                     ) {
                         Text(
                             "注册",
-                            textDecoration = TextDecoration.Underline
+                            textDecoration = TextDecoration.Underline,
                         )
                     }
                 }

@@ -43,8 +43,11 @@ kotlin {
 
             implementation(projects.components.taskCategory)
             implementation(projects.components.task)
-
+            implementation(projects.components.preference)
+            
             implementation(projects.core.database)
+            implementation(projects.core.datastore)
+
             implementation(projects.features.widget)
 
         }

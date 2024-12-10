@@ -10,6 +10,7 @@ import com.hys.hy.home.navigation.Home
 import com.hys.hy.home.navigation.addHomeScreen
 import com.hys.hy.home.navigation.navigateFromLoginToHome
 import com.hys.hy.home.navigation.popUpToHome
+import com.hys.hy.login.navigation.LoginNavGraph
 import com.hys.hy.login.navigation.addLoginNavGraph
 import com.hys.hy.search.navigation.addSearchScreen
 import com.hys.hy.setting.navigation.addSettingGraph
@@ -17,6 +18,7 @@ import com.hys.hy.taskcreation.navigation.addTaskCreationScreen
 import com.hys.hy.taskcreation.navigation.navigateTaskCreation
 import com.hys.hy.taskcreation.navigation.navigateTaskEdit
 import com.hys.hy.today.navigation.addTodayScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -29,20 +31,23 @@ fun App() {
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun HYNavHost() {
+fun HYNavHost(
+    appViewModel: AppViewModel = koinViewModel()
+) {
     SharedTransitionLayout {
         val navController = rememberNavController()
+
         NavHost(
             navController = navController,
-            startDestination = Home
+            startDestination = if (appViewModel.isFirstUse) LoginNavGraph else Home
         ) {
 
             addLoginNavGraph(
                 sharedTransitionScope = this@SharedTransitionLayout,
                 navController = navController,
-                onStartClick = {
+                navigateToHome = {
                     navController.navigateFromLoginToHome()
-                },
+                }
             )
 
             addHomeScreen(
@@ -81,6 +86,8 @@ fun HYNavHost() {
 
 
         }
+
+
     }
 }
 

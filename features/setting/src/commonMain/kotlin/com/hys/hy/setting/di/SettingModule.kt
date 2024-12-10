@@ -13,7 +13,8 @@ val settingModule = lazyModule {
         TaskCategoryScreenViewModel(
             getTaskCategoriesUseCase = get(),
             deleteTaskCategoryUseCase = get(),
-            addTaskCategoryUseCase = get()
+            addTaskCategoryUseCase = get(),
+            appPreference = get()
         )
     }
 }

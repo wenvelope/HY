@@ -39,6 +39,7 @@ kotlin {
             implementation(projects.core.viewmodel)
             implementation(projects.components.task)
             implementation(projects.components.taskCategory)
+            implementation(projects.components.preference)
         }
 
         desktopMain.dependencies {

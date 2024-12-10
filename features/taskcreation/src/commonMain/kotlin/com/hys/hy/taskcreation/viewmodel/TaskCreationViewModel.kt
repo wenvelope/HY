@@ -4,6 +4,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.AddTaskUseCase
 import com.hys.hy.task.usecase.GetTaskByIdUseCase
@@ -28,7 +29,8 @@ class TaskCreationViewModel(
     private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
-    val taskId: String?
+    private val taskId: String?,
+    private val appPreference: AppPreference
 ) : BaseViewModelCore<TaskCreationViewModel.TaskCreationState, TaskCreationViewModel.TaskCreationEvent>() {
 
     enum class TaskCreationType {
@@ -83,7 +85,7 @@ class TaskCreationViewModel(
 
         data class ShowSnackBar(val message: String) : TaskCreationEvent
 
-        data class GetCategories(val userId: String) : TaskCreationEvent
+        data object GetCategories: TaskCreationEvent
 
         data object UpdateTask : TaskCreationEvent
 
@@ -161,7 +163,8 @@ class TaskCreationViewModel(
                                         taskImportance = state.taskImportance,
                                         taskSelectTime = state.taskSelectedTime,
                                         isDone = false,
-                                        taskCategory = state.taskCategoryName
+                                        taskCategory = state.taskCategoryName,
+                                        userId = appPreference.getUserId()
                                     )
                                 )
                             }
@@ -200,7 +203,7 @@ class TaskCreationViewModel(
                             val categories = withContext(Dispatchers.IO) {
                                 getTaskCategoriesUseCase.execute(
                                     GetTaskCategoriesUseCase.Param(
-                                        userId = event.userId
+                                        userId = appPreference.getUserId()
                                     )
                                 )
                             }
@@ -264,7 +267,8 @@ class TaskCreationViewModel(
                                         taskImportance = state.taskImportance,
                                         taskSelectTime = state.taskSelectedTime,
                                         isDone = false,
-                                        taskCategory = state.taskCategoryName
+                                        taskCategory = state.taskCategoryName,
+                                        userId = appPreference.getUserId()
                                     )
                                 )
                             }

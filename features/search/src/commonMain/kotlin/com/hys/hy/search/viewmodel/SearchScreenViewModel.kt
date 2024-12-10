@@ -2,6 +2,7 @@ package com.hys.hy.search.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.dateutil.DateTimeUtil
+import com.hys.hy.preference.AppPreference
 import com.hys.hy.task.entities.TaskWithCategory
 import com.hys.hy.task.usecase.ChangeTaskIsDoneUseCase
 import com.hys.hy.task.usecase.DeleteTaskUseCase
@@ -24,7 +25,8 @@ class SearchScreenViewModel(
     private val getTaskWithCategoryByParams: GetTaskWithCategoryByParams,
     private val changeTaskIsDoneUseCase: ChangeTaskIsDoneUseCase,
     private val getTaskCategoriesUseCase: GetTaskCategoriesUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val appPreference: AppPreference
 ) :
     BaseViewModelCore<SearchScreenViewModel.SearchScreenState, SearchScreenViewModel.SearchScreenEvent>() {
 
@@ -123,7 +125,7 @@ class SearchScreenViewModel(
 
         data class ChangeTaskIsDone(val taskId: String, val isDone: Boolean) : SearchScreenEvent
 
-        data class GetTaskCategories(val userId: String) : SearchScreenEvent
+        data object GetTaskCategories : SearchScreenEvent
 
         data class ChangeQueryParamCategory(val category: TaskCategory?) : SearchScreenEvent
 
@@ -170,7 +172,7 @@ class SearchScreenViewModel(
                                 }
                                 getTaskWithCategoryByParams.execute(
                                     GetTaskWithCategoryByParams.Param(
-                                        userId = "test",
+                                        userId = appPreference.getUserId(),
                                         taskTitle = event.searchQuery
                                             ?: uiStateFlow.value.searchQuery,
                                         isDone = event.isDoneParam?.isDone
@@ -228,7 +230,7 @@ class SearchScreenViewModel(
                             val taskCategories = withContext(Dispatchers.IO) {
                                 getTaskCategoriesUseCase.execute(
                                     GetTaskCategoriesUseCase.Param(
-                                        userId = event.userId
+                                        userId = appPreference.getUserId()
                                     )
                                 )
                             }

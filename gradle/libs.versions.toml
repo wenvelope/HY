@@ -13,6 +13,7 @@ androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 animation = "1.7.0"
 compose-plugin = "1.7.0"
+coreSplashscreen = "1.0.1"
 glanceAppwidget = "1.1.1"
 junit = "4.13.2"
 kotlin = "2.0.20"
@@ -27,10 +28,19 @@ kotlin-serialization = "1.7.3"
 ksp = "2.0.20-1.0.25"
 sqlite = "2.5.0-alpha11"
 workRuntime = "2.10.0"
+androidx-data-store = "1.1.1"
 
 [libraries]
+#开屏
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+
+#小组件
 androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glanceAppwidget" }
 androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glanceAppwidget" }
+
+#datastore
+androidx-data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-data-store" }
+
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "animation" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

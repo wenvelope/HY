@@ -34,6 +34,7 @@ include(":composeApp")
 include(":core:viewmodel")
 include(":core:dateutil")
 include(":core:database")
+include(":core:datastore")
 
 include(":designsystem")
 
@@ -48,6 +49,7 @@ include(":features:widget")
 
 include(":components:task")
 include(":components:taskCategory")
+include(":components:preference")
 
 
 

@@ -80,7 +80,7 @@ fun SearchScreen(
 
     LaunchedEffect(Unit) {
         viewModel.sendEvent(
-            SearchScreenViewModel.SearchScreenEvent.GetTaskCategories(userId = "test")
+            SearchScreenViewModel.SearchScreenEvent.GetTaskCategories
         )
     }
 

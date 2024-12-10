@@ -10,7 +10,8 @@ val searchModule = lazyModule {
             getTaskWithCategoryByParams = get(),
             changeTaskIsDoneUseCase = get(),
             getTaskCategoriesUseCase = get(),
-            deleteTaskUseCase = get()
+            deleteTaskUseCase = get(),
+            appPreference = get()
         )
     }
 }

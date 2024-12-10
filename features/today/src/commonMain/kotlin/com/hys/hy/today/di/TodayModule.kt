@@ -10,7 +10,8 @@ val todayModule = lazyModule {
         TodayScreenViewModel(
             getCurrentDayTasksUseCase = get(),
             getTasksByUserAndDateUseCase = get(),
-            changeTaskIsDoneUseCase = get()
+            changeTaskIsDoneUseCase = get(),
+            appPreference = get()
         )
     }
 }

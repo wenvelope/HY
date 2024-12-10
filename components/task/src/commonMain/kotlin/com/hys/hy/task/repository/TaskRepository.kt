@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.map
 
 
 interface TaskRepository {
-    suspend fun addTask(task: Task)
+    suspend fun addTask(task: TaskTable)
 
     suspend fun deleteTask(taskId: String)
 
     suspend fun getTaskById(taskId: String): Task?
 
-    suspend fun updateTask(task: Task)
+    suspend fun updateTask(task: TaskTable)
 
     suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task>
 
@@ -48,17 +48,8 @@ class TaskRepositoryImpl(
     private val taskDao: TaskDao
 ) : TaskRepository {
 
-    override suspend fun addTask(task: Task) {
-        val taskTable = TaskTable(
-            taskTitle = task.taskTitle,
-            taskImportance = task.taskImportance.name,
-            taskDescription = task.taskDescription,
-            taskSelectDate = task.taskSelectDate,
-            taskSelectTime = task.taskSelectTime,
-            taskCategoryName = task.taskCategory,
-            isDone = task.isDone
-        )
-        taskDao.insert(taskTable)
+    override suspend fun addTask(task: TaskTable) {
+        taskDao.insert(task)
     }
 
     override suspend fun deleteTask(taskId: String) {
@@ -67,6 +58,7 @@ class TaskRepositoryImpl(
             taskTitle = "",
             taskImportance = "",
             taskDescription = "",
+            userId = "",
         )
         taskDao.delete(taskTable)
     }
@@ -87,18 +79,8 @@ class TaskRepositoryImpl(
         }
     }
 
-    override suspend fun updateTask(task: Task) {
-        val taskTable = TaskTable(
-            id = task.taskId!!,
-            taskTitle = task.taskTitle,
-            taskImportance = task.taskImportance.name,
-            taskDescription = task.taskDescription,
-            taskSelectDate = task.taskSelectDate,
-            taskSelectTime = task.taskSelectTime,
-            taskCategoryName = task.taskCategory,
-            isDone = task.isDone
-        )
-        taskDao.update(taskTable)
+    override suspend fun updateTask(task: TaskTable) {
+        taskDao.update(task)
     }
 
     override suspend fun getTasksByUserAndDate(userId: String, localDate: LocalDate): List<Task> {

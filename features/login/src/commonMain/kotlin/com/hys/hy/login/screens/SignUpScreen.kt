@@ -24,6 +24,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.hys.hy.login.viewmodel.SignUpScreenViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -41,8 +45,18 @@ fun SignUpScreen(
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     onBackClick: () -> Unit,
-    onCreateAccountClick: () -> Unit
+    navigateToHome: () -> Unit,
+    viewModel: SignUpScreenViewModel = koinViewModel()
 ) {
+
+    val state by viewModel.container.uiStateFlow.collectAsState()
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            navigateToHome()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -119,22 +133,37 @@ fun SignUpScreen(
 
             PrivacyTextLine(
                 checked = null,
-                onCheckedChange = {}
+                onCheckedChange = {
+
+                }
             )
 
             Spacer(modifier = Modifier.height(5.dp))
 
             with(sharedTransitionScope) {
-                Column(
+                Row(
                     modifier = Modifier.sharedBounds(
                         animatedVisibilityScope = animatedContentScope,
                         sharedContentState = rememberSharedContentState("login")
                     ).padding(bottom = 10.dp)
                 ) {
+
                     Button(
-                        onClick = onCreateAccountClick,
-                        modifier = Modifier.fillMaxWidth().height(48.dp)
-                            .padding(horizontal = 20.dp),
+                        onClick = {
+                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOfflineAccount)
+                        },
+                        modifier = Modifier.weight(1f).height(48.dp)
+                            .padding(horizontal = 10.dp),
+                    ) {
+                        Text("无账户使用")
+                    }
+
+                    Button(
+                        onClick = {
+
+                        },
+                        modifier = Modifier.weight(1f).height(48.dp)
+                            .padding(horizontal = 10.dp),
                     ) {
                         Text("创建账户")
                     }

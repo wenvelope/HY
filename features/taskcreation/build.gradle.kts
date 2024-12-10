@@ -47,7 +47,7 @@ kotlin {
             implementation(projects.components.task)
             implementation(projects.components.taskCategory)
             implementation(projects.features.widget)
-
+            implementation(projects.components.preference)
         }
 
         desktopMain.dependencies {

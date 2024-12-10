@@ -88,7 +88,7 @@ fun TaskCategoryScreen(
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        viewModel.sendEvent(TaskCategoryScreenViewModel.TaskCategoryEvent.GetTaskCategories("test"))
+        viewModel.sendEvent(TaskCategoryScreenViewModel.TaskCategoryEvent.GetTaskCategories)
     }
 
     Scaffold(
