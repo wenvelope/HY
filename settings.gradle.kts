@@ -35,6 +35,8 @@ include(":core:viewmodel")
 include(":core:dateutil")
 include(":core:database")
 include(":core:datastore")
+include(":core:network")
+
 
 include(":designsystem")
 
