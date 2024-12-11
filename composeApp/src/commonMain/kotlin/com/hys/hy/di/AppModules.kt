@@ -5,6 +5,7 @@ import com.hys.hy.datastore.di.dataStoreModule
 import com.hys.hy.home.di.homeModule
 import com.hys.hy.login.di.loginModule
 import com.hys.hy.navigation.AppViewModel
+import com.hys.hy.network.di.networkModule
 import com.hys.hy.preference.di.preferenceModule
 import com.hys.hy.search.di.searchModule
 import com.hys.hy.setting.di.settingModule
@@ -25,6 +26,7 @@ val appViewModelModule = lazyModule {
 
 val appModules = listOf(
     databaseModule,
+    networkModule,
     dataStoreModule,
     preferenceModule,
     taskModule,

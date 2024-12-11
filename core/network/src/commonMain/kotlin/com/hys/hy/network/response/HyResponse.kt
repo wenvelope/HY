@@ -20,8 +20,6 @@ data class HyResponse<T>(
 ) {
     val isSuccess: Boolean
         get() = result == "SUCCESS"
-    val isFailure: Boolean
-        get() = result == "ERROR"
 }
 
 fun <T> Result<HyResponse<T>>.unpack(): Result<T> {

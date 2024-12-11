@@ -9,11 +9,7 @@ class AppViewModel(
 ) : ViewModel() {
 
     val isFirstUse: Boolean = runBlocking {
-        if (appPreference.isFirstUse()) {
-            true
-        } else {
-            false
-        }
+        appPreference.isFirstUse()
     }
 
 

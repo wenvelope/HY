@@ -47,6 +47,7 @@ kotlin {
             
             implementation(projects.core.database)
             implementation(projects.core.datastore)
+            implementation(projects.core.network)
 
             implementation(projects.features.widget)
 
