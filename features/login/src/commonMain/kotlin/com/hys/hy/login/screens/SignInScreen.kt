@@ -142,13 +142,22 @@ fun SignInScreen(
             Column(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                // 标题
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    style = MaterialTheme.typography.headlineLarge,
-                    text = "欢迎回来!",
-                    textAlign = TextAlign.Center
-                )
+                with(sharedTransitionScope){
+                    // 标题
+                    Column(
+                        modifier = Modifier.sharedBounds(
+                            animatedVisibilityScope = animatedContentScope,
+                            sharedContentState = rememberSharedContentState("login_title")
+                        )
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            style = MaterialTheme.typography.headlineLarge,
+                            text = "欢迎回来!",
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.padding(9.dp))
 
@@ -201,38 +210,46 @@ fun SignInScreen(
                     }
                 }
 
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                TextButton(
-                    onClick = {
-
-                    },
-                    modifier = Modifier
-                        .align(alignment = Alignment.CenterHorizontally)
-                ) {
-                    Text(
-                        "忘记密码？",
-                        textDecoration = TextDecoration.Underline
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "还没有账户？"
-                    )
-                    TextButton(
-                        onClick = onSignUpClick,
-                        contentPadding = PaddingValues(0.dp),
-                    ) {
-                        Text(
-                            "注册",
-                            textDecoration = TextDecoration.Underline,
+                with(sharedTransitionScope) {
+                    Column(
+                        modifier = Modifier.sharedBounds(
+                            animatedVisibilityScope = animatedContentScope,
+                            sharedContentState = rememberSharedContentState("login_text")
                         )
+                    ) {
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        TextButton(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterHorizontally)
+                        ) {
+                            Text(
+                                "忘记密码？",
+                                textDecoration = TextDecoration.Underline
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                "还没有账户？"
+                            )
+                            TextButton(
+                                onClick = onSignUpClick,
+                                contentPadding = PaddingValues(0.dp),
+                            ) {
+                                Text(
+                                    "注册",
+                                    textDecoration = TextDecoration.Underline,
+                                )
+                            }
+                        }
                     }
                 }
 

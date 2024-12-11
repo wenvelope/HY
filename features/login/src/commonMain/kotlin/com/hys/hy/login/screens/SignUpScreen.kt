@@ -75,13 +75,23 @@ fun SignUpScreen(
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            //标题
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.headlineLarge,
-                text = "创建你的账户",
-                textAlign = TextAlign.Center
-            )
+            with(sharedTransitionScope){
+                Column(
+                    modifier = Modifier.sharedBounds(
+                        animatedVisibilityScope = animatedContentScope,
+                        sharedContentState = rememberSharedContentState("login_title")
+                    )
+                ) {
+                    //标题
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.headlineLarge,
+                        text = "创建你的账户",
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.padding(9.dp))
 
@@ -131,12 +141,24 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.padding(5.dp))
 
-            PrivacyTextLine(
-                checked = null,
-                onCheckedChange = {
+            with(sharedTransitionScope) {
+                Column(
+                    modifier = Modifier.sharedBounds(
+                        animatedVisibilityScope = animatedContentScope,
+                        sharedContentState = rememberSharedContentState("login_text")
+                    )
+                ) {
+                    PrivacyTextLine(
+                        checked = null,
+                        onCheckedChange = {
 
+                        }
+                    )
                 }
-            )
+
+            }
+
+
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -147,7 +169,6 @@ fun SignUpScreen(
                         sharedContentState = rememberSharedContentState("login")
                     ).padding(bottom = 10.dp)
                 ) {
-
                     Button(
                         onClick = {
                             viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOfflineAccount)
