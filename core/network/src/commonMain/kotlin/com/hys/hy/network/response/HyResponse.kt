@@ -37,7 +37,3 @@ fun <T> Result<HyResponse<T>>.unpack(): Result<T> {
     )
 }
 
-@Serializable
-data class RegisterResponse(
-    val token: String
-)

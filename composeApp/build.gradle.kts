@@ -44,6 +44,7 @@ kotlin {
             implementation(projects.components.taskCategory)
             implementation(projects.components.task)
             implementation(projects.components.preference)
+            implementation(projects.components.auth)
             
             implementation(projects.core.database)
             implementation(projects.core.datastore)

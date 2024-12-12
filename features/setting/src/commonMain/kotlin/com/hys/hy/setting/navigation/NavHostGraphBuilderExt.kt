@@ -16,6 +16,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.hys.hy.setting.screens.AboutScreen
+import com.hys.hy.setting.screens.ProfileScreen
 import com.hys.hy.setting.screens.SettingScreen
 import com.hys.hy.setting.screens.TaskCategoryScreen
 import kotlinx.serialization.Serializable
@@ -58,6 +59,24 @@ object TaskCategory
 
 @Serializable
 object About
+
+@Serializable
+object Profile
+
+fun NavGraphBuilder.addProfileScreen(
+    onBackClick: () -> Unit
+) {
+    composable<Profile>(
+        enterTransition = { slideInHorizontally { it / 3 } + fadeIn() },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
+    ) {
+        ProfileScreen(
+            onBackClick = onBackClick
+        )
+    }
+}
 
 fun NavGraphBuilder.addTaskCategoryScreen(
     onBackClick: () -> Unit
@@ -139,6 +158,10 @@ fun NavGraphBuilder.addSettingGraph(
         }
 
         addAboutScreen {
+            navController.popBackStack()
+        }
+
+        addProfileScreen {
             navController.popBackStack()
         }
     }

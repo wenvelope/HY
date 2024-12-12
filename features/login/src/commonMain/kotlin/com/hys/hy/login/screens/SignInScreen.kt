@@ -29,9 +29,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -142,7 +139,7 @@ fun SignInScreen(
             Column(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                with(sharedTransitionScope){
+                with(sharedTransitionScope) {
                     // 标题
                     Column(
                         modifier = Modifier.sharedBounds(
@@ -260,17 +257,19 @@ fun SignInScreen(
 }
 
 @Composable
-fun EmailAndPwdTextField(modifier: Modifier) {
+fun EmailAndPwdTextField(
+    modifier: Modifier,
+    email: String = "",
+    password: String = "",
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {}
+) {
     Column(modifier = modifier) {
-        var email by remember { mutableStateOf("") }
-
-        var password by remember { mutableStateOf("") }
-
 
         TextField(
             value = email,
             onValueChange = {
-                email = it
+                onEmailChange(it)
             },
             singleLine = true,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
@@ -283,7 +282,7 @@ fun EmailAndPwdTextField(modifier: Modifier) {
         TextField(
             value = password,
             onValueChange = {
-                password = it
+                onPasswordChange(it)
             },
             singleLine = true,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),

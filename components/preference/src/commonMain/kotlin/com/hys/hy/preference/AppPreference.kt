@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.map
 interface AppPreference {
     suspend fun getUserTokenValue(): String?
     suspend fun setUserTokenValue(value: String)
-    suspend fun isOfflineModeEnabled(): Boolean?
+    suspend fun isOfflineModeEnabled(): Boolean
     suspend fun setOfflineModeEnabled(value: Boolean)
     suspend fun getUserId(): String
     suspend fun setUserId(value: String)

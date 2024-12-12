@@ -36,6 +36,7 @@ import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
 import com.hys.hy.setting.navigation.About
+import com.hys.hy.setting.navigation.Profile
 import com.hys.hy.setting.navigation.TaskCategory
 import com.hys.hy.setting.viewmodel.SettingScreenViewModel
 import hy.features.setting.generated.resources.Res
@@ -92,11 +93,10 @@ fun SettingScreen(
             ) {
 
                 UserBanner(
-                    modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth().clickable {
-
-                    },
-                    sharedTransitionScope = sharedTransitionScope,
-                    animatedContentScope = animatedContentScope
+                    modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
+                    onUserClick = {
+                        navController.navigate(Profile)
+                    }
                 )
 
                 NotificationItem(
@@ -230,37 +230,40 @@ fun AboutItem(
 }
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun UserBanner(
     modifier: Modifier,
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
+    onUserClick: () -> Unit = {},
+    userName: String = "友利奈绪",
+    userDesc: String = "wo ai chi pao fu"
 ) {
     Row(
         modifier = modifier
     ) {
-
-        with(sharedTransitionScope) {
-            Image(
-                painter = painterResource(Res.drawable.naixv),
-                contentDescription = "avatar",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.padding(start = 24.dp).size(64.dp).clip(CircleShape)
-            )
-        }
+        Image(
+            painter = painterResource(Res.drawable.naixv),
+            contentDescription = "avatar",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.padding(start = 24.dp).size(64.dp).clip(CircleShape).clickable {
+                onUserClick.invoke()
+            }
+        )
 
         Column {
             Text(
-                "友利奈绪",
+                userName,
                 style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier.padding(start = 24.dp).clickable {
+                    onUserClick.invoke()
+                },
                 textAlign = TextAlign.Start
             )
             Text(
-                "wo ai chi pao fu",
+                userDesc,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(start = 24.dp),
+                modifier = Modifier.padding(start = 24.dp).clickable {
+                    onUserClick.invoke()
+                },
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Start

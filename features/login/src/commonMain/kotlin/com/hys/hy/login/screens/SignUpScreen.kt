@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -75,7 +76,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            with(sharedTransitionScope){
+            with(sharedTransitionScope) {
                 Column(
                     modifier = Modifier.sharedBounds(
                         animatedVisibilityScope = animatedContentScope,
@@ -114,27 +115,20 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.padding(20.dp))
 
-            var username by remember { mutableStateOf("") }
-
-            TextField(
-                value = username,
-                onValueChange = {
-                    username = it
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                placeholder = { Text("nickname") }
-            )
-
-            Spacer(modifier = Modifier.padding(10.dp))
-
-
             with(sharedTransitionScope) {
                 EmailAndPwdTextField(
                     modifier = Modifier.sharedBounds(
                         animatedVisibilityScope = animatedContentScope,
                         sharedContentState = sharedTransitionScope.rememberSharedContentState("1")
-                    ).fillMaxWidth()
+                    ).fillMaxWidth(),
+                    email = state.email,
+                    onEmailChange = {
+                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangeEmail(it))
+                    },
+                    password = state.password,
+                    onPasswordChange = {
+                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangePassword(it))
+                    }
                 )
             }
 
@@ -149,13 +143,12 @@ fun SignUpScreen(
                     )
                 ) {
                     PrivacyTextLine(
-                        checked = null,
+                        checked = state.isPrivacyPolicyChecked,
                         onCheckedChange = {
-
+                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.PrivacyPolicyChecked(it))
                         }
                     )
                 }
-
             }
 
 
@@ -167,7 +160,7 @@ fun SignUpScreen(
                     modifier = Modifier.sharedBounds(
                         animatedVisibilityScope = animatedContentScope,
                         sharedContentState = rememberSharedContentState("login")
-                    ).padding(bottom = 10.dp)
+                    )
                 ) {
                     Button(
                         onClick = {
@@ -181,13 +174,28 @@ fun SignUpScreen(
 
                     Button(
                         onClick = {
-
+                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOnlineAccount)
                         },
                         modifier = Modifier.weight(1f).height(48.dp)
                             .padding(horizontal = 10.dp),
                     ) {
-                        Text("创建账户")
+                        if (state.isLoading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp)
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 3.dp),
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                strokeWidth = 3.dp
+                            )
+                        }
+                        Text(
+                            "创建账户",
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            textAlign = TextAlign.Center
+                        )
                     }
+
+
                 }
             }
 

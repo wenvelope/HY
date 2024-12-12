@@ -15,7 +15,7 @@ val loginModule = lazyModule {
 
     viewModel<SignUpScreenViewModel>{
         SignUpScreenViewModel(
-            appPreference = get()
+            registerUseCase = get()
         )
     }
 }

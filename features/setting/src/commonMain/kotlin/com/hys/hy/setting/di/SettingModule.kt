@@ -1,5 +1,6 @@
 package com.hys.hy.setting.di
 
+import com.hys.hy.setting.viewmodel.ProfileScreenViewModel
 import com.hys.hy.setting.viewmodel.SettingScreenViewModel
 import com.hys.hy.setting.viewmodel.TaskCategoryScreenViewModel
 import org.koin.core.module.dsl.viewModel
@@ -15,6 +16,11 @@ val settingModule = lazyModule {
             deleteTaskCategoryUseCase = get(),
             addTaskCategoryUseCase = get(),
             appPreference = get()
+        )
+    }
+    viewModel<ProfileScreenViewModel> {
+        ProfileScreenViewModel(
+            appPreference = get(),
         )
     }
 }

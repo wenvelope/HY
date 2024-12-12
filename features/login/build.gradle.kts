@@ -38,6 +38,7 @@ kotlin {
             implementation(projects.core.viewmodel)
 
             implementation(projects.components.preference)
+            implementation(projects.components.auth)
         }
 
         desktopMain.dependencies {
