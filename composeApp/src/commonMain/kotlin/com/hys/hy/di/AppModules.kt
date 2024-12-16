@@ -14,6 +14,7 @@ import com.hys.hy.taskCategory.di.taskCategoryModule
 import com.hys.hy.taskcreation.di.taskCreationModule
 import com.hys.hy.today.di.todayModule
 import com.hys.hy.auth.di.authModule
+import com.hys.hy.user.di.userModule
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.lazyModule
 
@@ -32,6 +33,7 @@ val appModules = listOf(
     preferenceModule,
     taskModule,
     authModule,
+    userModule,
     taskCategoryModule
 )
 

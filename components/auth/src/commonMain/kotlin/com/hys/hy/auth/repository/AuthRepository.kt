@@ -9,7 +9,8 @@ interface AuthRepository {
 
     suspend fun register(email: String, password: String): Result<RegisterResponse>
 
-    suspend fun getUserInfo(): Result<RegisterResponse>
+    suspend fun logout(): Result<Unit>
+
 }
 
 class AuthRepositoryImpl(
@@ -25,7 +26,7 @@ class AuthRepositoryImpl(
         return userService.register(registerRequest)
     }
 
-    override suspend fun getUserInfo(): Result<RegisterResponse> {
-        TODO("Not yet implemented")
+    override suspend fun logout(): Result<Unit> {
+        return userService.logout()
     }
 }

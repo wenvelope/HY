@@ -91,7 +91,7 @@ class SignUpScreenViewModel(
                                     )
                                 )
                             }
-                            println(result)
+
                             delay(200)
                             if (result.isSuccess) {
                                 updateState {

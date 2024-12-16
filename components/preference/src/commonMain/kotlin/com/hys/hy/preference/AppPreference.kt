@@ -16,7 +16,8 @@ interface AppPreference {
     suspend fun getUserId(): String
     suspend fun setUserId(value: String)
     suspend fun isFirstUse(): Boolean
-    suspend fun setNotFirstUse()
+    suspend fun setNotFirstUse(isFirstUse: Boolean = false)
+    suspend fun clearUserTokenAndUserId()
 }
 
 internal class AppPreferenceImpl(
@@ -28,6 +29,7 @@ internal class AppPreferenceImpl(
         private const val USER_TOKEN = "user_token"
         private const val OFFLINE_MODE = "offline_mode"
         private const val IS_FIRST_USE = "is_first_use"
+        private const val USER_ID = "user_id"
     }
 
     private val userTokenKey = stringPreferencesKey("$PREFS_TAG_KEY.$USER_TOKEN")
@@ -35,6 +37,8 @@ internal class AppPreferenceImpl(
     private val offlineModeKey = booleanPreferencesKey("$PREFS_TAG_KEY.$OFFLINE_MODE")
 
     private val isFirstUseKey = booleanPreferencesKey("$PREFS_TAG_KEY.$IS_FIRST_USE")
+
+    private val userIdKey = stringPreferencesKey("$PREFS_TAG_KEY.$USER_ID")
 
 
     override suspend fun getUserTokenValue() = dataStore.data.map {
@@ -61,13 +65,13 @@ internal class AppPreferenceImpl(
 
     override suspend fun getUserId(): String{
         return dataStore.data.map {
-            it[userTokenKey] ?: "test"
+            it[userIdKey] ?: "test"
         }.first()
     }
 
     override suspend fun setUserId(value: String) {
         dataStore.edit {
-            it[userTokenKey] = value
+            it[userIdKey] = value
         }
     }
 
@@ -77,10 +81,18 @@ internal class AppPreferenceImpl(
         }.first()
     }
 
-    override suspend fun setNotFirstUse() {
+    override suspend fun setNotFirstUse(isFirstUse: Boolean) {
         dataStore.edit {
-            it[isFirstUseKey] = false
+            it[isFirstUseKey] = isFirstUse
         }
     }
+
+    override suspend fun clearUserTokenAndUserId() {
+        dataStore.edit {
+            it.remove(userTokenKey)
+            it.remove(userIdKey)
+        }
+    }
+
 
 }

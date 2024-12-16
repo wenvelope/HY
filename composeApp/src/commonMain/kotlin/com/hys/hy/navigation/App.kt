@@ -12,6 +12,7 @@ import com.hys.hy.home.navigation.navigateFromLoginToHome
 import com.hys.hy.home.navigation.popUpToHome
 import com.hys.hy.login.navigation.LoginNavGraph
 import com.hys.hy.login.navigation.addLoginNavGraph
+import com.hys.hy.login.navigation.navigateSignInWithPopUpToSignIn
 import com.hys.hy.search.navigation.addSearchScreen
 import com.hys.hy.setting.navigation.addSettingGraph
 import com.hys.hy.taskcreation.navigation.addTaskCreationScreen
@@ -62,6 +63,9 @@ fun HYNavHost(
                 navController = navController,
                 onHomeTabClick = navController::popUpToHome,
                 onTodayTabClick = navController::navigateTodayWithPopUpToHome,
+                onLogout = {
+                    navController.navigateSignInWithPopUpToSignIn()
+                }
             )
 
             addTodayScreen(

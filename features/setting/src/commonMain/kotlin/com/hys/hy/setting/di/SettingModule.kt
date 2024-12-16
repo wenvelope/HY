@@ -21,6 +21,9 @@ val settingModule = lazyModule {
     viewModel<ProfileScreenViewModel> {
         ProfileScreenViewModel(
             appPreference = get(),
+            updateUserInfoUseCase = get(),
+            logoutUseCase = get(),
+            getUSerInfoUseCase = get()
         )
     }
 }

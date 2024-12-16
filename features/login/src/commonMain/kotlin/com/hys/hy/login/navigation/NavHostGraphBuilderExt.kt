@@ -32,7 +32,12 @@ internal fun NavGraphBuilder.addSignInScreen(
     sharedTransitionScope: SharedTransitionScope,
     onSignUpClick: () -> Unit
 ) {
-    composable<SignIn> {
+    composable<SignIn>(
+        exitTransition = {ExitTransition.None},
+        enterTransition = {EnterTransition.None},
+        popExitTransition = {ExitTransition.None},
+        popEnterTransition = {EnterTransition.None}
+    ) {
         SignInScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable,

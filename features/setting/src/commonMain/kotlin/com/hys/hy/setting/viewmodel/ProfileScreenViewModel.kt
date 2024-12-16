@@ -1,13 +1,24 @@
 package com.hys.hy.setting.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.hys.hy.auth.usecase.LogoutUseCase
 import com.hys.hy.preference.AppPreference
+import com.hys.hy.user.usecase.GetUserInfoUseCase
+import com.hys.hy.user.usecase.UpdateUserInfoUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileScreenViewModel(
-    private val appPreference: AppPreference
+    private val appPreference: AppPreference,
+    private val updateUserInfoUseCase: UpdateUserInfoUseCase,
+    private val logoutUseCase: LogoutUseCase,
+    private val getUSerInfoUseCase: GetUserInfoUseCase
 ) :
     BaseViewModelCore<ProfileScreenViewModel.ProfileState, ProfileScreenViewModel.ProfileEvent>() {
 
@@ -15,8 +26,6 @@ class ProfileScreenViewModel(
         "昵称",
         "简介",
         "性别",
-        "学校",
-        "邮箱",
     )
 
     data class ProfileState(
@@ -28,7 +37,8 @@ class ProfileScreenViewModel(
         val bio: String,
         val isDialogShow: Boolean = false,
         val currentDialogTitle: String = "",
-        val currentDialogTextValue: String = ""
+        val currentDialogTextValue: String = "",
+        val isLogout: Boolean = false
     ) : UiState {
         fun getValueByKey(key: String): String {
             return when (key) {
@@ -51,6 +61,7 @@ class ProfileScreenViewModel(
         data class ShowDialog(val isShow: Boolean, val title: String) : ProfileEvent
         data class ChangeValueByKey(val key: String, val value: String) : ProfileEvent
         data class ChangeDialogTextValue(val value: String) : ProfileEvent
+        data object Logout : ProfileEvent
     }
 
     override fun initialState(): ProfileState {
@@ -87,10 +98,21 @@ class ProfileScreenViewModel(
                     }
 
                     ProfileEvent.GetUserInfo -> {
-                        if (appPreference.isOfflineModeEnabled()) {
-                            return@collect
+                        viewModelScope.launch(Dispatchers.IO) {
+                            getUSerInfoUseCase.execute(Unit).fold(
+                                onSuccess = { response ->
+                                    updateState {
+                                        copy(
+                                            name = response.nickname?: "",
+                                            bio = response.bio?: "",
+                                        )
+                                    }
+                                },
+                                onFailure = {
+                                    println(it.message)
+                                }
+                            )
                         }
-
                     }
 
                     is ProfileEvent.ShowDialog -> {
@@ -104,15 +126,29 @@ class ProfileScreenViewModel(
                     }
 
                     is ProfileEvent.ChangeValueByKey -> {
-                        updateState {
-                            copy(
-                                name = if (event.key == "昵称") event.value else name,
-                                bio = if (event.key == "简介") event.value else bio,
-                                sex = if (event.key == "性别") event.value else sex,
-                                school = if (event.key == "学校") event.value else school,
-                                email = if (event.key == "邮箱") event.value else email
+
+                        viewModelScope.launch(Dispatchers.IO) {
+
+                            updateUserInfoUseCase.execute(
+                                UpdateUserInfoUseCase.Params(
+                                    nickname = if (event.key == "昵称") event.value else null,
+                                    bio = if (event.key == "简介") event.value else null,
+                                )
+                            ).fold(
+                                onSuccess = { response ->
+                                    updateState {
+                                        copy(
+                                            name = response.nickname ?: "",
+                                            bio = response.bio ?: "",
+                                        )
+                                    }
+                                },
+                                onFailure = {
+                                    println(it.message)
+                                }
                             )
                         }
+
                     }
 
                     is ProfileEvent.ChangeDialogTextValue -> {
@@ -121,6 +157,21 @@ class ProfileScreenViewModel(
                                 currentDialogTextValue = event.value
                             )
                         }
+                    }
+
+                    ProfileEvent.Logout -> {
+                        viewModelScope.launch {
+                            withContext(Dispatchers.IO) {
+                                logoutUseCase.execute(Unit)
+                            }
+                            appPreference.clearUserTokenAndUserId()
+                            appPreference.setOfflineModeEnabled(false)
+                            appPreference.setNotFirstUse(isFirstUse = true)
+                            updateState {
+                                copy(isLogout = true)
+                            }
+                        }
+
                     }
                 }
             }

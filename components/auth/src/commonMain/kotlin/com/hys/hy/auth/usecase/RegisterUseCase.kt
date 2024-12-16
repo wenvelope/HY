@@ -32,7 +32,7 @@ class RegisterUseCaseImpl(
 
     override suspend fun execute(input: RegisterUseCase.Input): RegisterUseCase.Output {
         val result = authRepository.register(input.email, input.password)
-        println(result)
+
         result.fold(
             onSuccess = {
                 // save token to preference

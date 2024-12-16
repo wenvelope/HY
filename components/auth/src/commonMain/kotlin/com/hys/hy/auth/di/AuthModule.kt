@@ -5,6 +5,8 @@ import RegisterUseCaseImpl
 import org.koin.dsl.module
 import com.hys.hy.auth.repository.AuthRepository
 import com.hys.hy.auth.repository.AuthRepositoryImpl
+import com.hys.hy.auth.usecase.LogoutUseCase
+import com.hys.hy.auth.usecase.LogoutUseCaseImpl
 import com.hys.hy.auth.usecase.LoginUseCase
 import com.hys.hy.auth.usecase.LoginUseCaseImpl
 
@@ -28,6 +30,12 @@ val authModule = module {
         LoginUseCaseImpl(
             authRepository = get(),
             appPreference = get()
+        )
+    }
+
+    factory<LogoutUseCase> {
+        LogoutUseCaseImpl(
+            authRepository = get()
         )
     }
 }

@@ -64,7 +64,8 @@ object About
 object Profile
 
 fun NavGraphBuilder.addProfileScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLogout: () -> Unit
 ) {
     composable<Profile>(
         enterTransition = { slideInHorizontally { it / 3 } + fadeIn() },
@@ -73,7 +74,8 @@ fun NavGraphBuilder.addProfileScreen(
         popExitTransition = { ExitTransition.None },
     ) {
         ProfileScreen(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onLogout = onLogout
         )
     }
 }
@@ -141,6 +143,7 @@ fun NavGraphBuilder.addSettingGraph(
     onHomeTabClick: () -> Unit,
     onTodayTabClick: () -> Unit,
     onSettingTabClick: () -> Unit = {},
+    onLogout: () -> Unit
 ) {
     navigation<SettingGraph>(
         startDestination = Setting
@@ -161,8 +164,11 @@ fun NavGraphBuilder.addSettingGraph(
             navController.popBackStack()
         }
 
-        addProfileScreen {
-            navController.popBackStack()
-        }
+        addProfileScreen (
+            onBackClick = {
+                navController.popBackStack()
+            },
+            onLogout = onLogout
+        )
     }
 }

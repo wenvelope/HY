@@ -38,6 +38,8 @@ kotlin {
             implementation(projects.components.taskCategory)
             implementation(projects.core.viewmodel)
             implementation(projects.components.preference)
+            implementation(projects.components.user)
+            implementation(projects.components.auth)
         }
 
         desktopMain.dependencies {

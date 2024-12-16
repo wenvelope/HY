@@ -53,6 +53,7 @@ include(":components:task")
 include(":components:auth")
 include(":components:taskCategory")
 include(":components:preference")
+include(":components:user")
 
 
 

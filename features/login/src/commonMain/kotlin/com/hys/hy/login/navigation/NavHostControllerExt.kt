@@ -13,3 +13,11 @@ fun NavHostController.navigateWelcome() {
 fun NavHostController.navigateSignIn() {
     this.navigate(SignIn)
 }
+
+fun NavHostController.navigateSignInWithPopUpToSignIn() {
+    this.navigate(SignIn) {
+        popUpTo(graph.startDestinationId) {
+            inclusive = true
+        }
+    }
+}
