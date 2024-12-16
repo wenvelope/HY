@@ -1,11 +1,19 @@
 package com.hys.hy.setting.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.hys.hy.user.usecase.GetUserInfoUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SettingScreenViewModel :
+class SettingScreenViewModel (
+    private val getUserInfoUseCase: GetUserInfoUseCase
+):
     BaseViewModelCore<SettingScreenViewModel.SettingState, SettingScreenViewModel.SettingEvent>() {
     data class SettingState(
         val userName: String,
@@ -18,10 +26,12 @@ class SettingScreenViewModel :
         data object GetUserInfo : SettingEvent
     }
 
+
+
     override fun initialState(): SettingState {
         val settingState = SettingState(
-            userName = "友利奈绪",
-            userBio = "我爱吃泡芙"
+            userName = "",
+            userBio = ""
         )
         return settingState
     }
@@ -35,7 +45,24 @@ class SettingScreenViewModel :
                     }
 
                     SettingEvent.GetUserInfo -> {
-
+                        viewModelScope.launch {
+                            val userInfo = withContext(Dispatchers.IO){
+                                getUserInfoUseCase.execute(Unit)
+                            }
+                            userInfo.fold(
+                                onSuccess = {
+                                    updateState {
+                                        copy(
+                                            userName = it.nickname?: "还没有名字",
+                                            userBio = it.bio?: "写点什么吧"
+                                        )
+                                    }
+                                },
+                                onFailure = {
+                                    // handle error
+                                }
+                            )
+                        }
                     }
                 }
             }

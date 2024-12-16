@@ -8,7 +8,9 @@ import org.koin.dsl.lazyModule
 
 val settingModule = lazyModule {
     viewModel<SettingScreenViewModel> {
-        SettingScreenViewModel()
+        SettingScreenViewModel(
+            getUserInfoUseCase = get(),
+        )
     }
     viewModel<TaskCategoryScreenViewModel> {
         TaskCategoryScreenViewModel(

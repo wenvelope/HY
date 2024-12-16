@@ -25,12 +25,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
@@ -39,6 +43,7 @@ import com.hys.hy.setting.navigation.About
 import com.hys.hy.setting.navigation.Profile
 import com.hys.hy.setting.navigation.TaskCategory
 import com.hys.hy.setting.viewmodel.SettingScreenViewModel
+import com.hys.hy.setting.viewmodel.SettingScreenViewModel.SettingEvent
 import hy.features.setting.generated.resources.Res
 import hy.features.setting.generated.resources.category
 import hy.features.setting.generated.resources.naixv
@@ -55,8 +60,17 @@ fun SettingScreen(
     navController: NavController,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
-    viewModel: SettingScreenViewModel = koinViewModel()
+    viewModel: SettingScreenViewModel = koinViewModel(
+        viewModelStoreOwner = navController.previousBackStackEntry!! as ViewModelStoreOwner
+    ),
 ) {
+
+    val state by viewModel.container.uiStateFlow.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.sendEvent(SettingEvent.GetUserInfo)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -96,7 +110,9 @@ fun SettingScreen(
                     modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth(),
                     onUserClick = {
                         navController.navigate(Profile)
-                    }
+                    },
+                    userName = state.userName,
+                    userDesc = state.userBio
                 )
 
                 NotificationItem(

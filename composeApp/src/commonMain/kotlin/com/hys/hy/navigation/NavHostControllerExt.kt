@@ -12,6 +12,7 @@ fun NavHostController.navigateSettingWithPopUpToHome() {
             inclusive = false
             saveState = true
         }
+        restoreState = true
         launchSingleTop = true
     }
 }
@@ -20,6 +21,7 @@ fun NavHostController.navigateTodayWithPopUpToHome() {
     navigate(Today) {
         popUpTo(Home) {
             inclusive = false
+            saveState = true
         }
         restoreState = true
         launchSingleTop = true
