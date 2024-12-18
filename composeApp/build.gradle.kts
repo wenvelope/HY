@@ -34,6 +34,12 @@ kotlin {
             implementation(libs.koin.coroutines)
             implementation(libs.koin.compose.viewmodel)
 
+
+            implementation(libs.coil.network.ktor)
+            implementation(libs.coil.mp)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.compose)
+
             implementation(projects.features.login)
             implementation(projects.features.setting)
             implementation(projects.features.home)

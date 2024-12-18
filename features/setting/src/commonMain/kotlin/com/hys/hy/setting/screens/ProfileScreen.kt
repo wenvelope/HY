@@ -1,6 +1,5 @@
 package com.hys.hy.setting.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableDefaults
@@ -42,11 +41,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.network.httpHeaders
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.setting.viewmodel.ProfileScreenViewModel
-import hy.features.setting.generated.resources.Res
-import hy.features.setting.generated.resources.naixv
-import org.jetbrains.compose.resources.painterResource
+import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.core.PickerMode
+import io.github.vinceglb.filekit.core.PickerType
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,8 +105,22 @@ fun ProfileScreen(
                 )
         ) {
 
+            // 选择头像
+            val launcher = rememberFilePickerLauncher(
+                mode = PickerMode.Single,
+                type = PickerType.Image,
+                title = "选择头像"
+            ) { file ->
+                file?.let {
+                    viewModel.sendEvent(ProfileScreenViewModel.ProfileEvent.ChangeAvatar(it))
+                }
+            }
+
 
             ProfileItem(
+                modifier = Modifier.clickable {
+                    launcher.launch()
+                },
                 headlineContent = {
                     Text(
                         text = "头像",
@@ -110,13 +128,17 @@ fun ProfileScreen(
                     )
                 },
                 trailingContent = {
-                    Image(
-                        painter = painterResource(Res.drawable.naixv),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalPlatformContext.current).data(
+                            viewModel.getAvatarUrl()
+                        ).httpHeaders(
+                            viewModel.getAvatarHttpHeader()
+                        ).crossfade(true).build(),
+                        contentDescription = "User Avatar",
+                        modifier = Modifier.size(64.dp).clip(
+                            CircleShape
+                        ),  // 可根据需要调整头像大小
+                        contentScale = ContentScale.Crop,
                     )
                 }
             )

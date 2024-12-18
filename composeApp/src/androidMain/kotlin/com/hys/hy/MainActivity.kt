@@ -8,12 +8,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.hys.hy.navigation.App
+import io.github.vinceglb.filekit.core.FileKit
 
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 初始化 FileKit 文件 图片选择器
+        FileKit.init(this)
 
         installSplashScreen()
 

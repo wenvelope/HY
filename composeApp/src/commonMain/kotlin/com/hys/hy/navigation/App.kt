@@ -5,11 +5,14 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.setSingletonImageLoaderFactory
 import com.hys.hy.designsystem.theme.HYTheme
 import com.hys.hy.home.navigation.Home
 import com.hys.hy.home.navigation.addHomeScreen
 import com.hys.hy.home.navigation.navigateFromLoginToHome
 import com.hys.hy.home.navigation.popUpToHome
+import com.hys.hy.imageLoader.getAsyncImageLoader
 import com.hys.hy.login.navigation.LoginNavGraph
 import com.hys.hy.login.navigation.addLoginNavGraph
 import com.hys.hy.login.navigation.navigateSignInWithPopUpToSignIn
@@ -22,8 +25,16 @@ import com.hys.hy.today.navigation.addTodayScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() {
+
+    setSingletonImageLoaderFactory { context ->
+        getAsyncImageLoader(context)
+    }
+
+
+
     HYTheme {
         HYNavHost()
     }

@@ -1,26 +1,39 @@
 package com.hys.hy.setting.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import coil3.annotation.ExperimentalCoilApi
+import coil3.network.NetworkHeaders
 import com.hys.hy.auth.usecase.LogoutUseCase
 import com.hys.hy.preference.AppPreference
 import com.hys.hy.user.usecase.GetUserInfoUseCase
+import com.hys.hy.user.usecase.PostUserAvatarUseCase
 import com.hys.hy.user.usecase.UpdateUserInfoUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
+import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class ProfileScreenViewModel(
     private val appPreference: AppPreference,
     private val updateUserInfoUseCase: UpdateUserInfoUseCase,
     private val logoutUseCase: LogoutUseCase,
-    private val getUSerInfoUseCase: GetUserInfoUseCase
+    private val getUSerInfoUseCase: GetUserInfoUseCase,
+    private val postUserAvatarUseCase: PostUserAvatarUseCase,
 ) :
     BaseViewModelCore<ProfileScreenViewModel.ProfileState, ProfileScreenViewModel.ProfileEvent>() {
+
+    companion object {
+        private const val HY_TOKEN_NAME = "hyToken"
+        private const val LOCAL_HOST = "http://10.1.2.198:8080"
+        private const val REMOTE_HOST = "http://39.97.5.90:8080"
+        private const val AVATAR_URL = "${LOCAL_HOST}/v1/user/avatar"
+    }
 
     val profileDialogSettingKeys = listOf(
         "昵称",
@@ -38,7 +51,7 @@ class ProfileScreenViewModel(
         val isDialogShow: Boolean = false,
         val currentDialogTitle: String = "",
         val currentDialogTextValue: String = "",
-        val isLogout: Boolean = false
+        val isLogout: Boolean = false,
     ) : UiState {
         fun getValueByKey(key: String): String {
             return when (key) {
@@ -61,6 +74,7 @@ class ProfileScreenViewModel(
         data class ShowDialog(val isShow: Boolean, val title: String) : ProfileEvent
         data class ChangeValueByKey(val key: String, val value: String) : ProfileEvent
         data class ChangeDialogTextValue(val value: String) : ProfileEvent
+        data class ChangeAvatar(val imageFile: PlatformFile) : ProfileEvent
         data object Logout : ProfileEvent
     }
 
@@ -103,8 +117,8 @@ class ProfileScreenViewModel(
                                 onSuccess = { response ->
                                     updateState {
                                         copy(
-                                            name = response.nickname?: "",
-                                            bio = response.bio?: "",
+                                            name = response.nickname ?: "",
+                                            bio = response.bio ?: "",
                                         )
                                     }
                                 },
@@ -161,7 +175,7 @@ class ProfileScreenViewModel(
 
                     ProfileEvent.Logout -> {
                         viewModelScope.launch {
-                            withContext(Dispatchers.IO) {
+                            launch(Dispatchers.IO) {
                                 logoutUseCase.execute(Unit)
                             }
                             appPreference.clearUserTokenAndUserId()
@@ -173,9 +187,41 @@ class ProfileScreenViewModel(
                         }
 
                     }
+
+                    is ProfileEvent.ChangeAvatar -> {
+                        viewModelScope.launch {
+                            val result = withContext(Dispatchers.IO) {
+                                postUserAvatarUseCase.execute(
+                                    PostUserAvatarUseCase.Param(
+                                        event.imageFile.readBytes()
+                                    )
+                                )
+                            }
+                            result.fold(
+                                onSuccess = {
+                                    println("上传成功")
+                                },
+                                onFailure = {
+                                    println("POST" + it.message)
+                                }
+                            )
+
+                        }
+                    }
+
                 }
             }
         }
-
     }
+
+    @OptIn(ExperimentalCoilApi::class)
+    fun getAvatarHttpHeader(): NetworkHeaders = runBlocking {
+        return@runBlocking NetworkHeaders.Builder()
+            .add(HY_TOKEN_NAME, appPreference.getUserTokenValue().toString()).build()
+    }
+
+    fun getAvatarUrl(): String {
+        return AVATAR_URL
+    }
+
 }

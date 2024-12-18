@@ -10,14 +10,16 @@ import com.hys.hy.network.response.UserInfoResponse
 import com.hys.hy.network.response.unpack
 import com.hys.hy.preference.AppPreference
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import kotlinx.io.files.Path
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 
 interface UserService {
     suspend fun register(param: RegisterRequest): Result<RegisterResponse>
@@ -28,7 +30,9 @@ interface UserService {
 
     suspend fun getUserInfo(): Result<UserInfoResponse>
 
-    suspend fun postUserAvatar(avatarFile: Path): Result<UserInfoResponse>
+    suspend fun postUserAvatar(avatarFile: ByteArray): Result<String>
+
+    suspend fun getUserAvatar(): Result<ByteArray>
 
     suspend fun logout(): Result<Unit>
 
@@ -75,15 +79,34 @@ class UserServiceImpl(
         }.unpack()
     }
 
-    override suspend fun postUserAvatar(avatarFile: Path): Result<UserInfoResponse> {
+    override suspend fun postUserAvatar(avatarFile: ByteArray): Result<String> {
         return runCatching {
-            val response = hyHttpClient.post("/v1/user/avatar") {
-                header(HY_TOKEN_KEY, appPreference.getUserTokenValue())
-                contentType(ContentType.MultiPart.FormData)
-                setBody(avatarFile)
-            }.body<HyResponse<UserInfoResponse>>()
+            val response = hyHttpClient.submitFormWithBinaryData(
+                url = "/v1/user/avatar",  // 服务器上传接口的URL
+                formData = formData {
+                    append("avatar", avatarFile, Headers.build {
+                        append(
+                            HttpHeaders.ContentType,
+                            ContentType.Image.JPEG.toString()
+                        ) // 根据实际文件类型设置
+                        append(HttpHeaders.ContentDisposition, "filename=\"avatar.jpg\"")
+                    })
+                },
+                {
+                    header(HY_TOKEN_KEY, appPreference.getUserTokenValue())
+                }
+            ).body<HyResponse<String>>()
             return@runCatching response
         }.unpack()
+    }
+
+    override suspend fun getUserAvatar(): Result<ByteArray> {
+        return runCatching {
+            val response = hyHttpClient.get("/v1/user/avatar") {
+                header(HY_TOKEN_KEY, appPreference.getUserTokenValue())
+            }.body<ByteArray>()
+            return@runCatching response
+        }
     }
 
     override suspend fun logout(): Result<Unit> {
