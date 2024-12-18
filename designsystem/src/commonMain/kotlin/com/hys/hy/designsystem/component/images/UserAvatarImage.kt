@@ -1,7 +1,7 @@
 package com.hys.hy.designsystem.component.images
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
@@ -35,7 +35,7 @@ class UserAvatarImageState : KoinComponent {
 
 @Composable
 fun rememberUserAvatarImageState(): UserAvatarImageState {
-    return rememberSaveable{ UserAvatarImageState() }
+    return remember { UserAvatarImageState() }
 }
 
 @Composable
@@ -44,14 +44,14 @@ fun UserAvatarImage(
     contentDescription: String? = null,
     state: UserAvatarImageState = rememberUserAvatarImageState()
 ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalPlatformContext.current).data(
-                state.imageUrl
-            ).httpHeaders(
-                state.imageRequestHeader
-            ).build(),
-            contentDescription = contentDescription,
-            modifier = modifier,
-            contentScale = ContentScale.Crop
-        )
+    AsyncImage(
+        model = ImageRequest.Builder(LocalPlatformContext.current).data(
+            state.imageUrl
+        ).httpHeaders(
+            state.imageRequestHeader
+        ).build(),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        contentScale = ContentScale.Crop
+    )
 }
