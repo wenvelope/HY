@@ -31,7 +31,7 @@ class TaskCategoryRepositoryImpl(
         val taskCategoryTable = TaskCategoryTable(
             name = taskCategory.name,
             color = taskCategory.color,
-            userId = "test"
+            userId = userId
         )
         try {
             taskCategoryDao.insertTaskCategory(taskCategoryTable)
