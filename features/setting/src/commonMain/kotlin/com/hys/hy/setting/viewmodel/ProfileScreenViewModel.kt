@@ -1,7 +1,8 @@
 package com.hys.hy.setting.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import coil3.annotation.ExperimentalCoilApi
+import coil3.ImageLoader
+import coil3.memory.MemoryCache
 import coil3.network.NetworkHeaders
 import com.hys.hy.auth.usecase.LogoutUseCase
 import com.hys.hy.preference.AppPreference
@@ -30,7 +31,7 @@ class ProfileScreenViewModel(
 
     companion object {
         private const val HY_TOKEN_NAME = "hyToken"
-        private const val LOCAL_HOST = "http://10.1.2.198:8080"
+        private const val LOCAL_HOST = "http://127.0.0.1:8080"
         private const val REMOTE_HOST = "http://39.97.5.90:8080"
         private const val AVATAR_URL = "${LOCAL_HOST}/v1/user/avatar"
     }
@@ -52,6 +53,7 @@ class ProfileScreenViewModel(
         val currentDialogTitle: String = "",
         val currentDialogTextValue: String = "",
         val isLogout: Boolean = false,
+        val avatarRefreshTimes: Int = 0,
     ) : UiState {
         fun getValueByKey(key: String): String {
             return when (key) {
@@ -74,7 +76,9 @@ class ProfileScreenViewModel(
         data class ShowDialog(val isShow: Boolean, val title: String) : ProfileEvent
         data class ChangeValueByKey(val key: String, val value: String) : ProfileEvent
         data class ChangeDialogTextValue(val value: String) : ProfileEvent
-        data class ChangeAvatar(val imageFile: PlatformFile) : ProfileEvent
+        data class ChangeAvatar(val imageFile: PlatformFile, val imageLoader: ImageLoader) :
+            ProfileEvent
+        data object RefreshAvatar : ProfileEvent
         data object Logout : ProfileEvent
     }
 
@@ -200,6 +204,12 @@ class ProfileScreenViewModel(
                             result.fold(
                                 onSuccess = {
                                     println("上传成功")
+                                    event.imageLoader.memoryCache?.remove(
+                                        MemoryCache.Key(
+                                            getAvatarUrl()
+                                        )
+                                    )
+                                    sendEvent(ProfileEvent.RefreshAvatar)
                                 },
                                 onFailure = {
                                     println("POST" + it.message)
@@ -209,12 +219,16 @@ class ProfileScreenViewModel(
                         }
                     }
 
+                    ProfileEvent.RefreshAvatar -> {
+                        updateState {
+                            copy(avatarRefreshTimes = avatarRefreshTimes + 1)
+                        }
+                    }
                 }
             }
         }
     }
 
-    @OptIn(ExperimentalCoilApi::class)
     fun getAvatarHttpHeader(): NetworkHeaders = runBlocking {
         return@runBlocking NetworkHeaders.Builder()
             .add(HY_TOKEN_NAME, appPreference.getUserTokenValue().toString()).build()

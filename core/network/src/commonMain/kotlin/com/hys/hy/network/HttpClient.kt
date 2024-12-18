@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 internal expect val hyHttpClient: HttpClient
 
-internal const val localUrl = "http://10.1.2.198:8080"
+internal const val localUrl = "http://127.0.0.1:8080"
 internal const val remoteUrl = "http://39.97.5.90:8080"
 
 internal const val HY_TOKEN_KEY = "hyToken"

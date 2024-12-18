@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +42,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.network.httpHeaders
@@ -104,6 +106,7 @@ fun ProfileScreen(
                     flingBehavior = ScrollableDefaults.flingBehavior()
                 )
         ) {
+            val imageLoader = SingletonImageLoader.get(LocalPlatformContext.current)
 
             // 选择头像
             val launcher = rememberFilePickerLauncher(
@@ -112,7 +115,7 @@ fun ProfileScreen(
                 title = "选择头像"
             ) { file ->
                 file?.let {
-                    viewModel.sendEvent(ProfileScreenViewModel.ProfileEvent.ChangeAvatar(it))
+                    viewModel.sendEvent(ProfileScreenViewModel.ProfileEvent.ChangeAvatar(it, imageLoader))
                 }
             }
 
@@ -128,18 +131,23 @@ fun ProfileScreen(
                     )
                 },
                 trailingContent = {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalPlatformContext.current).data(
-                            viewModel.getAvatarUrl()
-                        ).httpHeaders(
-                            viewModel.getAvatarHttpHeader()
-                        ).crossfade(true).build(),
-                        contentDescription = "User Avatar",
-                        modifier = Modifier.size(64.dp).clip(
-                            CircleShape
-                        ),  // 可根据需要调整头像大小
-                        contentScale = ContentScale.Crop,
-                    )
+                    key(
+                        state.avatarRefreshTimes
+                    ){
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalPlatformContext.current).data(
+                                viewModel.getAvatarUrl()
+                            ).httpHeaders(
+                                viewModel.getAvatarHttpHeader()
+                            ).crossfade(true).build(),
+                            contentDescription = "User Avatar",
+                            modifier = Modifier.size(64.dp).clip(
+                                CircleShape
+                            ),
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(start = 16.dp))

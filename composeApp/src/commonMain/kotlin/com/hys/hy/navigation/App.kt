@@ -5,7 +5,6 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.setSingletonImageLoaderFactory
 import com.hys.hy.designsystem.theme.HYTheme
 import com.hys.hy.home.navigation.Home
@@ -25,14 +24,12 @@ import com.hys.hy.today.navigation.addTodayScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun App() {
 
     setSingletonImageLoaderFactory { context ->
-        getAsyncImageLoader(context)
+      getAsyncImageLoader(context)
     }
-
 
 
     HYTheme {
