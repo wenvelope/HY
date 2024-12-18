@@ -26,7 +26,8 @@ val settingModule = lazyModule {
             updateUserInfoUseCase = get(),
             logoutUseCase = get(),
             getUSerInfoUseCase = get(),
-            postUserAvatarUseCase = get()
+            postUserAvatarUseCase = get(),
+            getUserAvatarUseCase = get()
         )
     }
 }

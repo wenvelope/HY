@@ -4,7 +4,6 @@ package com.hys.hy.setting.screens
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,13 +29,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
+import com.hys.hy.designsystem.component.images.UserAvatarImage
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.SettingsTabIndex
 import com.hys.hy.setting.navigation.About
@@ -46,7 +45,6 @@ import com.hys.hy.setting.viewmodel.SettingScreenViewModel
 import com.hys.hy.setting.viewmodel.SettingScreenViewModel.SettingEvent
 import hy.features.setting.generated.resources.Res
 import hy.features.setting.generated.resources.category
-import hy.features.setting.generated.resources.naixv
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -256,13 +254,12 @@ fun UserBanner(
     Row(
         modifier = modifier
     ) {
-        Image(
-            painter = painterResource(Res.drawable.naixv),
-            contentDescription = "avatar",
-            contentScale = ContentScale.Crop,
+
+        UserAvatarImage(
             modifier = Modifier.padding(start = 24.dp).size(64.dp).clip(CircleShape).clickable {
                 onUserClick.invoke()
-            }
+            },
+            contentDescription = "avatar"
         )
 
         Column {

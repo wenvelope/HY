@@ -12,7 +12,7 @@ interface UserRepository {
 
     suspend fun postUserAvatar(avatarFile: ByteArray): Result<String>
 
-    suspend fun getUserAvatar(): Result<ByteArray>
+    suspend fun getUserAvatar(): String
 }
 
 class UserRepositoryImpl(
@@ -29,7 +29,7 @@ class UserRepositoryImpl(
         return userService.postUserAvatar(avatarFile)
     }
 
-    override suspend fun getUserAvatar(): Result<ByteArray> {
+    override suspend fun getUserAvatar(): String {
         return userService.getUserAvatar()
     }
 

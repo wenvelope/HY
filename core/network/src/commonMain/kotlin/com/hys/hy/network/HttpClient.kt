@@ -15,7 +15,9 @@ internal expect val hyHttpClient: HttpClient
 internal const val localUrl = "http://127.0.0.1:8080"
 internal const val remoteUrl = "http://39.97.5.90:8080"
 
-internal const val HY_TOKEN_KEY = "hyToken"
+const val HY_TOKEN_KEY = "hyToken"
+
+const val isLocalHost = true
 
 fun <T : HttpClientEngineConfig> HttpClientConfig<T>.defaultSetting() {
     install(HttpTimeout) {
@@ -24,7 +26,7 @@ fun <T : HttpClientEngineConfig> HttpClientConfig<T>.defaultSetting() {
     }
     defaultRequest {
         url {
-            takeFrom(localUrl)
+            takeFrom(if (isLocalHost) localUrl else remoteUrl)
         }
     }
     install(ContentNegotiation) {
@@ -32,5 +34,5 @@ fun <T : HttpClientEngineConfig> HttpClientConfig<T>.defaultSetting() {
             ignoreUnknownKeys = true
         })
     }
-} 
+}
 

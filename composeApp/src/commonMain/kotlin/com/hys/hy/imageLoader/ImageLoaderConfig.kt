@@ -11,8 +11,11 @@ import okio.FileSystem
 fun getAsyncImageLoader(context: PlatformContext) =
     ImageLoader.Builder(context).crossfade(true)
         .logger(DebugLogger())
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .diskCachePolicy(CachePolicy.DISABLED)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .networkCachePolicy(CachePolicy.ENABLED)
+        .diskCache {
+            newDiskCache()
+        }
         .build()
 
 fun newDiskCache(): DiskCache {

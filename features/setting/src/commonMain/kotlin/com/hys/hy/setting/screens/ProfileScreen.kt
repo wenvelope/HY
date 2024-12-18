@@ -39,15 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.SingletonImageLoader
-import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
-import coil3.network.httpHeaders
-import coil3.request.ImageRequest
-import coil3.request.crossfade
+import com.hys.hy.designsystem.component.images.UserAvatarImage
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.setting.viewmodel.ProfileScreenViewModel
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
@@ -106,6 +102,7 @@ fun ProfileScreen(
                     flingBehavior = ScrollableDefaults.flingBehavior()
                 )
         ) {
+            //获取loader 用于清除缓存刷新头像
             val imageLoader = SingletonImageLoader.get(LocalPlatformContext.current)
 
             // 选择头像
@@ -115,7 +112,12 @@ fun ProfileScreen(
                 title = "选择头像"
             ) { file ->
                 file?.let {
-                    viewModel.sendEvent(ProfileScreenViewModel.ProfileEvent.ChangeAvatar(it, imageLoader))
+                    viewModel.sendEvent(
+                        ProfileScreenViewModel.ProfileEvent.ChangeAvatar(
+                            it,
+                            imageLoader
+                        )
+                    )
                 }
             }
 
@@ -133,18 +135,9 @@ fun ProfileScreen(
                 trailingContent = {
                     key(
                         state.avatarRefreshTimes
-                    ){
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalPlatformContext.current).data(
-                                viewModel.getAvatarUrl()
-                            ).httpHeaders(
-                                viewModel.getAvatarHttpHeader()
-                            ).crossfade(true).build(),
-                            contentDescription = "User Avatar",
-                            modifier = Modifier.size(64.dp).clip(
-                                CircleShape
-                            ),
-                            contentScale = ContentScale.Crop,
+                    ) {
+                        UserAvatarImage(
+                            modifier = Modifier.size(64.dp).clip(CircleShape)
                         )
                     }
 

@@ -3,7 +3,6 @@ package com.hys.hy.home.screens
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,10 +37,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
+import com.hys.hy.designsystem.component.images.UserAvatarImage
 import com.hys.hy.designsystem.component.toolbars.HomeTabIndex
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.theme.CurrentTaskBrush
@@ -50,9 +49,6 @@ import com.hys.hy.designsystem.theme.MonthlyItemImportantBrush
 import com.hys.hy.designsystem.theme.MonthlyItemInProgressBrush
 import com.hys.hy.designsystem.theme.MonthlyItemNotStartedBrush
 import com.hys.hy.home.viewmodel.HomeScreenViewModel
-import hy.features.home.generated.resources.Res
-import hy.features.home.generated.resources.naixv
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -123,15 +119,12 @@ fun HomeScreen(
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        with(sharedTransitionScope) {
-                            Image(
-                                painter = painterResource(Res.drawable.naixv),
-                                contentDescription = "avatar",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.padding(end = 24.dp).size(56.dp)
-                                    .clip(CircleShape)
-                            )
-                        }
+                        UserAvatarImage(
+                            contentDescription = "avatar",
+                            modifier = Modifier.padding(end = 24.dp).size(56.dp)
+                                .clip(CircleShape)
+                        )
+
                     }
                 )
 

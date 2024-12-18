@@ -2,6 +2,9 @@ package com.hys.hy.network.service
 
 import com.hys.hy.network.HY_TOKEN_KEY
 import com.hys.hy.network.hyHttpClient
+import com.hys.hy.network.isLocalHost
+import com.hys.hy.network.localUrl
+import com.hys.hy.network.remoteUrl
 import com.hys.hy.network.request.RegisterRequest
 import com.hys.hy.network.request.UserInfoRequest
 import com.hys.hy.network.response.HyResponse
@@ -32,7 +35,7 @@ interface UserService {
 
     suspend fun postUserAvatar(avatarFile: ByteArray): Result<String>
 
-    suspend fun getUserAvatar(): Result<ByteArray>
+    suspend fun getUserAvatar(): String
 
     suspend fun logout(): Result<Unit>
 
@@ -100,12 +103,11 @@ class UserServiceImpl(
         }.unpack()
     }
 
-    override suspend fun getUserAvatar(): Result<ByteArray> {
-        return runCatching {
-            val response = hyHttpClient.get("/v1/user/avatar") {
-                header(HY_TOKEN_KEY, appPreference.getUserTokenValue())
-            }.body<ByteArray>()
-            return@runCatching response
+    override suspend fun getUserAvatar(): String {
+        return if (isLocalHost) {
+            "${localUrl}/v1/user/avatar"
+        } else {
+            "${remoteUrl}/v1/user/avatar"
         }
     }
 

@@ -3,9 +3,9 @@ package com.hys.hy.setting.viewmodel
 import androidx.lifecycle.viewModelScope
 import coil3.ImageLoader
 import coil3.memory.MemoryCache
-import coil3.network.NetworkHeaders
 import com.hys.hy.auth.usecase.LogoutUseCase
 import com.hys.hy.preference.AppPreference
+import com.hys.hy.user.usecase.GetUserAvatarUseCase
 import com.hys.hy.user.usecase.GetUserInfoUseCase
 import com.hys.hy.user.usecase.PostUserAvatarUseCase
 import com.hys.hy.user.usecase.UpdateUserInfoUseCase
@@ -17,7 +17,6 @@ import io.github.vinceglb.filekit.core.PlatformFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class ProfileScreenViewModel(
@@ -26,15 +25,10 @@ class ProfileScreenViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val getUSerInfoUseCase: GetUserInfoUseCase,
     private val postUserAvatarUseCase: PostUserAvatarUseCase,
+    private val getUserAvatarUseCase: GetUserAvatarUseCase
 ) :
     BaseViewModelCore<ProfileScreenViewModel.ProfileState, ProfileScreenViewModel.ProfileEvent>() {
 
-    companion object {
-        private const val HY_TOKEN_NAME = "hyToken"
-        private const val LOCAL_HOST = "http://127.0.0.1:8080"
-        private const val REMOTE_HOST = "http://39.97.5.90:8080"
-        private const val AVATAR_URL = "${LOCAL_HOST}/v1/user/avatar"
-    }
 
     val profileDialogSettingKeys = listOf(
         "昵称",
@@ -206,8 +200,11 @@ class ProfileScreenViewModel(
                                     println("上传成功")
                                     event.imageLoader.memoryCache?.remove(
                                         MemoryCache.Key(
-                                            getAvatarUrl()
+                                            getUserAvatarUseCase.execute(Unit).urlString
                                         )
+                                    )
+                                    event.imageLoader.diskCache?.remove(
+                                        getUserAvatarUseCase.execute(Unit).urlString
                                     )
                                     sendEvent(ProfileEvent.RefreshAvatar)
                                 },
@@ -229,13 +226,6 @@ class ProfileScreenViewModel(
         }
     }
 
-    fun getAvatarHttpHeader(): NetworkHeaders = runBlocking {
-        return@runBlocking NetworkHeaders.Builder()
-            .add(HY_TOKEN_NAME, appPreference.getUserTokenValue().toString()).build()
-    }
 
-    fun getAvatarUrl(): String {
-        return AVATAR_URL
-    }
 
 }

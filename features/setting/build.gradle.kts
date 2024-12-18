@@ -14,7 +14,6 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
-            implementation(libs.ktor.client.okhttp)
         }
 
         commonMain.dependencies {
@@ -33,10 +32,6 @@ kotlin {
             api(libs.filekit.core)
 
 
-            implementation(libs.coil.network.ktor)
-            implementation(libs.coil.mp)
-            implementation(libs.coil.compose.core)
-            implementation(libs.coil.compose)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
@@ -55,15 +50,12 @@ kotlin {
             implementation(projects.components.auth)
         }
 
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
+
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
 
-            implementation(libs.ktor.client.okhttp)
         }
     }
 }

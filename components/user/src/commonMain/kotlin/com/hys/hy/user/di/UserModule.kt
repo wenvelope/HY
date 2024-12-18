@@ -41,7 +41,8 @@ val userModule = module {
 
     factory<GetUserAvatarUseCase> {
         GetUserAvatarUseCaseImpl(
-            userRepository = get()
+            userRepository = get(),
+            appPreference = get()
         )
     }
 }
