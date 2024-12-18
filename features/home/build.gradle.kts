@@ -36,11 +36,12 @@ kotlin {
 
             implementation(libs.kotlinx.datetime)
 
-            api(projects.designsystem)
+            implementation(projects.designsystem)
             implementation(projects.core.viewmodel)
             implementation(projects.components.task)
             implementation(projects.core.dateutil)
             implementation(projects.components.preference)
+            implementation(projects.components.user)
         }
 
         desktopMain.dependencies {

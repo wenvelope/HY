@@ -7,6 +7,7 @@ import com.hys.hy.task.entities.Task
 import com.hys.hy.task.entities.TaskImportance
 import com.hys.hy.task.usecase.GetMonthTasksByUserAndDateUseCase
 import com.hys.hy.task.usecase.GetTasksByUserAndDateUseCase
+import com.hys.hy.user.usecase.GetUserInfoUseCase
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
@@ -20,16 +21,22 @@ import kotlin.math.abs
 class HomeScreenViewModel(
     private val getMonthTasksByUserAndDateUseCase: GetMonthTasksByUserAndDateUseCase,
     private val getTasksByUserAndDateUseCase: GetTasksByUserAndDateUseCase,
-    private val appPreference: AppPreference
+    private val appPreference: AppPreference,
+    private val getUserInfoUseCase: GetUserInfoUseCase
 ) :
     BaseViewModelCore<HomeScreenViewModel.HomeScreenState, HomeScreenViewModel.HomeScreenEvent>() {
+
+    init {
+        sendEvent(HomeScreenEvent.RefreshScreen)
+    }
 
     data class HomeScreenState(
         val currentMonth: String,
         val currentDayOfTheWeek: String,
         val currentDayOfTheMonth: String,
         val currentDayTaskList: List<Task> = emptyList(),
-        val currentMonthTaskList: List<Task> = emptyList()
+        val currentMonthTaskList: List<Task> = emptyList(),
+        val userName: String = ""
     ) : UiState {
         val currentDayInProcessTasksNum: Int
             get() {
@@ -71,7 +78,6 @@ class HomeScreenViewModel(
 
     sealed interface HomeScreenEvent : UiEvent {
         data object RefreshScreen : HomeScreenEvent
-        data object SwitchTheme : HomeScreenEvent
     }
 
     override fun initialState(): HomeScreenState {
@@ -83,9 +89,6 @@ class HomeScreenViewModel(
         )
     }
 
-    init {
-        sendEvent(HomeScreenEvent.RefreshScreen)
-    }
 
     override suspend fun reduce(container: MutableContainer<HomeScreenState, HomeScreenEvent>) {
         container.apply {
@@ -112,6 +115,17 @@ class HomeScreenViewModel(
                                 )
                             }.await()
 
+                            val userName = async(Dispatchers.IO) {
+                                getUserInfoUseCase.execute(Unit)
+                            }.await().fold(
+                                onSuccess = { userInfo ->
+                                    return@fold userInfo.nickname
+                                },
+                                onFailure = {
+                                    return@fold null
+                                }
+                            )
+
 
                             updateState {
                                 copy(
@@ -119,6 +133,7 @@ class HomeScreenViewModel(
                                     currentDayOfTheWeek = DateTimeUtil.getCurrentDayOfTheWeek(),
                                     currentDayOfTheMonth = DateTimeUtil.getCurrentDayOfMoth()
                                         .toString(),
+                                    userName = userName ?: "无名氏",
                                     currentDayTaskList = currentDayTasks,
                                     currentMonthTaskList = currentMonthTasks
                                 )
@@ -126,9 +141,7 @@ class HomeScreenViewModel(
                         }
                     }
 
-                    HomeScreenEvent.SwitchTheme -> {
 
-                    }
                 }
             }
         }

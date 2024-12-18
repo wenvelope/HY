@@ -311,7 +311,7 @@ fun Greet(
         modifier = modifier
     ) {
         Text(
-            text = "Hi 友利奈绪",
+            text = "Hi ${state.userName}",
             style = MaterialTheme.typography.headlineLarge,
         )
         Spacer(modifier = Modifier.height(4.dp))
