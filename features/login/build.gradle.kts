@@ -34,7 +34,7 @@ kotlin {
 
             implementation(libs.kotlinx.serialization)
 
-            api(projects.designsystem)
+            implementation(projects.designsystem)
             implementation(projects.core.viewmodel)
 
             implementation(projects.components.preference)

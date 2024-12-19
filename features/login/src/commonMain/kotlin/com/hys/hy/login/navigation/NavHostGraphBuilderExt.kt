@@ -30,7 +30,8 @@ object Welcome
 @OptIn(ExperimentalSharedTransitionApi::class)
 internal fun NavGraphBuilder.addSignInScreen(
     sharedTransitionScope: SharedTransitionScope,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
     composable<SignIn>(
         exitTransition = {ExitTransition.None},
@@ -46,7 +47,8 @@ internal fun NavGraphBuilder.addSignInScreen(
             onPhoneClick = {},
             onEmailLogInClick = {},
             onForgetPwdClick = {},
-            onSignUpClick = onSignUpClick
+            onSignUpClick = onSignUpClick,
+            navigateToHome = navigateToHome
         )
     }
 }
@@ -95,7 +97,8 @@ fun NavGraphBuilder.addLoginNavGraph(
     ) {
         addSignInScreen(
             sharedTransitionScope = sharedTransitionScope,
-            onSignUpClick = navController::navigateSignUp
+            onSignUpClick = navController::navigateSignUp,
+            navigateToHome = navigateToHome
         )
 
         addSignUpScreen(

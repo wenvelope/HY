@@ -16,10 +16,8 @@ fun NavHostController.navigateFromLoginToHome() {
         }
         launchSingleTop = true
     }
-
 }
 
 fun NavHostController.popUpToHome() {
     popBackStack(route = Home, inclusive = false, saveState = true)
-
 }

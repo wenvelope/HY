@@ -10,7 +10,9 @@ import org.koin.dsl.lazyModule
 val loginModule = lazyModule {
 
     viewModel<SignInScreenViewModel> {
-        SignInScreenViewModel()
+        SignInScreenViewModel(
+            loginUseCase = get()
+        )
     }
 
     viewModel<SignUpScreenViewModel>{
