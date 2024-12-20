@@ -63,7 +63,6 @@ import com.hys.hy.designsystem.component.animation.SinkAnimateScope
 import com.hys.hy.designsystem.component.timeline.TimeLineNodeDefaults
 import com.hys.hy.designsystem.component.timeline.TimeLineNodePositionType
 import com.hys.hy.designsystem.component.timeline.TimelineNode
-import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.designsystem.component.toolbars.NavigationBottomBar
 import com.hys.hy.designsystem.component.toolbars.TodayTabIndex
 import com.hys.hy.today.component.DayScrollableSelector
@@ -106,11 +105,6 @@ fun TodayScreen(
                     )
                 },
                 navigationIcon = {
-                    NavigationBackButton(
-                        modifier = Modifier.padding(start = 16.dp)
-                    ) {
-
-                    }
                 },
                 actions = {
                     var menuExpandState by remember {
