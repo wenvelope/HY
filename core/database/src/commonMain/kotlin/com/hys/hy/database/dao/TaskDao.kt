@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.hys.hy.database.entities.TaskTable
 import com.hys.hy.database.entities.TaskWithCategory
@@ -57,6 +58,8 @@ interface TaskDao {
     @Query("SELECT * FROM task")
     suspend fun getAllTasks(): List<TaskTable>
 
+
+    @Transaction
     //查询指定用户的的当前所在月的所有任务和种类
     @Query(
         """
@@ -72,6 +75,7 @@ interface TaskDao {
     ): List<TaskWithCategory>
 
     // 根据 userID 日期范围 分类 完成状态 重要性 查询任务
+    @Transaction
     @Query(
         """
         SELECT * FROM task
