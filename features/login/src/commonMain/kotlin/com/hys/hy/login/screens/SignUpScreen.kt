@@ -3,6 +3,7 @@ package com.hys.hy.login.screens
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -21,6 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -71,6 +75,26 @@ fun SignUpScreen(
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = 72.dp),
+                hostState = state.snackBarHostState
+            ) { snackbarData ->
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        modifier = Modifier
+                            .padding(horizontal = 60.dp)
+                            .align(Alignment.TopCenter),
+                        shape = MaterialTheme.shapes.large
+                    )
+                }
+            }
         }
     ) { innerPadding ->
         Column(

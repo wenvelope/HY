@@ -1,6 +1,7 @@
 package com.hys.hy.login.viewmodel
 
 import RegisterUseCase
+import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.viewModelScope
 import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
@@ -8,7 +9,6 @@ import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -23,7 +23,8 @@ class SignUpScreenViewModel(
         val isLoading: Boolean = false,
         val email: String = "",
         val password: String = "",
-        val isPrivacyPolicyChecked: Boolean = false
+        val isPrivacyPolicyChecked: Boolean = false,
+        val snackBarHostState: SnackbarHostState = SnackbarHostState(),
     ) : UiState
 
     sealed interface SignUpEvent : UiEvent {
@@ -92,7 +93,6 @@ class SignUpScreenViewModel(
                                 )
                             }
 
-                            delay(200)
                             if (result.isSuccess) {
                                 updateState {
                                     copy(
@@ -101,11 +101,7 @@ class SignUpScreenViewModel(
                                     )
                                 }
                             } else {
-                                updateState {
-                                    copy(
-                                        isLoading = false
-                                    )
-                                }
+                                uiStateFlow.value.snackBarHostState.showSnackbar(result.errorMessage)
                             }
 
                         }

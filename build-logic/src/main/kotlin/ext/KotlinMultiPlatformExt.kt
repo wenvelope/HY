@@ -30,4 +30,5 @@ internal fun KotlinMultiplatformExtension.configurePlatformTargets() {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
+
 }

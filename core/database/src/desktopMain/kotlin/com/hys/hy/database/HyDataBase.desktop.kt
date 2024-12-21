@@ -5,7 +5,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import java.io.File
 
 private val userHome get() = System.getProperty("user.home")
-private const val APP_NAME = "ComposeApp"
+private const val APP_NAME = "HY"
 
 actual fun createHyDatabase(): HyDatabase {
 

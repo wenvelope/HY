@@ -169,7 +169,6 @@ fun TaskCreationScreen(
                         shape = MaterialTheme.shapes.large
                     )
                 }
-
             }
         }
     ) { innerPadding ->

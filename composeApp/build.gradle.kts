@@ -80,7 +80,13 @@ compose.desktop {
             linux {
                 modules("jdk.security.auth")
             }
+            //新添加
+            buildTypes.release{
+                proguard {
+                    isEnabled = false
+                    configurationFiles.from("compose-desktop.pro")
+                }
+            }
         }
-
     }
 }

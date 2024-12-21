@@ -1,4 +1,3 @@
-
 import com.hys.hy.auth.repository.AuthRepository
 import com.hys.hy.auth.usecase.UseCase
 import com.hys.hy.preference.AppPreference
@@ -35,16 +34,24 @@ class RegisterUseCaseImpl(
 
         result.fold(
             onSuccess = {
-                // save token to preference
-                appPreference.setUserTokenValue(it.token)
-                // save user id to preference
-                appPreference.setUserId(it.userId)
-                // set offline mode to false
-                appPreference.setOfflineModeEnabled(false)
-                // set first use to false
-                appPreference.setNotFirstUse()
+                try {
+                    // save token to preference
+                    appPreference.setUserTokenValue(it.token)
+                    // save user id to preference
+                    appPreference.setUserId(it.userId)
+                    // set offline mode to false
+                    appPreference.setOfflineModeEnabled(false)
+                    // set first use to false
+                    appPreference.setNotFirstUse()
 
-                return RegisterUseCase.Output(isSuccess = true)
+                    return RegisterUseCase.Output(isSuccess = true)
+                } catch (e: Exception) {
+                    println(e.printStackTrace())
+                    return RegisterUseCase.Output(
+                        isSuccess = false, errorMessage = e.message ?: "unknown error"
+                    )
+                }
+
             },
             onFailure = {
                 return RegisterUseCase.Output(
