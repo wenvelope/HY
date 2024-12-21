@@ -76,22 +76,17 @@ fun SignUpScreen(
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            with(sharedTransitionScope) {
-                Column(
-                    modifier = Modifier.sharedBounds(
-                        animatedVisibilityScope = animatedContentScope,
-                        sharedContentState = rememberSharedContentState("login_title")
-                    )
-                ) {
-                    //标题
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.headlineLarge,
-                        text = "创建你的账户",
-                        textAlign = TextAlign.Center
-                    )
-                }
+
+            Column {
+                //标题
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.headlineLarge,
+                    text = "创建你的账户",
+                    textAlign = TextAlign.Center
+                )
             }
+
 
 
             Spacer(modifier = Modifier.padding(9.dp))
@@ -115,90 +110,76 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.padding(20.dp))
 
-            with(sharedTransitionScope) {
-                EmailAndPwdTextField(
-                    modifier = Modifier.sharedBounds(
-                        animatedVisibilityScope = animatedContentScope,
-                        sharedContentState = sharedTransitionScope.rememberSharedContentState("1")
-                    ).fillMaxWidth(),
-                    email = state.email,
-                    onEmailChange = {
-                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangeEmail(it))
-                    },
-                    password = state.password,
-                    onPasswordChange = {
-                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangePassword(it))
+            EmailAndPwdTextField(
+                modifier = Modifier.fillMaxWidth(),
+                email = state.email,
+                onEmailChange = {
+                    viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangeEmail(it))
+                },
+                password = state.password,
+                onPasswordChange = {
+                    viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangePassword(it))
+                }
+            )
+
+
+
+            Spacer(modifier = Modifier.padding(5.dp))
+
+
+            Column {
+                PrivacyTextLine(
+                    checked = state.isPrivacyPolicyChecked,
+                    onCheckedChange = {
+                        viewModel.sendEvent(
+                            SignUpScreenViewModel.SignUpEvent.PrivacyPolicyChecked(
+                                it
+                            )
+                        )
                     }
                 )
             }
 
 
-            Spacer(modifier = Modifier.padding(5.dp))
-
-            with(sharedTransitionScope) {
-                Column(
-                    modifier = Modifier.sharedBounds(
-                        animatedVisibilityScope = animatedContentScope,
-                        sharedContentState = rememberSharedContentState("login_text")
-                    )
-                ) {
-                    PrivacyTextLine(
-                        checked = state.isPrivacyPolicyChecked,
-                        onCheckedChange = {
-                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.PrivacyPolicyChecked(it))
-                        }
-                    )
-                }
-            }
-
 
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            with(sharedTransitionScope) {
-                Row(
-                    modifier = Modifier.sharedBounds(
-                        animatedVisibilityScope = animatedContentScope,
-                        sharedContentState = rememberSharedContentState("login")
-                    )
-                ) {
-                    Button(
-                        onClick = {
-                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOfflineAccount)
-                        },
-                        modifier = Modifier.weight(1f).height(48.dp)
-                            .padding(horizontal = 10.dp),
-                    ) {
-                        Text("无账户使用")
-                    }
 
-                    Button(
-                        onClick = {
-                            viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOnlineAccount)
-                        },
-                        modifier = Modifier.weight(1f).height(48.dp)
-                            .padding(horizontal = 10.dp),
-                    ) {
-                        if (state.isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(24.dp)
-                                    .align(Alignment.CenterVertically)
-                                    .padding(end = 3.dp),
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                strokeWidth = 3.dp
-                            )
-                        }
-                        Text(
-                            "创建账户",
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            textAlign = TextAlign.Center
+            Row {
+                Button(
+                    onClick = {
+                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOfflineAccount)
+                    },
+                    modifier = Modifier.weight(1f).height(48.dp)
+                        .padding(horizontal = 10.dp),
+                ) {
+                    Text("无账户使用")
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOnlineAccount)
+                    },
+                    modifier = Modifier.weight(1f).height(48.dp)
+                        .padding(horizontal = 10.dp),
+                ) {
+                    if (state.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp)
+                                .align(Alignment.CenterVertically)
+                                .padding(end = 3.dp),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            strokeWidth = 3.dp
                         )
                     }
-
-
+                    Text(
+                        "创建账户",
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
-
 
         }
 

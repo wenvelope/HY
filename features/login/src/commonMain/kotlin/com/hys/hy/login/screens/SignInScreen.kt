@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -131,12 +132,6 @@ fun SignInScreen(
             TopAppBar(
                 title = { },
                 navigationIcon = {
-//                    IconButton(onClick = onBackClick) {
-//                        Icon(
-//                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                            contentDescription = "返回"
-//                        )
-//                    }
                 }
             )
         },
@@ -144,22 +139,19 @@ fun SignInScreen(
             Column(
                 modifier = Modifier.padding(innerPadding)
             ) {
-                with(sharedTransitionScope) {
-                    // 标题
-                    Column(
-                        modifier = Modifier.sharedBounds(
-                            animatedVisibilityScope = animatedContentScope,
-                            sharedContentState = rememberSharedContentState("login_title")
-                        )
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            style = MaterialTheme.typography.headlineLarge,
-                            text = "欢迎回来!",
-                            textAlign = TextAlign.Center
-                        )
-                    }
+
+                // 标题
+                Column(
+                    modifier = Modifier
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.headlineLarge,
+                        text = "欢迎回来!",
+                        textAlign = TextAlign.Center
+                    )
                 }
+
 
                 Spacer(modifier = Modifier.padding(9.dp))
 
@@ -181,86 +173,73 @@ fun SignInScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                with(sharedTransitionScope) {
-                    EmailAndPwdTextField(
-                        modifier = Modifier.sharedBounds(
-                            animatedVisibilityScope = animatedContentScope,
-                            sharedContentState = sharedTransitionScope.rememberSharedContentState("1")
-                        ).fillMaxWidth(),
-                        email = state.email,
-                        password = state.password,
-                        onEmailChange = {
-                            viewModel.sendEvent(SignInScreenViewModel.SignInEvent.ChangeEmail(it))
-                        },
-                        onPasswordChange = {
-                            viewModel.sendEvent(SignInScreenViewModel.SignInEvent.ChangePassword(it))
-                        }
-                    )
-                }
+
+                EmailAndPwdTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    email = state.email,
+                    password = state.password,
+                    onEmailChange = {
+                        viewModel.sendEvent(SignInScreenViewModel.SignInEvent.ChangeEmail(it))
+                    },
+                    onPasswordChange = {
+                        viewModel.sendEvent(SignInScreenViewModel.SignInEvent.ChangePassword(it))
+                    }
+                )
+
 
 
                 Spacer(modifier = Modifier.padding(16.dp))
 
-                with(sharedTransitionScope) {
-                    Column(
-                        modifier = Modifier.sharedBounds(
-                            animatedVisibilityScope = animatedContentScope,
-                            sharedContentState = rememberSharedContentState("login")
-                        )
+
+                Column {
+                    Button(
+                        onClick = {
+                            viewModel.sendEvent(SignInScreenViewModel.SignInEvent.SignIn)
+                        },
+                        modifier = Modifier.fillMaxWidth().height(48.dp)
+                            .padding(horizontal = 20.dp),
                     ) {
-                        Button(
-                            onClick = {
-                                viewModel.sendEvent(SignInScreenViewModel.SignInEvent.SignIn)
-                            },
-                            modifier = Modifier.fillMaxWidth().height(48.dp)
-                                .padding(horizontal = 20.dp),
-                        ) {
-                            Text("登录")
-                        }
+                        Text("登录")
                     }
                 }
 
-                with(sharedTransitionScope) {
-                    Column(
-                        modifier = Modifier.sharedBounds(
-                            animatedVisibilityScope = animatedContentScope,
-                            sharedContentState = rememberSharedContentState("login_text")
-                        )
+
+
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    TextButton(
+                        onClick = {
+
+                        },
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterHorizontally)
                     ) {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            "忘记密码？",
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
 
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "还没有账户？"
+                        )
                         TextButton(
-                            onClick = {
-
-                            },
-                            modifier = Modifier
-                                .align(alignment = Alignment.CenterHorizontally)
+                            onClick = onSignUpClick,
+                            contentPadding = PaddingValues(0.dp),
                         ) {
                             Text(
-                                "忘记密码？",
-                                textDecoration = TextDecoration.Underline
+                                "注册",
+                                textDecoration = TextDecoration.Underline,
                             )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                "还没有账户？"
-                            )
-                            TextButton(
-                                onClick = onSignUpClick,
-                                contentPadding = PaddingValues(0.dp),
-                            ) {
-                                Text(
-                                    "注册",
-                                    textDecoration = TextDecoration.Underline,
-                                )
-                            }
                         }
                     }
+
                 }
 
 
@@ -299,7 +278,8 @@ fun EmailAndPwdTextField(
             },
             singleLine = true,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-            placeholder = { Text("Password") }
+            placeholder = { Text("Password") },
+            visualTransformation = PasswordVisualTransformation()
         )
     }
 
