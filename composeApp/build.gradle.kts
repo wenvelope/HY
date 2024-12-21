@@ -76,6 +76,8 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.hys.hy"
             packageVersion = "1.0.0"
+            includeAllModules = true
         }
+
     }
 }

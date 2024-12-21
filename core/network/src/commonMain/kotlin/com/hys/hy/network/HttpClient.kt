@@ -17,7 +17,7 @@ internal const val remoteUrl = "http://39.97.5.90:8080"
 
 const val HY_TOKEN_KEY = "hyToken"
 
-const val isLocalHost = true
+const val isLocalHost = false
 
 fun <T : HttpClientEngineConfig> HttpClientConfig<T>.defaultSetting() {
     install(HttpTimeout) {

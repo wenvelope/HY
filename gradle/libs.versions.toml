@@ -29,7 +29,7 @@ koin = "4.0.0"
 kotlin-serialization = "1.7.3"
 ksp = "2.0.20-1.0.25"
 sqlite = "2.5.0-alpha11"
-workRuntime = "2.10.0"
+workRuntime = "2.9.0"
 androidx-data-store = "1.1.1"
 ktor = "3.0.2"
 
