@@ -77,6 +77,9 @@ compose.desktop {
             packageName = "com.hys.hy"
             packageVersion = "1.0.0"
             includeAllModules = true
+            linux {
+                modules("jdk.security.auth")
+            }
         }
 
     }
