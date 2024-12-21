@@ -1,9 +1,6 @@
 package com.hys.hy.setting.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -15,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
@@ -96,11 +94,7 @@ fun ProfileScreen(
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(top = 16.dp)
-                .padding(innerPadding).scrollable(
-                    state = scrollState,
-                    orientation = Orientation.Vertical,
-                    flingBehavior = ScrollableDefaults.flingBehavior()
-                )
+                .padding(innerPadding).verticalScroll(scrollState)
         ) {
             //获取loader 用于清除缓存刷新头像
             val imageLoader = SingletonImageLoader.get(LocalPlatformContext.current)
