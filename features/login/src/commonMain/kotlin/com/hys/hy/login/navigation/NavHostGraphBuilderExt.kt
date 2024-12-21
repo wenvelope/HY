@@ -4,6 +4,8 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -34,10 +36,10 @@ internal fun NavGraphBuilder.addSignInScreen(
     navigateToHome: () -> Unit
 ) {
     composable<SignIn>(
-        exitTransition = {ExitTransition.None},
-        enterTransition = {EnterTransition.None},
-        popExitTransition = {ExitTransition.None},
-        popEnterTransition = {EnterTransition.None}
+        exitTransition = { ExitTransition.None },
+        enterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None }
     ) {
         SignInScreen(
             sharedTransitionScope = sharedTransitionScope,
@@ -59,12 +61,12 @@ internal fun NavGraphBuilder.addSignUpScreen(
     navigateToHome: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    composable<SignUp> (
-        exitTransition = {ExitTransition.None},
-        enterTransition = {EnterTransition.None},
-        popExitTransition = {ExitTransition.None},
-        popEnterTransition = {EnterTransition.None}
-    ){
+    composable<SignUp>(
+        enterTransition = { slideInHorizontally { it } },
+        exitTransition = { ExitTransition.None },
+        popExitTransition = { slideOutHorizontally { it }  },
+        popEnterTransition = { EnterTransition.None }
+    ) {
         SignUpScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable,
