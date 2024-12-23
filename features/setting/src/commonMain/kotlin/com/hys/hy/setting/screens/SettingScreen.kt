@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Info
@@ -100,6 +102,8 @@ fun SettingScreen(
         }
     ) { innerPadding ->
 
+        val scrollState = rememberScrollState()
+
         SinkAnimateScope(
             animatedContentScope
         ) { offset ->
@@ -109,6 +113,7 @@ fun SettingScreen(
                     .padding(innerPadding)
                     .padding(horizontal = 16.dp)
                     .offset { offset }
+                    .verticalScroll(scrollState)
             ) {
 
                 UserBanner(
