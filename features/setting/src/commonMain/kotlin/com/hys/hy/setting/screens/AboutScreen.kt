@@ -239,7 +239,7 @@ fun DeveloperInfo() {
             ),
             headlineContent = {
                 Text(
-                    text = "whr1930@outlool.com",
+                    text = "whr1930@outlook.com",
                     style = MaterialTheme.typography.bodyMedium
                 )
             },
