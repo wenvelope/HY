@@ -40,6 +40,8 @@ kotlin {
 
             implementation(libs.kotlinx.serialization)
 
+            implementation(libs.alert.kmp)
+
             implementation(projects.designsystem)
             implementation(projects.core.dateutil)
             implementation(projects.core.viewmodel)

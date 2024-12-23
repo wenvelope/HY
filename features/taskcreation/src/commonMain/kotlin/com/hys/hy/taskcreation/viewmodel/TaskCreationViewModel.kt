@@ -1,5 +1,7 @@
 package com.hys.hy.taskcreation.viewmodel
 
+import NotificationDuration
+import Notify
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.viewModelScope
@@ -168,7 +170,7 @@ class TaskCreationViewModel(
                                     )
                                 )
                             }
-                            sendEvent(TaskCreationEvent.ShowSnackBar("添加成功"))
+                            Notify(message= "添加成功", duration=NotificationDuration.SHORT)
                         }
                     }
 
