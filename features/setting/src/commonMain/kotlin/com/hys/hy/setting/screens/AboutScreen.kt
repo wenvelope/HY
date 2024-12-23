@@ -76,7 +76,7 @@ fun AboutScreen(
 
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(MaterialTheme.colorScheme.surface)
                 .verticalScroll(scrollState)
         ) {
 
@@ -202,8 +202,7 @@ fun DeveloperInfo() {
     Card(
         modifier = Modifier.padding(horizontal = 14.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         )
     ) {
 
@@ -217,7 +216,7 @@ fun DeveloperInfo() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
@@ -236,7 +235,7 @@ fun DeveloperInfo() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
@@ -260,8 +259,7 @@ fun FunctionList() {
     Card(
         modifier = Modifier.padding(horizontal = 14.dp).padding(top = 28.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
         )
     ) {
 
@@ -275,7 +273,7 @@ fun FunctionList() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
@@ -293,7 +291,7 @@ fun FunctionList() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
@@ -311,7 +309,7 @@ fun FunctionList() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
@@ -329,7 +327,7 @@ fun FunctionList() {
 
         ListItem(
             colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
             ),
             headlineContent = {
                 Text(
