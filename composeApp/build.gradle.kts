@@ -46,6 +46,7 @@ kotlin {
             implementation(projects.features.today)
             implementation(projects.features.taskcreation)
             implementation(projects.features.search)
+            implementation(projects.features.pomodoro)
 
             implementation(projects.components.taskCategory)
             implementation(projects.components.task)

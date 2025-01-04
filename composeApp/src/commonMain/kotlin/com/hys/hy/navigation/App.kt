@@ -15,6 +15,8 @@ import com.hys.hy.imageLoader.getAsyncImageLoader
 import com.hys.hy.login.navigation.LoginNavGraph
 import com.hys.hy.login.navigation.addLoginNavGraph
 import com.hys.hy.login.navigation.navigateSignInWithPopUpToSignIn
+import com.hys.hy.pomodoro.navigation.addPomodoroScreen
+import com.hys.hy.pomodoro.navigation.navigatePomodoro
 import com.hys.hy.search.navigation.addSearchScreen
 import com.hys.hy.setting.navigation.addSettingGraph
 import com.hys.hy.taskcreation.navigation.addTaskCreationScreen
@@ -93,7 +95,15 @@ fun HYNavHost(
             addSearchScreen(
                 sharedTransitionScope = this@SharedTransitionLayout,
                 onTaskEditClick = navController::navigateTaskEdit,
+                onPomodoroClick = navController::navigatePomodoro,
                 navController = navController
+            )
+
+            addPomodoroScreen(
+                sharedTransitionScope = this@SharedTransitionLayout,
+                onBackButtonClick = {
+                    navController.popBackStack()
+                }
             )
 
 

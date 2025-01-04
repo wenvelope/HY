@@ -73,7 +73,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun SearchScreen(
     navController: NavHostController,
     viewModel: SearchScreenViewModel = koinViewModel(),
-    onTaskEditClick: (taskId: String) -> Unit
+    onTaskEditClick: (taskId: String) -> Unit,
+    onPomodoroClick: (taskId: String) -> Unit
 ) {
 
     val state by viewModel.container.uiStateFlow.collectAsState()
@@ -409,12 +410,12 @@ fun SearchScreen(
                                     trailingContent = {
                                         FilledTonalIconButton(
                                             onClick = {
-
+                                                onPomodoroClick(item.taskId!!)
                                             }
                                         ) {
                                             Icon(
                                                 painter = painterResource(Res.drawable.button_alarm),
-                                                contentDescription = "more",
+                                                contentDescription = "alarm",
                                                 modifier = Modifier.size(24.dp)
                                             )
                                         }

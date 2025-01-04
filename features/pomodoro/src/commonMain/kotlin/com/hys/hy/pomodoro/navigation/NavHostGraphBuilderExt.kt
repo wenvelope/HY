@@ -1,39 +1,38 @@
-package com.hys.hy.search.navigation
+package com.hys.hy.pomodoro.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.hys.hy.search.screens.SearchScreen
+import androidx.navigation.toRoute
+import com.hys.hy.pomodoro.screen.PomodoroScreen
 import kotlinx.serialization.Serializable
 
-
 @Serializable
-object Search
+data class Pomodoro(
+    val taskId: String? = null,
+)
 
 @OptIn(ExperimentalSharedTransitionApi::class)
-fun NavGraphBuilder.addSearchScreen(
-    onHomeTabClick: () -> Unit = {},
-    onSettingTabClick: () -> Unit = {},
-    onTodayTabClick: () -> Unit = {},
-    onTaskEditClick: (String) -> Unit = {},
-    onPomodoroClick: (String) -> Unit = {},
+fun NavGraphBuilder.addPomodoroScreen(
     sharedTransitionScope: SharedTransitionScope,
-    navController: NavHostController
+    onBackButtonClick:()->Unit
 ) {
-    composable<Search>(
+    composable<Pomodoro>(
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
     ) {
-        SearchScreen(
-            navController,
-            onTaskEditClick = onTaskEditClick,
-            onPomodoroClick = onPomodoroClick,
+        val pomodoroRoute = it.toRoute<Pomodoro>()
+        PomodoroScreen(
+            onBackButtonClick = onBackButtonClick,
+            taskId = pomodoroRoute.taskId
         )
+
     }
 }
+
+
