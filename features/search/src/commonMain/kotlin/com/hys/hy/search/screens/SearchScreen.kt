@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hys.hy.designsystem.component.animation.SwipeToShowActionBox
 import com.hys.hy.designsystem.component.animation.animatePlacement
+import com.hys.hy.designsystem.component.icons.Pomodoro
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.designsystem.component.toolbars.SearchBar
 import com.hys.hy.search.viewmodel.SearchScreenViewModel
@@ -414,7 +415,7 @@ fun SearchScreen(
                                             }
                                         ) {
                                             Icon(
-                                                painter = painterResource(Res.drawable.button_alarm),
+                                                imageVector = Icons.Filled.Pomodoro,
                                                 contentDescription = "alarm",
                                                 modifier = Modifier.size(24.dp)
                                             )
