@@ -82,7 +82,8 @@ fun HYNavHost(
                 sharedTransitionScope = this@SharedTransitionLayout,
                 onHomeTabClick = navController::popUpToHome,
                 onSettingTabClick = navController::navigateSettingWithPopUpToHome,
-                onCreateTaskButtonClick = navController::navigateTaskCreation
+                onCreateTaskButtonClick = navController::navigateTaskCreation,
+                onPomodoroClick = navController::navigatePomodoro
             )
 
             addTaskCreationScreen(

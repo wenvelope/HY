@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -58,6 +60,17 @@ fun PomodoroScreen(
                     NavigationBackButton {
                         onBackButtonClick()
                     }
+                },
+                actions = {
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = null
+                        )
+                    }
+
                 }
             )
         }
@@ -117,9 +130,11 @@ fun PomodoroScreen(
                         PomodoroScreenViewModel.PomodoroState.Idle -> {
                             viewModel.sendEvent(PomodoroScreenViewModel.PomodoroScreenEvent.StartPomodoro)
                         }
+
                         PomodoroScreenViewModel.PomodoroState.Running -> {
                             viewModel.sendEvent(PomodoroScreenViewModel.PomodoroScreenEvent.StopPomodoro)
                         }
+
                         PomodoroScreenViewModel.PomodoroState.Rest -> {
                             viewModel.sendEvent(PomodoroScreenViewModel.PomodoroScreenEvent.StopPomodoroRest)
                         }
@@ -197,7 +212,6 @@ fun PomodoroScreen(
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
 
 
         }

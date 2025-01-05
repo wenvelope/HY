@@ -19,6 +19,7 @@ fun NavGraphBuilder.addTodayScreen(
     onSettingTabClick: () -> Unit = {},
     onTodayTabClick: () -> Unit = {},
     onCreateTaskButtonClick: () -> Unit = {},
+    onPomodoroClick: (String) -> Unit = {},
     sharedTransitionScope: SharedTransitionScope
 ) {
     composable<Today>(
@@ -32,6 +33,7 @@ fun NavGraphBuilder.addTodayScreen(
             onHomeTabClick = onHomeTabClick,
             onSettingTabClick = onSettingTabClick,
             animatedContentScope = this@composable,
+            onPomodoroClick = onPomodoroClick,
             onCreateTaskButtonClick = onCreateTaskButtonClick,
             sharedTransitionScope = sharedTransitionScope
         )

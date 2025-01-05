@@ -188,7 +188,7 @@ fun ContactUs() {
             ) {
                 Icon(
                     imageVector = Icons.Filled.Bilibili,
-                    contentDescription = "联系qq",
+                    contentDescription = "联系bilibili",
                     modifier = Modifier.size(25.dp).align(Alignment.Center),
                 )
             }

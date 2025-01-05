@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -60,6 +61,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.hys.hy.designsystem.component.animation.DropDownNestedScope
 import com.hys.hy.designsystem.component.animation.SinkAnimateScope
+import com.hys.hy.designsystem.component.icons.Pomodoro
 import com.hys.hy.designsystem.component.timeline.TimeLineNodeDefaults
 import com.hys.hy.designsystem.component.timeline.TimeLineNodePositionType
 import com.hys.hy.designsystem.component.timeline.TimelineNode
@@ -83,6 +85,7 @@ fun TodayScreen(
     onSettingTabClick: () -> Unit = {},
     onTodayTabClick: () -> Unit = {},
     onCreateTaskButtonClick: () -> Unit = {},
+    onPomodoroClick: (String) -> Unit = {},
     viewModel: TodayScreenViewModel = koinViewModel()
 ) {
 
@@ -260,7 +263,8 @@ fun TodayScreen(
                             TimeLineColumn(
                                 state,
                                 viewModel,
-                                listState
+                                listState,
+                                onPomodoroClick
                             )
                         }
                     }
@@ -298,7 +302,8 @@ fun TodayScreen(
 internal fun TimeLineColumn(
     state: TodayScreenViewModel.TodayState,
     viewModel: TodayScreenViewModel,
-    lazyColumnState: LazyListState
+    lazyColumnState: LazyListState,
+    onPomodoroClick: (String) -> Unit
 ) {
 
     LazyColumn(
@@ -332,7 +337,7 @@ internal fun TimeLineColumn(
 
                     Card(
                         modifier = modifier
-                            .height(93.dp)
+                            .height(106.dp)
                             .fillMaxWidth()
                             .clickable {
 
@@ -345,10 +350,8 @@ internal fun TimeLineColumn(
                         Column(
                             modifier = Modifier.fillMaxSize()
                                 .background(brush = task.brush)
-                                .padding(horizontal = 16.dp)
+                                .padding(11.dp)
                         ) {
-
-                            Spacer(modifier = Modifier.height(13.dp))
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -419,7 +422,7 @@ internal fun TimeLineColumn(
                             }
 
 
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(2.dp))
 
                             Text(
                                 text = task.taskDescription,
@@ -437,14 +440,29 @@ internal fun TimeLineColumn(
                                 task.taskSelectTime?.minute.toString().padStart(2, '0')
                             }" else "未定时间"
 
-                            Text(
-                                modifier = Modifier.align(Alignment.End),
-                                text = task.taskCategory?.let { "$it · $timeText" } ?: timeText,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.End
-                            )
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Row {
+                                IconButton(
+                                    onClick = {
+                                        onPomodoroClick(task.taskId!!)
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Pomodoro,
+                                        contentDescription = null
+                                    )
+                                }
+                                Spacer(Modifier.weight(1f))
+                                Text(
+                                    text = task.taskCategory?.let { "$it · $timeText" } ?: timeText,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    textAlign = TextAlign.End,
+                                    modifier = Modifier.align(Alignment.CenterVertically)
+                                )
+                            }
+
+
                         }
 
                     }
