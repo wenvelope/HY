@@ -1,6 +1,5 @@
 package com.hys.hy.database
 
-import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -19,12 +18,8 @@ import kotlinx.coroutines.IO
     entities = [
         TaskTable::class,
         TaskCategoryTable::class],
-    version = 3,
-    exportSchema = true,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2),
-        AutoMigration(from = 2, to = 3)
-    ]
+    version = 1,
+    exportSchema = true
 )
 @TypeConverters(DateConverter::class, TimeConverter::class)
 @ConstructedBy(HyDatabaseConstructor::class)

@@ -63,11 +63,12 @@ interface TaskDao {
     //查询指定用户的的当前所在月的所有任务和种类
     @Query(
         """
-    SELECT * FROM task
-    WHERE userId = :userId
-    AND taskSelectDate IS NOT NULL
-    AND strftime('%Y-%m', taskSelectDate / 1000, 'unixepoch') = strftime('%Y-%m', :date / 1000, 'unixepoch')
-    """
+        SELECT * FROM task
+        LEFT JOIN task_category ON task.userId = task_category.userId AND task.taskCategoryName = task_category.name
+        WHERE task.userId = :userId
+        AND taskSelectDate IS NOT NULL
+        AND strftime('%Y-%m', taskSelectDate / 1000, 'unixepoch') = strftime('%Y-%m', :date / 1000, 'unixepoch')
+        """
     )
     suspend fun getMonthsTasksWithCategoryByUserAndDate(
         userId: String,
@@ -79,7 +80,8 @@ interface TaskDao {
     @Query(
         """
         SELECT * FROM task
-        WHERE userId = :userId
+        LEFT JOIN task_category ON task.userId = task_category.userId AND task.taskCategoryName = task_category.name
+        WHERE task.userId = :userId
         AND (:taskTitle IS NULL OR taskTitle LIKE '%' || :taskTitle || '%')
         AND (:startDate IS NULL OR taskSelectDate >= :startDate)
         AND (:endDate IS NULL OR taskSelectDate <= :endDate)

@@ -2,8 +2,6 @@ package com.hys.hy.database.entities
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import kotlinx.datetime.LocalDate
@@ -12,16 +10,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @Entity(
-    tableName = "task", foreignKeys = [
-        ForeignKey(
-            entity = TaskCategoryTable::class,
-            parentColumns = ["name"],
-            childColumns = ["taskCategoryName"],
-            onDelete = ForeignKey.SET_NULL,
-            onUpdate = ForeignKey.CASCADE
-        )
-    ],
-    indices = [Index(value = ["taskCategoryName"])]
+    tableName = "task"
 )
 @OptIn(ExperimentalUuidApi::class)
 data class TaskTable(

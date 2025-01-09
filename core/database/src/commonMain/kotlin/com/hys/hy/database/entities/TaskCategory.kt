@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "task_category",
     indices = [
-        Index(value = ["name"], unique = true),
-        Index(value = ["color"], unique = true)]
+        Index(value = ["name","userId"], unique = true),
+        Index(value = ["color","userId"], unique = true),
+    ]
 )
 data class TaskCategoryTable(
     @PrimaryKey(autoGenerate = true)
