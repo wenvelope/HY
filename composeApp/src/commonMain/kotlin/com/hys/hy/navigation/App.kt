@@ -50,7 +50,7 @@ fun HYNavHost(
 
         NavHost(
             navController = navController,
-            startDestination = if (appViewModel.isFirstUse) LoginNavGraph else Home
+            startDestination = if (!appViewModel.isLoginIn) LoginNavGraph else Home
         ) {
 
             addLoginNavGraph(

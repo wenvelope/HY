@@ -44,6 +44,7 @@ class SignUpScreenViewModel(
             uiEventFlow.collect { event ->
                 when (event) {
                     SignUpEvent.CreateOfflineAccount -> {
+                        //勾选了隐私协议
                         if (!uiStateFlow.value.isPrivacyPolicyChecked) {
                             return@collect
                         }

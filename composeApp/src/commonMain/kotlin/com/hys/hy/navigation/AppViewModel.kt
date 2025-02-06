@@ -8,9 +8,11 @@ class AppViewModel(
     private val appPreference: AppPreference
 ) : ViewModel() {
 
-    val isFirstUse: Boolean = runBlocking {
-        appPreference.isFirstUse()
+    val isLoginIn: Boolean = runBlocking {
+        appPreference.isLoginIn()
     }
+
+
 
 
 }
