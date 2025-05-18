@@ -51,6 +51,7 @@ include(":features:taskcreation")
 include(":features:search")
 include(":features:widget")
 include(":features:pomodoro")
+include(":features:eatWhat")
 
 include(":components:task")
 include(":components:auth")
