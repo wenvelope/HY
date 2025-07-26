@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
@@ -25,6 +24,7 @@ import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.ExperimentalTime
 
 class TodayScreenViewModel(
     private val getCurrentDayTasksUseCase: GetCurrentDayTasksUseCase,
@@ -47,7 +47,7 @@ class TodayScreenViewModel(
         val currentDayItemListSorted: List<Task> = emptyList()
     ) : UiState {
         val todayIndex: Int
-            get() = today.dayOfMonth - 1
+            get() = today.day - 1
         val todayMonth: Month
             get() = today.month
 
@@ -94,18 +94,20 @@ class TodayScreenViewModel(
         data object RefreshDateAndData : TodayEvent
     }
 
+    @OptIn(ExperimentalTime::class)
     override fun initialState(): TodayState {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
         val dayItemList = getDayItemList(today.month, today.year)
 
         return TodayState(
             today = today,
-            currentSelectDayIndex = today.dayOfMonth - 1,
+            currentSelectDayIndex = today.day - 1,
             currentDayItemList = dayItemList,
             currentSelectMonth = today.month
         )
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun reduce(container: MutableContainer<TodayState, TodayEvent>) {
         container.apply {
             uiEventFlow.collect { event ->
@@ -233,11 +235,11 @@ class TodayScreenViewModel(
 
                     is TodayEvent.RefreshDateAndData -> {
                         val today =
-                            Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                            kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
                         updateState {
                             copy(
                                 today = today,
-                                currentSelectDayIndex = today.dayOfMonth - 1,
+                                currentSelectDayIndex = today.day - 1,
                                 currentSelectMonth = today.month,
                                 currentDayItemList = getDayItemList(today.month, today.year)
                             )
@@ -264,7 +266,7 @@ class TodayScreenViewModel(
                 DayItem(
                     day.year,
                     day.month.number,
-                    day.dayOfMonth.toString(),
+                    day.day.toString(),
                     dayOfWeek
                 )
             )

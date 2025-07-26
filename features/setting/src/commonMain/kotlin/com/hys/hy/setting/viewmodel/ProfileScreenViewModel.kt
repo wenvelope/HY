@@ -13,7 +13,8 @@ import com.hys.hy.viewmodel.BaseViewModelCore
 import com.hys.hy.viewmodel.MutableContainer
 import com.hys.hy.viewmodel.UiEvent
 import com.hys.hy.viewmodel.UiState
-import io.github.vinceglb.filekit.core.PlatformFile
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.readBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch

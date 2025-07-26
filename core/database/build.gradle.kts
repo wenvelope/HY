@@ -1,5 +1,6 @@
 plugins {
     alias (libs.plugins.kmp.library.serialization.feature.plugin)
+    alias(libs.plugins.kmp.library.koin.feature.plugin)
     alias(libs.plugins.room.plugin)
     alias(libs.plugins.ksp)
 }
@@ -7,22 +8,10 @@ plugins {
 
 kotlin {
     sourceSets {
-
-        androidMain.dependencies {
-
-        }
-
         commonMain.dependencies {
-            implementation(libs.koin.core)
-            implementation(libs.koin.coroutines)
-            implementation(libs.kotlinx.serialization)
             implementation(libs.room.runtime)
             implementation(libs.kotlinx.datetime)
             implementation(libs.sqlite.bundled)
-        }
-
-        desktopMain.dependencies {
-            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

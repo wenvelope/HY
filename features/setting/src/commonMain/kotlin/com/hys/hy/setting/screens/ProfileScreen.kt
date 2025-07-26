@@ -44,9 +44,9 @@ import coil3.compose.LocalPlatformContext
 import com.hys.hy.designsystem.component.images.UserAvatarImage
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.setting.viewmodel.ProfileScreenViewModel
-import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
-import io.github.vinceglb.filekit.core.PickerMode
-import io.github.vinceglb.filekit.core.PickerType
+import io.github.vinceglb.filekit.dialogs.FileKitMode
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,8 +101,8 @@ fun ProfileScreen(
 
             // 选择头像
             val launcher = rememberFilePickerLauncher(
-                mode = PickerMode.Single,
-                type = PickerType.Image,
+                mode = FileKitMode.Single,
+                type = FileKitType.Image,
                 title = "选择头像"
             ) { file ->
                 file?.let {

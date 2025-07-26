@@ -1,6 +1,5 @@
 package com.hys.hy.dateutil
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -11,6 +10,8 @@ import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class DateTimeUtil {
 
@@ -113,6 +114,7 @@ class DateTimeUtil {
         }
 
 
+        @OptIn(ExperimentalTime::class)
         private fun getCurrentTime(): LocalDateTime {
             val now = Clock.System.now()
             val currentDateTime = now.toLocalDateTime(TimeZone.currentSystemDefault())

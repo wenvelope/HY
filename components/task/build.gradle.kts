@@ -1,6 +1,5 @@
 plugins {
-    id("kmp-library-plugin")
-    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.kmp.library.serialization.feature.plugin)
     alias(libs.plugins.room.plugin)
     alias(libs.plugins.ksp)
 }
@@ -8,12 +7,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        val desktopMain by getting
-
-        androidMain.dependencies {
-
-        }
-
         commonMain.dependencies {
             implementation(libs.koin.core)
             implementation(libs.koin.coroutines)
@@ -24,7 +17,6 @@ kotlin {
 
             implementation(projects.core.database)
             implementation(projects.core.dateutil)
-
         }
 
         desktopMain.dependencies {

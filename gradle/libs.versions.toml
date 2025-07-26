@@ -12,24 +12,24 @@ androidx-lifecycle = "2.9.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 coil3 = "3.0.4"
-compose-plugin = "1.9.0-alpha03"
+compose-plugin = "1.8.2"
 coreSplashscreen = "1.0.1"
-filekitCompose = "0.10.0-beta01"
+filekitCompose = "0.10.0-beta04"
 glanceAppwidget = "1.1.1"
 junit = "4.13.2"
 kmqttCommon = "1.0.0"
-kotlin = "2.2.0"
+kotlin = "2.2.10-RC"
 kotlinx-coroutines = "1.10.2"
-kotlinxDatetime = "0.7.0"
+kotlinxDatetime = "0.7.1"
 multiplatformMarkdownRendererM3 = "0.33.0-b02"
-navigationCompose = "2.8.0-alpha10"
+navigationCompose = "2.9.0-beta04"
 permissions = "0.19.1"
 room = "2.7.0-alpha11"
 gradle = "8.7.1"
 koin = "4.1.0"
-kotlin-serialization = "1.7.3"
+kotlin-serialization = "1.9.0"
 ksp = "2.2.10-RC-2.0.2"
-sqlite = "2.5.0-alpha11"
+sqlite = "2.5.2"
 workRuntime = "2.9.0"
 androidx-data-store = "1.1.7"
 ktor = "3.0.2"
@@ -38,6 +38,7 @@ kable = "0.38.0"
 logging = "7.0.7"
 okio = "3.15.0"
 udf = "2.0.0-alpha2"
+icons-extended  = "1.7.3"
 
 [libraries]
 #netowrk
@@ -139,6 +140,8 @@ compose-animation = { module = "org.jetbrains.compose.animation:animation", vers
 compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
 compose-components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
+compose-material-icons-extended = {  module = "org.jetbrains.compose.material:material-icons-core", version.ref = "icons-extended" }
+
 #compose-android
 compose-androidx-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-plugin" }
 #compose-desktop
@@ -182,7 +185,8 @@ compose-full = [
     "compose-animation",
     "compose-ui",
     "compose-components-resources",
-    "compose-components-ui-tooling-preview"
+    "compose-components-ui-tooling-preview",
+    "compose-material-icons-extended",
 ]
 
 koin = [

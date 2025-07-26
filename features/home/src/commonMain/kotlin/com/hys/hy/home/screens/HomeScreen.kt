@@ -135,7 +135,7 @@ fun HomeScreen(
             with(sharedTransitionScope) {
                 NavigationBottomBar(
                     modifier = Modifier.sharedElement(
-                        state = rememberSharedContentState("bottomBar"),
+                        sharedContentState = rememberSharedContentState("bottomBar"),
                         animatedVisibilityScope = animatedContentScope
                     ),
                     currentTabIndex = HomeTabIndex,

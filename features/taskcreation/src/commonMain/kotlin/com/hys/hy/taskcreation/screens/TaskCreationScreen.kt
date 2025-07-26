@@ -72,10 +72,11 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.time.ExperimentalTime
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
-    ExperimentalLayoutApi::class
+    ExperimentalLayoutApi::class, ExperimentalTime::class
 )
 @Composable
 fun TaskCreationScreen(
