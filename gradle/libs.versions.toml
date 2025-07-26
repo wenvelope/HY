@@ -1,38 +1,43 @@
 [versions]
-agp = "8.2.2"
+agp = "8.9.0"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.3"
-androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.0"
-androidx-core-ktx = "1.15.0"
+androidx-activityCompose = "1.10.1"
+androidx-appcompat = "1.7.1"
+androidx-constraintlayout = "2.2.1"
+androidx-core-ktx = "1.16.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.9.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-animation = "1.7.0"
 coil3 = "3.0.4"
-compose-plugin = "1.7.0"
+compose-plugin = "1.9.0-alpha03"
 coreSplashscreen = "1.0.1"
-filekitCompose = "0.8.8"
+filekitCompose = "0.10.0-beta01"
 glanceAppwidget = "1.1.1"
 junit = "4.13.2"
-kotlin = "2.0.20"
-kotlinx-coroutines = "1.9.0"
-kotlinxDatetime = "0.6.1"
+kmqttCommon = "1.0.0"
+kotlin = "2.2.0"
+kotlinx-coroutines = "1.10.2"
+kotlinxDatetime = "0.7.0"
+multiplatformMarkdownRendererM3 = "0.33.0-b02"
 navigationCompose = "2.8.0-alpha10"
-permissionsCompose = "0.18.1"
+permissions = "0.19.1"
 room = "2.7.0-alpha11"
 gradle = "8.7.1"
-koin = "4.0.0"
+koin = "4.1.0"
 kotlin-serialization = "1.7.3"
-ksp = "2.0.20-1.0.25"
+ksp = "2.2.10-RC-2.0.2"
 sqlite = "2.5.0-alpha11"
 workRuntime = "2.9.0"
-androidx-data-store = "1.1.1"
+androidx-data-store = "1.1.7"
 ktor = "3.0.2"
 alertKmp = "2.0.0"
+kable = "0.38.0"
+logging = "7.0.7"
+okio = "3.15.0"
+udf = "2.0.0-alpha2"
 
 [libraries]
 #netowrk
@@ -44,6 +49,12 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 #开屏
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
+# 蓝牙 com.juul.kable:kable-core:0.38.0
+kable = { module = "com.juul.kable:kable-core", version.ref = "kable" }
+
+#mqtt
+mqtt-client = { module = "io.github.davidepianca98:kmqtt-client", version.ref = "kmqttCommon" }
+mqtt-common = { module = "io.github.davidepianca98:kmqtt-common", version.ref = "kmqttCommon" }
 
 #图片加载
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
@@ -59,7 +70,6 @@ androidx-glance-material3 = { module = "androidx.glance:glance-material3", versi
 androidx-data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-data-store" }
 
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "animation" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -74,7 +84,12 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatformMarkdownRendererM3" }
+multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatformMarkdownRendererM3" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+
+#log
+kotlin-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "logging" }
 
 # room
 room_compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -84,21 +99,50 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 # kotlin 序列化
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 
+
 #permission
-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "permissionsCompose" }
+permissions = { module = "dev.icerock.moko:permissions", version.ref = "permissions" }
+permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "permissions" }
+permissions-bluetooth = { module = "dev.icerock.moko:permissions-bluetooth", version.ref = "permissions" }
+permissions-camera = { module = "dev.icerock.moko:permissions-camera", version.ref = "permissions" }
+permissions-contacts = { module = "dev.icerock.moko:permissions-contacts", version.ref = "permissions" }
+permissions-gallery = { module = "dev.icerock.moko:permissions-gallery", version.ref = "permissions" }
+permissions-location = { module = "dev.icerock.moko:permissions-location", version.ref = "permissions" }
+permissions-microphone = { module = "dev.icerock.moko:permissions-microphone", version.ref = "permissions" }
+permissions-motion = { module = "dev.icerock.moko:permissions-motion", version.ref = "permissions" }
+permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "permissions" }
+permissions-storage = { module = "dev.icerock.moko:permissions-storage", version.ref = "permissions" }
 
 #图片选择器 跨平台
-filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekitCompose" }
+filekit-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekitCompose" }
 filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekitCompose" }
+
+#io
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 # Koin
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-koin_core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
-koin_coroutines = { group = "io.insert-koin", name = "koin-core-coroutines", version.ref = "koin" }
-koin-viewmodel = { module = "io.insert-koin:koin-core-viewmodel", version.ref = "koin" }
+
+
+koin-coroutines = { group = "io.insert-koin", name = "koin-core-coroutines", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin_core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+
+#compose
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-plugin" }
+compose-animation = { module = "org.jetbrains.compose.animation:animation", version.ref = "compose-plugin" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
+compose-components-ui-tooling-preview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "compose-plugin" }
+#compose-android
+compose-androidx-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-plugin" }
+#compose-desktop
+compose-desktop-currentOs = { module = "org.jetbrains.compose.desktop:desktop-jvm", version.ref = "compose-plugin" }
 
 #Native 通知
 alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertKmp" }
@@ -106,6 +150,9 @@ alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertK
 #构建gradle 脚本
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+#单项数据流
+udf = { module = "com.freeletics.flowredux:flowredux", version.ref = "udf" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -116,3 +163,46 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 room_plugin = { id = "androidx.room", version.ref = "room" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+
+#custom plugins
+kmp-library-compose-feature-plugin = { id = "kmp-library-compose-feature" }
+kmp-library-koin-feature-plugin = { id = "kmp-library-koin-feature" }
+kmp-library-serialization-feature-plugin = { id = "kmp-library-serialization-feature" }
+kmp-library-udf-feature-plugin = { id = "kmp-library-udf-feature" }
+kmp-application-compose-feature-plugin = { id = "kmp-application-compose-feature" }
+kmp-application-koin-feature-plugin = { id = "kmp-application-koin-feature" }
+
+
+[bundles]
+compose-full = [
+    "compose-runtime",
+    "compose-foundation",
+    "compose-material3",
+    "compose-animation",
+    "compose-ui",
+    "compose-components-resources",
+    "compose-components-ui-tooling-preview"
+]
+
+koin = [
+    "koin-coroutines",
+    "koin-compose-viewmodel-navigation",
+    "koin-compose-viewmodel",
+    "koin-compose",
+    "koin_core"
+]
+
+moko-permissions = [
+    "permissions-compose",
+    "permissions",
+    "permissions-bluetooth",
+    "permissions-camera",
+    "permissions-contacts",
+    "permissions-gallery",
+    "permissions-location",
+    "permissions-microphone",
+    "permissions-motion",
+    "permissions-notifications",
+    "permissions-storage"
+]

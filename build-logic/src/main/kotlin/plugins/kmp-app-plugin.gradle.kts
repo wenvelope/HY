@@ -7,8 +7,6 @@ import ext.configureDefaultConfig
 import ext.configurePlatformTargets
 import ext.configureTestOptions
 
-@Suppress("DSL_SCOPE_VIOLATION")
-
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("com.android.application")

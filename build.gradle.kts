@@ -9,4 +9,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.room.plugin) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.kmp.library.koin.feature.plugin) apply false
+    alias(libs.plugins.kmp.library.serialization.feature.plugin) apply false
+    alias(libs.plugins.kmp.library.compose.feature.plugin) apply false
 }

@@ -5,9 +5,9 @@ import ext.configureCompileOptions
 import ext.configureDefaultConfig
 import ext.configurePlatformTargets
 import ext.configureTestOptions
+import ext.libs
 
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     id("org.jetbrains.kotlin.multiplatform")
     id("com.android.library")
@@ -21,6 +21,10 @@ android {
     configureTestOptions()
 
     namespace = ConfigurationKeys.APPLICATION_ID.plus(name)
+
+    buildFeatures{
+        compose = true
+    }
 
 }
 

@@ -27,7 +27,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.navigation.compose)
-            implementation(libs.animation)
 
             api(libs.kotlinx.datetime)
             implementation(libs.koin.core)
