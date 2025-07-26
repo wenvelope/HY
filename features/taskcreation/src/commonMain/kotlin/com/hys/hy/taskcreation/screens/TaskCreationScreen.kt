@@ -63,7 +63,6 @@ import com.hys.hy.taskcreation.viewmodel.TaskCreationViewModel
 import hy.features.taskcreation.generated.resources.Res
 import hy.features.taskcreation.generated.resources.icon_startTime
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
@@ -73,6 +72,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class,
@@ -86,7 +86,7 @@ fun TaskCreationScreen(
     taskId: String?,
 ) {
 
-    val viewModel: TaskCreationViewModel = koinViewModel(parameters = { parametersOf(taskId) })
+    val viewModel = koinViewModel<TaskCreationViewModel>(parameters = { parametersOf(taskId) })
     val state by viewModel.container.uiStateFlow.collectAsState()
 
     val datePickerState = rememberDatePickerState()
@@ -583,7 +583,7 @@ private fun DateSelector(
             label = {
                 if (state.taskSelectedDate != null && !state.isTomorrowSelected && !state.isTodaySelected) {
                     val localDateText =
-                        "${state.taskSelectedDate.month.number}.${state.taskSelectedDate.dayOfMonth}"
+                        "${state.taskSelectedDate.month.number}.${state.taskSelectedDate.day}"
                     Text(localDateText)
                 } else {
                     Text(

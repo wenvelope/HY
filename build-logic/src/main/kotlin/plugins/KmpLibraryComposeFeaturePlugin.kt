@@ -21,12 +21,10 @@ class KmpLibraryComposeFeaturePlugin : Plugin<Project> {
             apply(
                 plugin = libs.composeCompilerPlugin().get().pluginId
             )
-
             val multiplatformExtension = extensions.getByType<KotlinMultiplatformExtension>()
-
             configurationCompose(multiplatformExtension)
-
-
+            val agpExtension = extensions.getByType<com.android.build.gradle.LibraryExtension>()
+            agpExtension.buildFeatures.compose = true
         }
     }
 

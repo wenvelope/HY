@@ -62,9 +62,7 @@ import com.hys.hy.designsystem.component.icons.Pomodoro
 import com.hys.hy.designsystem.component.toolbars.NavigationBackButton
 import com.hys.hy.designsystem.component.toolbars.SearchBar
 import com.hys.hy.search.viewmodel.SearchScreenViewModel
-import hy.features.search.generated.resources.Res
-import hy.features.search.generated.resources.button_alarm
-import org.jetbrains.compose.resources.painterResource
+import kotlinx.datetime.number
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(
@@ -403,7 +401,7 @@ fun SearchScreen(
                                     supportingContent = {
                                         item.taskSelectDate?.let { date ->
                                             Text(
-                                                "${date.year}年${date.monthNumber}月${date.dayOfMonth}日",
+                                                "${date.year}年${date.month.number}月${date.day}日",
                                                 style = MaterialTheme.typography.bodyMedium
                                             )
                                         }
