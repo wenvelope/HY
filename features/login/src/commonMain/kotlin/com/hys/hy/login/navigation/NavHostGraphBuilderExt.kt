@@ -4,8 +4,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,7 +12,6 @@ import com.hys.hy.login.screens.SignInScreen
 import com.hys.hy.login.screens.SignUpScreen
 import com.hys.hy.login.screens.WelcomeScreen
 import kotlinx.serialization.Serializable
-
 
 @Serializable
 object LoginNavGraph
@@ -28,18 +25,17 @@ object SignUp
 @Serializable
 object Welcome
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 internal fun NavGraphBuilder.addSignInScreen(
     sharedTransitionScope: SharedTransitionScope,
     onSignUpClick: () -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     composable<SignIn>(
         exitTransition = { ExitTransition.None },
         enterTransition = { EnterTransition.None },
         popExitTransition = { ExitTransition.None },
-        popEnterTransition = { EnterTransition.None }
+        popEnterTransition = { EnterTransition.None },
     ) {
         SignInScreen(
             sharedTransitionScope = sharedTransitionScope,
@@ -50,7 +46,7 @@ internal fun NavGraphBuilder.addSignInScreen(
             onEmailLogInClick = {},
             onForgetPwdClick = {},
             onSignUpClick = onSignUpClick,
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
         )
     }
 }
@@ -59,48 +55,44 @@ internal fun NavGraphBuilder.addSignInScreen(
 internal fun NavGraphBuilder.addSignUpScreen(
     sharedTransitionScope: SharedTransitionScope,
     navigateToHome: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     composable<SignUp>(
-        enterTransition = { slideInHorizontally { it } },
+        enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
-        popExitTransition = { slideOutHorizontally { it }  },
-        popEnterTransition = { EnterTransition.None }
+        popExitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
     ) {
         SignUpScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = this@composable,
             navigateToHome = navigateToHome,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
         )
     }
 }
 
-internal fun NavGraphBuilder.addWelcomeScreen(
-    onStartClick: () -> Unit
-) {
+internal fun NavGraphBuilder.addWelcomeScreen(onStartClick: () -> Unit) {
     composable<Welcome> {
         WelcomeScreen(
-            onStartClick = onStartClick
+            onStartClick = onStartClick,
         )
     }
 }
-
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.addLoginNavGraph(
     navController: NavHostController,
     navigateToHome: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope
+    sharedTransitionScope: SharedTransitionScope,
 ) {
-
     navigation<LoginNavGraph>(
-        startDestination = SignIn
+        startDestination = SignIn,
     ) {
         addSignInScreen(
             sharedTransitionScope = sharedTransitionScope,
             onSignUpClick = navController::navigateSignUp,
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
         )
 
         addSignUpScreen(
@@ -110,8 +102,7 @@ fun NavGraphBuilder.addLoginNavGraph(
         )
 
         addWelcomeScreen(
-            onStartClick = navigateToHome
+            onStartClick = navigateToHome,
         )
-
     }
 }

@@ -19,33 +19,35 @@ import com.hys.hy.user.di.userModule
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.lazyModule
 
-val appViewModelModule = lazyModule {
-    viewModel<AppViewModel> {
-        AppViewModel(
-            appPreference = get()
-        )
+val appViewModelModule =
+    lazyModule {
+        viewModel<AppViewModel> {
+            AppViewModel(
+                appPreference = get(),
+            )
+        }
     }
-}
 
-val appModules = listOf(
-    databaseModule,
-    networkModule,
-    dataStoreModule,
-    preferenceModule,
-    taskModule,
-    authModule,
-    userModule,
-    taskCategoryModule
-)
+val appModules =
+    listOf(
+        databaseModule,
+        networkModule,
+        dataStoreModule,
+        preferenceModule,
+        taskModule,
+        authModule,
+        userModule,
+        taskCategoryModule,
+    )
 
-val featureModules = listOf(
-    loginModule,
-    homeModule,
-    todayModule,
-    taskCreationModule,
-    settingModule,
-    searchModule,
-    pomodoroModule,
-    appViewModelModule
-)
-
+val featureModules =
+    listOf(
+        loginModule,
+        homeModule,
+        todayModule,
+        taskCreationModule,
+        settingModule,
+        searchModule,
+        pomodoroModule,
+        appViewModelModule,
+    )

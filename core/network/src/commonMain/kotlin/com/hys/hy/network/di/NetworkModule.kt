@@ -4,10 +4,11 @@ import com.hys.hy.network.service.UserService
 import com.hys.hy.network.service.UserServiceImpl
 import org.koin.dsl.module
 
-val networkModule = module {
-    single<UserService> {
-        UserServiceImpl(
-            appPreference = get(),
-        )
+val networkModule =
+    module {
+        single<UserService> {
+            UserServiceImpl(
+                appPreference = get(),
+            )
+        }
     }
-}

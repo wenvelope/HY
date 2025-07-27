@@ -10,6 +10,8 @@ internal fun VersionCatalog.composeFullLibrary() = findBundle("compose-full").ge
 
 internal fun VersionCatalog.koinFullLibrary() = findBundle("koin").get()
 
+internal fun VersionCatalog.koinCompilerLibrary() = findLibrary("koin-annotations-compiler").get()
+
 internal fun VersionCatalog.roomCompilerLibrary() = findLibrary("room-compiler").get()
 
 internal fun VersionCatalog.roomRuntimeLibrary() = findLibrary("room-runtime").get()

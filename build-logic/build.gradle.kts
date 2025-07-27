@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradle)
     implementation(libs.androidx.room.gradle.plugin)
+    implementation(libs.symbol.processing.gradle.plugin)
 }
 
 gradlePlugin {

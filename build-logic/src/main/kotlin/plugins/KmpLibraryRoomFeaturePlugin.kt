@@ -28,22 +28,22 @@ class KmpLibraryRoomFeaturePlugin : Plugin<Project> {
                 }
             }
             dependencies {
-                val kspTargets = listOf(
-                    "kspAndroid",
-                    "kspIosSimulatorArm64",
-                    "kspIosArm64",
-                    "kspIosX64",
-                    "kspDesktop"
-                )
+                val kspTargets =
+                    listOf(
+                        "kspAndroid",
+                        "kspIosSimulatorArm64",
+                        "kspIosArm64",
+                        "kspIosX64",
+                        "kspDesktop",
+                    )
                 kspTargets.forEach { add(it, libs.roomCompilerLibrary()) }
             }
 
             extensions.getByType<RoomExtension>().apply {
                 schemaDirectory(
-                    "$projectDir/schemas"
+                    "$projectDir/schemas",
                 )
             }
         }
     }
-
 }

@@ -9,20 +9,24 @@ import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
 
 actual fun createHyDatabase(): HyDatabase {
-    val dbFile = "${fileDirectory()}/$dbFileName"
-    return Room.databaseBuilder<HyDatabase>(
-        name = dbFile
-    ).setDefaults().setDriver(BundledSQLiteDriver()).build()
+    val dbFile = "${fileDirectory()}/$DB_FILE_NAME"
+    return Room
+        .databaseBuilder<HyDatabase>(
+            name = dbFile,
+        ).setDefaults()
+        .setDriver(BundledSQLiteDriver())
+        .build()
 }
 
 @OptIn(ExperimentalForeignApi::class)
 private fun fileDirectory(): String {
-    val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
-        directory = NSDocumentDirectory,
-        inDomain = NSUserDomainMask,
-        appropriateForURL = null,
-        create = false,
-        error = null
-    )
+    val documentDirectory: NSURL? =
+        NSFileManager.defaultManager.URLForDirectory(
+            directory = NSDocumentDirectory,
+            inDomain = NSUserDomainMask,
+            appropriateForURL = null,
+            create = false,
+            error = null,
+        )
     return requireNotNull(documentDirectory).path!!
 }

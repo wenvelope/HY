@@ -5,14 +5,15 @@ import ext.libs
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-internal fun Project.configurationKoin(
-    extension: KotlinMultiplatformExtension
-) {
+internal fun Project.configurationKoin(extension: KotlinMultiplatformExtension) {
     extension.apply {
         sourceSets.named("commonMain") {
             dependencies {
                 implementation(libs.koinFullLibrary())
             }
+        }
+        sourceSets.named("commonMain").configure {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
         }
     }
 }

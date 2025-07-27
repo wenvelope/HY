@@ -3,19 +3,21 @@ package com.hys.hy.login.di
 import com.hys.hy.login.stateMachine.SignInStateMachine
 import com.hys.hy.login.viewmodel.SignInScreenViewModel
 import com.hys.hy.login.viewmodel.SignUpScreenViewModel
+import org.koin.core.module.LazyModule
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.lazyModule
 
-val loginModule =
-    lazyModule {
-        factoryOf(::SignInStateMachine)
-        viewModelOf(::SignInScreenViewModel)
+val loginModule: LazyModule
+    get() =
+        lazyModule {
+            factoryOf(::SignInStateMachine)
+            viewModelOf(::SignInScreenViewModel)
 
-        viewModel<SignUpScreenViewModel> {
-            SignUpScreenViewModel(
-                registerUseCase = get(),
-            )
+            viewModel<SignUpScreenViewModel> {
+                SignUpScreenViewModel(
+                    registerUseCase = get(),
+                )
+            }
         }
-    }

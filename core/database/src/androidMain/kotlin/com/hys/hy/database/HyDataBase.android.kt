@@ -6,10 +6,11 @@ import org.koin.mp.KoinPlatform
 
 actual fun createHyDatabase(): HyDatabase {
     val appContext = KoinPlatform.getKoin().get<Context>()
-    val dbFile = appContext.getDatabasePath(dbFileName)
-    return Room.databaseBuilder<HyDatabase>(
-        KoinPlatform.getKoin().get(),
-        name = dbFile.absolutePath,
-    ).setDefaults()
+    val dbFile = appContext.getDatabasePath(DB_FILE_NAME)
+    return Room
+        .databaseBuilder<HyDatabase>(
+            KoinPlatform.getKoin().get(),
+            name = dbFile.absolutePath,
+        ).setDefaults()
         .build()
 }

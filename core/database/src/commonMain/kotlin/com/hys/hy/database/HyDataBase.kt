@@ -17,26 +17,30 @@ import kotlinx.coroutines.IO
 @Database(
     entities = [
         TaskTable::class,
-        TaskCategoryTable::class],
+        TaskCategoryTable::class,
+    ],
     version = 1,
-    exportSchema = true
+    exportSchema = true,
 )
 @TypeConverters(DateConverter::class, TimeConverter::class)
 @ConstructedBy(HyDatabaseConstructor::class)
 abstract class HyDatabase : RoomDatabase() {
-    abstract fun taskDao(): TaskDao  // 获取 TaskDao
+    abstract fun taskDao(): TaskDao // 获取 TaskDao
+
     abstract fun TaskCategoryDao(): TaskCategoryDao // 获取 TaskCategoryDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")
-internal expect object HyDatabaseConstructor : RoomDatabaseConstructor<HyDatabase>
+internal expect object HyDatabaseConstructor : RoomDatabaseConstructor<HyDatabase> {
+    override fun initialize(): HyDatabase
+}
 
-const val dbFileName = "HYApp.db"
+const val DB_FILE_NAME = "HYApp.db"
 
 expect fun createHyDatabase(): HyDatabase
 
-fun <T : RoomDatabase> RoomDatabase.Builder<T>.setDefaults(): RoomDatabase.Builder<T> = this.apply {
-    fallbackToDestructiveMigration(true)
-    setQueryCoroutineContext(Dispatchers.IO)
-}
-
+fun <T : RoomDatabase> RoomDatabase.Builder<T>.setDefaults(): RoomDatabase.Builder<T> =
+    this.apply {
+        fallbackToDestructiveMigration(true)
+        setQueryCoroutineContext(Dispatchers.IO)
+    }

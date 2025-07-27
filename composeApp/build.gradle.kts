@@ -11,18 +11,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.androidx.core.splashscreen)
-
         }
         commonMain.dependencies {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.navigation.compose)
-
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.coroutines)
-            implementation(libs.koin.compose.viewmodel)
-
 
             implementation(libs.coil.network.ktor)
             implementation(libs.coil.mp)
@@ -42,13 +35,12 @@ kotlin {
             implementation(projects.components.preference)
             implementation(projects.components.auth)
             implementation(projects.components.user)
-            
+
             implementation(projects.core.database)
             implementation(projects.core.datastore)
             implementation(projects.core.network)
 
             implementation(projects.features.widget)
-
         }
 
         desktopMain.dependencies {
@@ -69,8 +61,8 @@ compose.desktop {
             linux {
                 modules("jdk.security.auth")
             }
-            //新添加
-            buildTypes.release{
+            // 新添加
+            buildTypes.release {
                 proguard {
                     isEnabled = false
                     configurationFiles.from("compose-desktop.pro")
