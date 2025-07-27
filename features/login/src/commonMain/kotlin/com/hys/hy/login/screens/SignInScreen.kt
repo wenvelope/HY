@@ -107,7 +107,7 @@ fun SinInFromThirdAccount(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
     sharedTransitionScope: SharedTransitionScope,
