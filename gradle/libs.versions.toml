@@ -39,6 +39,7 @@ logging = "7.0.7"
 okio = "3.15.0"
 udf = "2.0.0-alpha2"
 icons-extended  = "1.7.3"
+roomGradlePlugin = "2.7.2"
 
 [libraries]
 #netowrk
@@ -153,6 +154,7 @@ alert-kmp = { module = "io.github.khubaibkhan4:alert-kmp", version.ref = "alertK
 #构建gradle 脚本
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlin_gradle_plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+androidx-room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "roomGradlePlugin" }
 
 #单项数据流
 udf = { module = "com.freeletics.flowredux:flowredux", version.ref = "udf" }
@@ -173,6 +175,8 @@ kmp-library-compose-feature-plugin = { id = "kmp-library-compose-feature" }
 kmp-library-koin-feature-plugin = { id = "kmp-library-koin-feature" }
 kmp-library-serialization-feature-plugin = { id = "kmp-library-serialization-feature" }
 kmp-library-udf-feature-plugin = { id = "kmp-library-udf-feature" }
+kmp-library-room-feature-plugin = { id = "kmp-library-room-feature" }
+
 kmp-application-compose-feature-plugin = { id = "kmp-application-compose-feature" }
 kmp-application-koin-feature-plugin = { id = "kmp-application-koin-feature" }
 

@@ -1,24 +1,14 @@
 plugins {
-    id("kmp-library-plugin")
+    alias(libs.plugins.kmp.library.koin.feature.plugin)
 }
 
 
 kotlin {
     sourceSets {
-        val desktopMain by getting
-
-        androidMain.dependencies {
-
-        }
 
         commonMain.dependencies {
-            implementation(libs.koin.core)
-            implementation(libs.koin.coroutines)
-
-
             implementation(projects.core.datastore)
             implementation(libs.androidx.data.store.core)
-
         }
 
         desktopMain.dependencies {

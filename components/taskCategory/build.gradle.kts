@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.kmp.library.serialization.feature.plugin)
     alias(libs.plugins.kmp.library.koin.feature.plugin)
-    alias(libs.plugins.room.plugin)
-    alias(libs.plugins.ksp)
 }
 
 
@@ -10,10 +8,7 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
-
-            implementation(libs.room.runtime)
             implementation(libs.kotlinx.datetime)
-
             implementation(projects.core.database)
             implementation(projects.core.dateutil)
         }
@@ -23,19 +18,3 @@ kotlin {
         }
     }
 }
-
-
-dependencies {
-    //keep in mind that i am not compiling for iOS x86, if you do need it, just add it below
-    add("kspAndroid", libs.room.compiler)
-    add("kspIosSimulatorArm64", libs.room.compiler)
-    add("kspIosArm64", libs.room.compiler)
-    add("kspIosX64", libs.room.compiler)
-    add("kspDesktop", libs.room.compiler)
-}
-
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-

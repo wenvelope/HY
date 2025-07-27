@@ -7,11 +7,9 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
-
             implementation(libs.androidx.data.store.core)
             implementation(projects.core.network)
             implementation(projects.components.preference)
-
         }
 
         desktopMain.dependencies {

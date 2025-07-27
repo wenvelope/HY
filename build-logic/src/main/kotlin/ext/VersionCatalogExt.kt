@@ -13,6 +13,15 @@ internal fun VersionCatalog.composeFullLibrary() =
 internal fun VersionCatalog.koinFullLibrary() =
     findBundle("koin").get()
 
+internal fun VersionCatalog.roomCompilerLibrary() =
+    findLibrary("room-compiler").get()
+
+internal fun VersionCatalog.roomRuntimeLibrary() =
+    findLibrary("room-runtime").get()
+
+internal fun VersionCatalog.sqliteDriverLibrary() =
+    findLibrary("sqlite-bundled").get()
+
 internal fun VersionCatalog.composeAndroidPreview() =
     findLibrary("compose-androidx-preview").get()
 

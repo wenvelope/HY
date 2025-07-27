@@ -14,6 +14,7 @@ repositories {
 dependencies {
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradle)
+    implementation(libs.androidx.room.gradle.plugin)
 }
 
 
@@ -36,6 +37,11 @@ gradlePlugin {
             id = libs.plugins.kmp.library.udf.feature.plugin.get().pluginId
             implementationClass = "plugins.KmpLibraryUdfFeaturePlugin"
         }
+        register("kmpLibraryRoomPlugin") {
+            id = libs.plugins.kmp.library.room.feature.plugin.get().pluginId
+            implementationClass = "plugins.KmpLibraryRoomFeaturePlugin"
+        }
+
         register("kmpApplicationComposePlugin") {
             id = libs.plugins.kmp.application.compose.feature.plugin.get().pluginId
             implementationClass = "plugins.KmpApplicationComposeFeaturePlugin"
@@ -44,5 +50,6 @@ gradlePlugin {
             id = libs.plugins.kmp.application.koin.feature.plugin.get().pluginId
             implementationClass = "plugins.KmpApplicationKoinFeaturePlugin"
         }
+
     }
 }
