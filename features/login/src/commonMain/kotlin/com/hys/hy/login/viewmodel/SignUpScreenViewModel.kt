@@ -12,11 +12,9 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class SignUpScreenViewModel(
-    private val registerUseCase: RegisterUseCase
-) :
-    BaseViewModelCore<SignUpScreenViewModel.SignUpState, SignUpScreenViewModel.SignUpEvent>() {
+    private val registerUseCase: RegisterUseCase,
+) : BaseViewModelCore<SignUpScreenViewModel.SignUpState, SignUpScreenViewModel.SignUpEvent>() {
     data class SignUpState(
         // 是否登陆成功 创建离线账户 或者 创建在线账户
         val isSuccess: Boolean = false,
@@ -29,29 +27,37 @@ class SignUpScreenViewModel(
 
     sealed interface SignUpEvent : UiEvent {
         data object CreateOfflineAccount : SignUpEvent
-        data class ChangeEmail(val email: String) : SignUpEvent
-        data class ChangePassword(val password: String) : SignUpEvent
+
+        data class ChangeEmail(
+            val email: String,
+        ) : SignUpEvent
+
+        data class ChangePassword(
+            val password: String,
+        ) : SignUpEvent
+
         data object CreateOnlineAccount : SignUpEvent
-        data class PrivacyPolicyChecked(val checked: Boolean) : SignUpEvent
+
+        data class PrivacyPolicyChecked(
+            val checked: Boolean,
+        ) : SignUpEvent
     }
 
-    override fun initialState(): SignUpState {
-        return SignUpState()
-    }
+    override fun initialState(): SignUpState = SignUpState()
 
     override suspend fun reduce(container: MutableContainer<SignUpState, SignUpEvent>) {
         container.apply {
             uiEventFlow.collect { event ->
                 when (event) {
                     SignUpEvent.CreateOfflineAccount -> {
-                        //勾选了隐私协议
+                        // 勾选了隐私协议
                         if (!uiStateFlow.value.isPrivacyPolicyChecked) {
                             return@collect
                         }
                         registerUseCase.createOfflineAccount()
                         updateState {
                             copy(
-                                isSuccess = true
+                                isSuccess = true,
                             )
                         }
                     }
@@ -59,7 +65,7 @@ class SignUpScreenViewModel(
                     is SignUpEvent.ChangeEmail -> {
                         updateState {
                             copy(
-                                email = event.email
+                                email = event.email,
                             )
                         }
                     }
@@ -67,7 +73,7 @@ class SignUpScreenViewModel(
                     is SignUpEvent.ChangePassword -> {
                         updateState {
                             copy(
-                                password = event.password
+                                password = event.password,
                             )
                         }
                     }
@@ -82,43 +88,41 @@ class SignUpScreenViewModel(
                         viewModelScope.launch {
                             updateState {
                                 copy(
-                                    isLoading = true
+                                    isLoading = true,
                                 )
                             }
-                            val result = withContext(Dispatchers.IO) {
-                                registerUseCase.execute(
-                                    RegisterUseCase.Input(
-                                        email = uiStateFlow.value.email,
-                                        password = uiStateFlow.value.password
+                            val result =
+                                withContext(Dispatchers.IO) {
+                                    registerUseCase.execute(
+                                        RegisterUseCase.Input(
+                                            email = uiStateFlow.value.email,
+                                            password = uiStateFlow.value.password,
+                                        ),
                                     )
-                                )
-                            }
+                                }
 
                             if (result.isSuccess) {
                                 updateState {
                                     copy(
                                         isSuccess = true,
-                                        isLoading = false
+                                        isLoading = false,
                                     )
                                 }
                             } else {
                                 uiStateFlow.value.snackBarHostState.showSnackbar(result.errorMessage)
                             }
-
                         }
-
                     }
 
                     is SignUpEvent.PrivacyPolicyChecked -> {
                         updateState {
                             copy(
-                                isPrivacyPolicyChecked = event.checked
+                                isPrivacyPolicyChecked = event.checked,
                             )
                         }
                     }
                 }
             }
         }
-
     }
 }

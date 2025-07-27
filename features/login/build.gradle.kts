@@ -2,9 +2,8 @@ plugins {
     alias(libs.plugins.kmp.library.serialization.feature.plugin)
     alias(libs.plugins.kmp.library.koin.feature.plugin)
     alias(libs.plugins.kmp.library.compose.feature.plugin)
+    alias(libs.plugins.kmp.library.udf.feature.plugin)
 }
-
-
 
 kotlin {
     sourceSets {
@@ -25,6 +24,3 @@ kotlin {
         }
     }
 }
-
-
-

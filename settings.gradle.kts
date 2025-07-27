@@ -39,7 +39,6 @@ include(":core:database")
 include(":core:datastore")
 include(":core:network")
 
-
 include(":designsystem")
 
 include(":features:login")
@@ -57,9 +56,3 @@ include(":components:auth")
 include(":components:taskCategory")
 include(":components:preference")
 include(":components:user")
-
-
-
-
-
-

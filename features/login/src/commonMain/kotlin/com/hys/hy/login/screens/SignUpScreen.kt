@@ -3,7 +3,6 @@ package com.hys.hy.login.screens
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -23,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.hys.hy.login.viewmodel.SignUpScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SignUpScreen(
@@ -51,18 +48,20 @@ fun SignUpScreen(
     animatedContentScope: AnimatedContentScope,
     onBackClick: () -> Unit,
     navigateToHome: () -> Unit,
-    viewModel: SignUpScreenViewModel = koinViewModel()
+    modifier: Modifier = Modifier,
+    viewModel: SignUpScreenViewModel = koinViewModel(),
 ) {
-
     val state by viewModel.container.uiStateFlow.collectAsState()
+    val navigateToHomeEffect by rememberUpdatedState(navigateToHome)
 
     LaunchedEffect(state.isSuccess) {
         if (state.isSuccess) {
-            navigateToHome()
+            navigateToHomeEffect()
         }
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {},
@@ -70,57 +69,41 @@ fun SignUpScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "返回"
+                            contentDescription = "返回",
                         )
                     }
-                }
+                },
             )
         },
         snackbarHost = {
             SnackbarHost(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(top = 72.dp),
-                hostState = state.snackBarHostState
-            ) { snackbarData ->
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Snackbar(
-                        snackbarData = snackbarData,
-                        modifier = Modifier
-                            .padding(horizontal = 60.dp)
-                            .align(Alignment.TopCenter),
-                        shape = MaterialTheme.shapes.large
-                    )
-                }
-            }
-        }
+                modifier =
+                    Modifier
+                        .padding(top = 72.dp),
+                hostState = state.snackBarHostState,
+            )
+        },
     ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
         ) {
-
             Column {
-                //标题
+                // 标题
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.headlineLarge,
                     text = "创建你的账户",
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
 
-
-
             Spacer(modifier = Modifier.padding(9.dp))
 
-
-            //第三方登录方式
+            // 第三方登录方式
             SinInFromThirdAccount(
                 modifier = Modifier,
                 onWechatClick = {},
-                onPhoneClick = {}
+                onPhoneClick = {},
             )
 
             Spacer(modifier = Modifier.padding(20.dp))
@@ -129,7 +112,7 @@ fun SignUpScreen(
                 text = "或者用邮箱登录",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
             )
 
             Spacer(modifier = Modifier.padding(20.dp))
@@ -143,13 +126,10 @@ fun SignUpScreen(
                 password = state.password,
                 onPasswordChange = {
                     viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.ChangePassword(it))
-                }
+                },
             )
 
-
-
             Spacer(modifier = Modifier.padding(5.dp))
-
 
             Column {
                 PrivacyTextLine(
@@ -157,26 +137,25 @@ fun SignUpScreen(
                     onCheckedChange = {
                         viewModel.sendEvent(
                             SignUpScreenViewModel.SignUpEvent.PrivacyPolicyChecked(
-                                it
-                            )
+                                it,
+                            ),
                         )
-                    }
+                    },
                 )
             }
 
-
-
-
             Spacer(modifier = Modifier.height(5.dp))
-
 
             Row {
                 Button(
                     onClick = {
                         viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOfflineAccount)
                     },
-                    modifier = Modifier.weight(1f).height(48.dp)
-                        .padding(horizontal = 10.dp),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .height(48.dp)
+                            .padding(horizontal = 10.dp),
                 ) {
                     Text("无账户使用")
                 }
@@ -185,52 +164,56 @@ fun SignUpScreen(
                     onClick = {
                         viewModel.sendEvent(SignUpScreenViewModel.SignUpEvent.CreateOnlineAccount)
                     },
-                    modifier = Modifier.weight(1f).height(48.dp)
-                        .padding(horizontal = 10.dp),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .height(48.dp)
+                            .padding(horizontal = 10.dp),
                 ) {
                     if (state.isLoading) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp)
-                                .align(Alignment.CenterVertically)
-                                .padding(end = 3.dp),
+                            modifier =
+                                Modifier
+                                    .size(24.dp)
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 3.dp),
                             color = MaterialTheme.colorScheme.onPrimary,
-                            strokeWidth = 3.dp
+                            strokeWidth = 3.dp,
                         )
                     }
                     Text(
                         "创建账户",
                         modifier = Modifier.align(Alignment.CenterVertically),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
-
         }
-
-
     }
-
 }
 
 @Composable
 fun PrivacyTextLine(
     checked: Boolean?,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var checkState by remember { mutableStateOf(false) }
 
-    Row {
+    Row(
+        modifier = modifier,
+    ) {
         Text(
             "我已经阅读",
-            modifier = Modifier.padding(start = 20.dp).align(Alignment.CenterVertically)
+            modifier = Modifier.padding(start = 20.dp).align(Alignment.CenterVertically),
         )
         TextButton(
             onClick = {},
-            modifier = Modifier.align(Alignment.CenterVertically)
+            modifier = Modifier.align(Alignment.CenterVertically),
         ) {
             Text(
                 "隐私协议",
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
         }
 
@@ -242,8 +225,7 @@ fun PrivacyTextLine(
                 checkState = it
                 onCheckedChange.invoke(it)
             },
-            modifier = Modifier.padding(end = 20.dp)
+            modifier = Modifier.padding(end = 20.dp),
         )
-
     }
 }

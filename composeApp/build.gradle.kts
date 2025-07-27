@@ -7,8 +7,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        val desktopMain by getting
-        
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)

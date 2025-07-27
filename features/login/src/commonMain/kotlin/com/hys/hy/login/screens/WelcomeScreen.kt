@@ -23,45 +23,49 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun WelcomeScreen(
-    onStartClick: () -> Unit = {}
+    modifier: Modifier = Modifier,
+    onStartClick: () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Image(
             painter = painterResource(Res.drawable.bg_welcome),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
 
         Scaffold(
-            containerColor = Color.Unspecified
+            containerColor = Color.Unspecified,
         ) { innerPadding ->
             Box(
-                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 20.dp)
+                modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 20.dp),
             ) {
                 Text(
                     "欢迎来到HY",
-                    modifier = Modifier.fillMaxWidth()
-                        .align(Alignment.TopCenter)
-                        .padding(top = 70.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter)
+                            .padding(top = 70.dp),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.displayMedium,
                 )
 
-
                 Button(
                     onClick = onStartClick,
-                    modifier = Modifier.padding(bottom = 70.dp).height(48.dp).fillMaxWidth().align(Alignment.BottomCenter)
-
+                    modifier =
+                        Modifier
+                            .padding(bottom = 70.dp)
+                            .height(48.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
                 ) {
                     Text("开始")
                 }
             }
         }
     }
-
-
 }

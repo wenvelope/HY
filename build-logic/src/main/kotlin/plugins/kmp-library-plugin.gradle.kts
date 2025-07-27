@@ -21,10 +21,8 @@ android {
     configureTestOptions()
 
     namespace = ConfigurationKeys.APPLICATION_ID.plus(name)
-
 }
 
 kotlin {
     configurePlatformTargets()
 }
-

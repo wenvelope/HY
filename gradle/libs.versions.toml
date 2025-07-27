@@ -37,7 +37,7 @@ alertKmp = "2.0.0"
 kable = "0.38.0"
 logging = "7.0.7"
 okio = "3.15.0"
-udf = "2.0.0-alpha2"
+udf = "1.2.2"
 icons-extended  = "1.7.3"
 roomGradlePlugin = "2.7.2"
 

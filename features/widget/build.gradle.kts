@@ -23,9 +23,6 @@ kotlin {
             implementation(projects.components.preference)
         }
 
-        desktopMain.dependencies {
-            implementation(libs.kotlinx.coroutines.swing)
-        }
     }
 }
 
