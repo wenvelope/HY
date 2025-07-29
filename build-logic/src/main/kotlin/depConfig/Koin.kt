@@ -12,8 +12,5 @@ internal fun Project.configurationKoin(extension: KotlinMultiplatformExtension) 
                 implementation(libs.koinFullLibrary())
             }
         }
-        sourceSets.named("commonMain").configure {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-        }
     }
 }

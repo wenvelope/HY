@@ -15,35 +15,8 @@ class KmpApplicationKoinFeaturePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply("kmp-app-plugin")
-            pluginManager.apply(libs.kspPlugin().get().pluginId)
             val extension = extensions.getByType<KotlinMultiplatformExtension>()
             configurationKoin(extension)
-
-            dependencies {
-                val kspTargets =
-                    listOf(
-                        "kspCommonMainMetadata",
-                        "kspAndroid",
-                        "kspIosSimulatorArm64",
-                        "kspIosArm64",
-                        "kspIosX64",
-                        "kspDesktop",
-                    )
-                kspTargets.forEach { add(it, libs.koinCompilerLibrary()) }
-            }
-
-            val kspExtension = extensions.getByType<KspExtension>()
-
-            kspExtension.apply {
-                arg("KOIN_CONFIG_CHECK", "true")
-                arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
-            }
-
-            tasks
-                .matching { it.name == "compileKotlinMetadata" }
-                .configureEach {
-                    dependsOn("kspCommonMainKotlinMetadata")
-                }
         }
     }
 }
