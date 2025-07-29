@@ -51,17 +51,17 @@ import com.hys.hy.designsystem.theme.MonthlyItemNotStartedBrush
 import com.hys.hy.home.viewmodel.HomeScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeScreen(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
+    modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel = koinViewModel(),
     onSettingTabClick: () -> Unit = {},
     onHomeTabClick: () -> Unit = {},
     onTodayTabClick: () -> Unit = {},
     onSearchClick: () -> Unit = {},
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope
 ) {
     val state by viewModel.container.uiStateFlow.collectAsState()
 
@@ -70,21 +70,22 @@ fun HomeScreen(
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         topBar = {
             SinkAnimateScope(
-                animatedContentScope
+                animatedContentScope,
             ) { offset ->
                 TopAppBar(
-                    modifier = Modifier.offset {
-                        offset
-                    },
+                    modifier =
+                        Modifier.offset {
+                            offset
+                        },
                     title = {
                         Column {
                             Text(
                                 text = state.currentDayOfTheWeek,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Spacer(modifier = Modifier.padding(2.dp))
 
@@ -100,19 +101,24 @@ fun HomeScreen(
                             onClick = { onSearchClick.invoke() },
                             modifier = Modifier.size(56.dp),
                             shape = CircleShape,
-                            elevation = CardDefaults.outlinedCardElevation(
-                                defaultElevation = 2.dp,
-                            ),
-                            border = CardDefaults.outlinedCardBorder(
-                                enabled = true,
-                            )
+                            elevation =
+                                CardDefaults.outlinedCardElevation(
+                                    defaultElevation = 2.dp,
+                                ),
+                            border =
+                                CardDefaults.outlinedCardBorder(
+                                    enabled = true,
+                                ),
                         ) {
                             Box(modifier = Modifier.fillMaxSize()) {
                                 Icon(
                                     imageVector = Icons.Filled.Search,
                                     contentDescription = "avatar",
-                                    modifier = Modifier.size(24.dp).clip(CircleShape)
-                                        .align(Alignment.Center)
+                                    modifier =
+                                        Modifier
+                                            .size(24.dp)
+                                            .clip(CircleShape)
+                                            .align(Alignment.Center),
                                 )
                             }
                         }
@@ -121,23 +127,24 @@ fun HomeScreen(
 
                         UserAvatarImage(
                             contentDescription = "avatar",
-                            modifier = Modifier.padding(end = 24.dp).size(56.dp)
-                                .clip(CircleShape)
+                            modifier =
+                                Modifier
+                                    .padding(end = 24.dp)
+                                    .size(56.dp)
+                                    .clip(CircleShape),
                         )
-
-                    }
+                    },
                 )
-
             }
-
         },
         bottomBar = {
             with(sharedTransitionScope) {
                 NavigationBottomBar(
-                    modifier = Modifier.sharedElement(
-                        sharedContentState = rememberSharedContentState("bottomBar"),
-                        animatedVisibilityScope = animatedContentScope
-                    ),
+                    modifier =
+                        Modifier.sharedElement(
+                            sharedContentState = rememberSharedContentState("bottomBar"),
+                            animatedVisibilityScope = animatedContentScope,
+                        ),
                     currentTabIndex = HomeTabIndex,
                     onHomeTabClick = {
                         onHomeTabClick.invoke()
@@ -147,28 +154,27 @@ fun HomeScreen(
                     },
                     onTodayTabClick = {
                         onTodayTabClick.invoke()
-                    }
+                    },
                 )
             }
-
-        }
+        },
     ) { innerPadding ->
         SinkAnimateScope(
-            animatedContentScope
+            animatedContentScope,
         ) { offset ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp)
-                    .offset { offset }
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(horizontal = 16.dp)
+                        .offset { offset },
             ) {
-
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Greet(
-                    modifier = Modifier,
-                    state
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -176,16 +182,15 @@ fun HomeScreen(
                 Text(
                     text = "本月总览",
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 MonthlyPreview(
                     modifier = Modifier,
-                    state
+                    state = state,
                 )
-
             }
         }
     }
@@ -193,22 +198,21 @@ fun HomeScreen(
 
 @Composable
 fun MonthlyPreview(
-    modifier: Modifier,
-    state: HomeScreenViewModel.HomeScreenState
+    state: HomeScreenViewModel.HomeScreenState,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row {
-
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 MonthlyPreviewItem(
                     modifier = Modifier.height(150.dp).fillMaxWidth(),
                     title = "${state.currentMonthDoneTaskNum}",
                     subTitle = "已完成",
-                    brush = Brush.MonthlyItemDoneBrush
+                    brush = Brush.MonthlyItemDoneBrush,
                 )
 
                 Spacer(modifier = Modifier.height(13.dp))
@@ -217,21 +221,20 @@ fun MonthlyPreview(
                     modifier = Modifier.height(105.dp).fillMaxWidth(),
                     title = "${state.currentMonthImportantTaskNum}",
                     subTitle = "重要",
-                    brush = Brush.MonthlyItemImportantBrush
+                    brush = Brush.MonthlyItemImportantBrush,
                 )
             }
 
             Spacer(modifier = Modifier.width(20.dp))
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
-
                 MonthlyPreviewItem(
                     modifier = Modifier.height(105.dp).fillMaxWidth(),
                     title = "${state.currentDayInProcessTasksNum}",
                     subTitle = "进行中",
-                    brush = Brush.MonthlyItemInProgressBrush
+                    brush = Brush.MonthlyItemInProgressBrush,
                 )
 
                 Spacer(modifier = Modifier.height(13.dp))
@@ -240,15 +243,12 @@ fun MonthlyPreview(
                     modifier = Modifier.height(150.dp).fillMaxWidth(),
                     title = "14",
                     subTitle = "未确定代办",
-                    brush = Brush.MonthlyItemNotStartedBrush
+                    brush = Brush.MonthlyItemNotStartedBrush,
                 )
-
             }
         }
-
     }
 }
-
 
 /**
  * A composable function that displays a preview item for the monthly overview.
@@ -261,25 +261,26 @@ fun MonthlyPreview(
  */
 @Composable
 fun MonthlyPreviewItem(
-    modifier: Modifier,
     title: String,
     subTitle: String,
+    brush: Brush,
+    modifier: Modifier = Modifier,
     contentColor: Color = MaterialTheme.colorScheme.surface,
-    brush: Brush
 ) {
-
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent,
-            contentColor = contentColor
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+                contentColor = contentColor,
+            ),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().background(
-                brush = brush
-            ),
-            verticalArrangement = Arrangement.Center
+            modifier =
+                Modifier.fillMaxSize().background(
+                    brush = brush,
+                ),
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = title,
@@ -296,19 +297,17 @@ fun MonthlyPreviewItem(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 textAlign = TextAlign.Center,
             )
-
         }
     }
 }
 
-
 @Composable
 fun Greet(
-    modifier: Modifier,
-    state: HomeScreenViewModel.HomeScreenState
+    state: HomeScreenViewModel.HomeScreenState,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = "Hi ${state.userName}",
@@ -324,40 +323,45 @@ fun Greet(
 
         Card(
             modifier = Modifier.height(93.dp).fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                ),
         ) {
             Column(
-                modifier = Modifier.fillMaxSize().background(
-                    brush = Brush.CurrentTaskBrush
-                ).padding(10.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.CurrentTaskBrush,
+                        ).padding(10.dp),
             ) {
                 Text(
                     text = state.currentDayInProcessTask?.taskTitle ?: "无任务",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
 
                 Spacer(Modifier.height(8.dp))
 
                 Text(
                     text = state.currentDayInProcessTask?.taskDescription ?: "",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
                 )
 
                 Spacer(Modifier.weight(1f))
 
                 Row {
-                    Spacer(modifier.weight(1f))
+                    Spacer(Modifier.weight(1f))
                     if (state.currentDayInProcessTask != null) {
-                        val timeText = with(state.currentDayInProcessTask!!) {
-                            "${
-                                taskSelectTime!!.hour.toString().padStart(2, '0')
-                            }:${
-                                taskSelectTime!!.minute.toString().padStart(2, '0')
-                            }"
-                        }
+                        val timeText =
+                            with(state.currentDayInProcessTask!!) {
+                                "${
+                                    taskSelectTime!!.hour.toString().padStart(2, '0')
+                                }:${
+                                    taskSelectTime!!.minute.toString().padStart(2, '0')
+                                }"
+                            }
                         Text(
                             state.currentDayInProcessTask!!.taskCategory?.let { "$it · $timeText" }
                                 ?: timeText,
@@ -369,5 +373,4 @@ fun Greet(
             }
         }
     }
-
 }
