@@ -30,7 +30,7 @@ abstract class HyDatabase : RoomDatabase() {
     abstract fun TaskCategoryDao(): TaskCategoryDao // 获取 TaskCategoryDao
 }
 
-@Suppress("NO_ACTUAL_FOR_EXPECT")
+@Suppress("KotlinNoActualForExpect", "EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 internal expect object HyDatabaseConstructor : RoomDatabaseConstructor<HyDatabase> {
     override fun initialize(): HyDatabase
 }
