@@ -16,8 +16,11 @@ import com.hys.hy.taskCategory.di.taskCategoryModule
 import com.hys.hy.taskcreation.di.taskCreationModule
 import com.hys.hy.today.di.todayModule
 import com.hys.hy.user.di.userModule
+import org.koin.core.annotation.ComponentScan
+import org.koin.core.annotation.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.lazyModule
+import org.koin.ksp.generated.module
 
 val appViewModelModule =
     lazyModule {
@@ -28,8 +31,13 @@ val appViewModelModule =
         }
     }
 
+@ComponentScan
+@Module
+class RootModule
+
 val appModules =
     listOf(
+        RootModule().module,
         databaseModule,
         networkModule,
         dataStoreModule,

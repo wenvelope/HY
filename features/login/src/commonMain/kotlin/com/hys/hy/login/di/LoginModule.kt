@@ -5,7 +5,6 @@ import com.hys.hy.login.viewmodel.SignInScreenViewModel
 import com.hys.hy.login.viewmodel.SignUpScreenViewModel
 import org.koin.core.module.LazyModule
 import org.koin.core.module.dsl.factoryOf
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.lazyModule
 
@@ -15,9 +14,5 @@ val loginModule: LazyModule
             factoryOf(::SignInStateMachine)
             viewModelOf(::SignInScreenViewModel)
 
-            viewModel<SignUpScreenViewModel> {
-                SignUpScreenViewModel(
-                    registerUseCase = get(),
-                )
-            }
+            viewModelOf(::SignUpScreenViewModel)
         }
