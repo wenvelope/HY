@@ -1,6 +1,7 @@
 package plugins
 
 import depConfig.configurationKoin
+import depConfig.configurationKoinKspCompiler
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -12,6 +13,8 @@ class KmpLibraryKoinFeaturePlugin : Plugin<Project> {
             pluginManager.apply("kmp-library-plugin")
             val extension = extensions.getByType<KotlinMultiplatformExtension>()
             configurationKoin(extension)
+
+            configurationKoinKspCompiler()
         }
     }
 }
