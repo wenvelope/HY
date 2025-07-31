@@ -16,7 +16,7 @@ class SignInScreenViewModel(
         signInStateMachine.state.stateIn(
             scope = viewModelScope,
             initialValue = SignInData(),
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Lazily,
         )
 
     fun dispatch(action: SignInAction) {

@@ -52,7 +52,7 @@ fun SinInFromThirdAccount(
     onPhoneClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier) {
+    Column(modifier = modifier) {
         // 微信登陆按钮
         Button(
             onClick = onWechatClick,
@@ -183,7 +183,6 @@ fun SignInScreen(
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
-
                 EmailAndPwdTextField(
                     modifier = Modifier.fillMaxWidth(),
                     email = state.email,

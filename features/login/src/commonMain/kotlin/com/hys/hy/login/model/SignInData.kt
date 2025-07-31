@@ -1,7 +1,9 @@
 package com.hys.hy.login.model
 
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Stable
 
+@Stable
 data class SignInData(
     val email: String = "",
     val password: String = "",
