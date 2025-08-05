@@ -14,7 +14,7 @@ class KmpLibraryKoinFeaturePlugin : Plugin<Project> {
             val extension = extensions.getByType<KotlinMultiplatformExtension>()
             configurationKoin(extension)
 
-            configurationKoinKspCompiler()
+//            configurationKoinKspCompiler()
         }
     }
 }

@@ -9,17 +9,19 @@ import coil3.util.DebugLogger
 import okio.FileSystem
 
 fun getAsyncImageLoader(context: PlatformContext) =
-    ImageLoader.Builder(context).crossfade(true)
+    ImageLoader
+        .Builder(context)
+        .crossfade(true)
         .logger(DebugLogger())
         .diskCachePolicy(CachePolicy.ENABLED)
         .networkCachePolicy(CachePolicy.ENABLED)
         .diskCache {
             newDiskCache()
-        }
-        .build()
+        }.build()
 
-fun newDiskCache(): DiskCache {
-    return DiskCache.Builder().directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY / "image_cache")
+fun newDiskCache(): DiskCache =
+    DiskCache
+        .Builder()
+        .directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY / "image_cache")
         .maxSizeBytes(512L * 1024 * 1024) // 512MB
         .build()
-}

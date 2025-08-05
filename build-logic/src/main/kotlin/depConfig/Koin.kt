@@ -17,14 +17,17 @@ internal fun Project.configurationKoin(extension: KotlinMultiplatformExtension) 
             }
         }
 
-        sourceSets.named("commonMain").configure {
-            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
-        }
     }
 }
 
 internal fun Project.configurationKoinKspCompiler() {
     pluginManager.apply(libs.kspPlugin().get().pluginId)
+    val extension = extensions.getByType<KotlinMultiplatformExtension>()
+    extension.apply{
+        sourceSets.named("commonMain").configure {
+            kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+        }
+    }
     dependencies {
         val kspTargets =
             listOf(
